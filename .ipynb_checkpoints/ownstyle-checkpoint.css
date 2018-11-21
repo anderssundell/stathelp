@@ -78,6 +78,10 @@ a.menulink:hover
     background-color: white;
 }
 
+.logo-container {
+    text-align: center;
+}
+
 
 
 .menu-header {
@@ -135,8 +139,27 @@ h4 {
     
 }
 
+h5 {
+
+    margin: auto;
+    background-color: #f2f2f2;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #333333;
+    width: calc(80% - 40px);
+    height: 30px;
+    border-left: 20px solid #ffd84f;
+    padding-top: 8px;
+}
+
+
+
 table, tr, td {
     border: 0;
     padding: 0px;
     border-spacing: 0px;
 }
+
