@@ -17,26 +17,14 @@
     padding-left: 30px;
 }
 
-.header-rightlink{
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: #ffd84f;
-    font-size: 16px;
-    margin: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-right: 30px;
-    text-align: right;
-}
-
 a.navlink:visited,
 a.navlink:link,
 a.navlink:hover
 {
     text-decoration: none;
     font-weight: bold;
-
     color: #333333;
-    
+    font-size: 16px;
 }
 
 a.menulink:visited,
@@ -126,7 +114,23 @@ a.menulink:hover
     display: block;
 }
 
+.headercolumnleft {
+    display: inline-block;
+    width: calc(80% - 20px);
+    vertical-align:middle;
+    max-width: 980px;
+    text-align: left;
+}
 
+
+
+.headerrow {
+    display: block;
+    background-color: #ffd84f;
+    height: 40px;
+    text-align: center;
+    padding-top: 4px;
+}
 
 
 h4 {
