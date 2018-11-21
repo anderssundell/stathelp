@@ -119,6 +119,7 @@ a.menulink:hover
     display: inline-block;
     width: 40%;
     vertical-align:top;
+    max-width: 500px;
 }
 
 .row {
@@ -149,9 +150,9 @@ h5 {
     vertical-align: middle;
     font-weight: bold;
     color: #333333;
-    width: calc(80% - 40px);
+    width: calc(80% - 20px);
+    max-width: 980px;
     height: 30px;
-    border-left: 20px solid #ffd84f;
     padding-top: 8px;
 }
 
