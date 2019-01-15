@@ -35,6 +35,15 @@ a.menulink:link
     color: #333333;
 }
 
+a.unfinishedlink:visited,
+a.unfinishedlink:link,
+a.unfinishedlink:hover
+{
+    text-decoration: none;
+    font-weight: normal;
+    color: #bbbbbb;
+}
+
 a.menulink:hover
 {
     text-decoration: underline;
