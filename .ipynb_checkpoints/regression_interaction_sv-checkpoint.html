@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-    
-       <!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,7 +10,7 @@
 
   gtag('config', 'UA-132683642-1');
 </script>
-
+    
 <title>regression_interaction_sv</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
@@ -13130,7 +13129,7 @@ div#notebook {
 <p>Med regressionsanalys kan man undersöka samband mellan variabler, med eller utan kontroll för andra variabler. I verkligheten är det dock ofta så att samband ser olika ut i olika grupper, eller under olika omständigheter. Effekten av att bli förälder på arbetsinkomst är till exempel mycket olika för kvinnor och män; kvinnor ser en mycket större nedgång i inkomster.</p>
 <p>Hur ska man ta hänsyn till detta i sina analyser? Ett sätt kan vara att göra två separata analyser, där man jämför kvinnor som fått barn med kvinnor som inte fått barn, och motsvarande för män. Men det går faktiskt att baka ihop det i en regressionsanalys. Vi kan då se hur effekten skiljer sig åt, och också om skillnaden i effekt är statistiskt signifikant. På så sätt kan vi se om det är värt att komplicera modellen ytterligare genom att införa dessa separata effekter. Vi håller också effekten av alla kontrollvariabler konstant. Gör man separata analyser kommer de också kunna få olika effekter i varje analys, och det är vi kanske inte intresserade av.</p>
 <p><strong>Detta kallas för en interaktionsanalys. Det kan också kallas för en moderationsanalys, moderering, eller på engelska att man undersöker conditional effects. Poängen är oavsett att man låter effekten av en variabel variera över värdena på en annan variabel.</strong> Schematiskt brukar det representeras av ett diagram med en "pil på pilen" - dvs den tredje variabeln påverkar <em>effekten</em> av den oberoende variabeln, snarare än värdet på någon av de andra variablerna.</p>
-<p>&lt;img src = "images/interaktionsdiagram.png"&gt;</p>
+<p>&lt;img src = "images/interaktionsdiagram.png" alt="En interaktion"&gt;</p>
 <p>I det här inlägget kommer vi gå igenom hur man gör regressionsanalyser där både oberoende variabel och interaktionsvariabel bara har två värden, och hur man bäst ska presentera resultaten.</p>
 <p>För att ha något att jobba med kommer vi i det här exemplet att använda oss av data från den amerikanska <a href="http://gss.norc.org/get-the-data/stata">General Social Survey</a>, som är en enkätundersökning med vanliga medborgare, med frågor om allt möjligt. Vi kommer använda versionen från 2016. Ladda ned den och lägg den i projektmappen för att följa med i exemplet. Jag har lagt den i en undermapp som heter data, och anger därför också det när jag öppnar filen.</p>
 
