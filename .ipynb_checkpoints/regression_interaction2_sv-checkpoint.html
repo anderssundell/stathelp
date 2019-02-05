@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
- <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<title>regression_interaction2_sv</title>
+    
+       <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -10,8 +13,6 @@
 
   gtag('config', 'UA-132683642-1');
 </script>
-    
-<title>regression_interaction2_sv</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13231,17 +13232,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Koefficienten för <strong>childs</strong> visar nu den förväntade effekten av att öka variabeln ett steg, dvs ha ett barn till. Den är svagt negativ och inte signifikant. Det verkar alltså inte vara någon större skillnad mellan de som har få och de som har många barn. Nu lägger vi till interaktionen med woman-variabeln. Det gör vi automatiskt genom att skriva in i regressionskommandot att de två variablerna hör ihop:</p>
+<p>Koefficienten för <strong>childs</strong> visar nu den förväntade effekten av att öka variabeln ett steg, dvs ha ett barn till. Den är svagt negativ och inte signifikant. Det verkar alltså inte vara någon större skillnad mellan de som har få och de som har många barn. Nu lägger vi till interaktionen med woman-variabeln. Det gör vi automatiskt genom att skriva in i regressionskommandot att de två variablerna hör ihop. Vi måste dock nu lägga till ett c. framför childs-variabeln, för att visa att det är en continous variabel, en skala.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc c<span class="m">.</span>woman##c<span class="m">.</span>childs age
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman##c<span class="m">.</span>childs age
 </pre></div>
 
     </div>
@@ -13266,17 +13267,18 @@ div#notebook {
 -------------+----------------------------------   Adj R-squared   =    0.0445
        Total |  1.3876e+12     1,626   853396969   Root MSE        =     28556
 
-----------------------------------------------------------------------------------
-        realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
------------------+----------------------------------------------------------------
-           woman |  -6100.754   2108.763    -2.89   0.004    -10236.94   -1964.569
-          childs |   855.1288   671.1906     1.27   0.203    -461.3629    2171.621
-                 |
-c.woman#c.childs |  -2060.054   953.8345    -2.16   0.031    -3930.931   -189.1764
-                 |
-             age |   275.4991    53.0037     5.20   0.000     171.5362     379.462
-           _cons |   14916.98   2498.767     5.97   0.000     10015.82    19818.13
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+      realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       1.woman |  -6100.754   2108.763    -2.89   0.004    -10236.94   -1964.569
+        childs |   855.1288   671.1906     1.27   0.203    -461.3629    2171.621
+               |
+woman#c.childs |
+            1  |  -2060.054   953.8345    -2.16   0.031    -3930.931   -189.1764
+               |
+           age |   275.4991    53.0037     5.20   0.000     171.5362     379.462
+         _cons |   14916.98   2498.767     5.97   0.000     10015.82    19818.13
+--------------------------------------------------------------------------------
 </pre>
 </div>
 </div>
@@ -13299,7 +13301,7 @@ För woman = 1 (kvinnor): $855.1288 -2060.054*1 = -1204.9252$ <br></p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(childs) at(woman=(<span class="m">0</span> <span class="m">1</span>))
@@ -13449,7 +13451,7 @@ childs       |
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(woman) at(childs=(<span class="m">0</span><span class="o">/</span><span class="m">8</span>))
@@ -13476,7 +13478,7 @@ Average marginal effects                        Number of obs     =      1,627
 Model VCE    : OLS
 
 Expression   : Linear prediction, predict()
-dy/dx w.r.t. : woman
+dy/dx w.r.t. : 1.woman
 
 1._at        : childs          =           0
 
@@ -13500,7 +13502,9 @@ dy/dx w.r.t. : woman
              |            Delta-method
              |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-woman        |
+0.woman      |  (base outcome)
+-------------+----------------------------------------------------------------
+1.woman      |
          _at |
           1  |  -6100.754   2108.763    -2.89   0.004    -10236.94   -1964.569
           2  |  -8160.807   1541.729    -5.29   0.000     -11184.8   -5136.819
@@ -13512,6 +13516,7 @@ woman        |
           8  |  -20521.13    5307.43    -3.87   0.000    -30931.27   -10110.99
           9  |  -22581.18   6231.859    -3.62   0.000    -34804.52   -10357.84
 ------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
 
 
   Variables that uniquely identify margins: childs
@@ -13627,7 +13632,7 @@ woman        |
 	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
 	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">eight or more</text>
 	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">number of children</text>
-	<text x="1979.88" y="206.19" style="font-family:'Helvetica';font-size:125.98px;fill:#1E2D53" text-anchor="middle">Average Marginal Effects of woman with 95% CIs</text>
+	<text x="1979.88" y="206.19" style="font-family:'Helvetica';font-size:125.98px;fill:#1E2D53" text-anchor="middle">Average Marginal Effects of 1.woman with 95% CIs</text>
 </svg>
 
 </div>
@@ -13972,17 +13977,17 @@ Expression   : Linear prediction, predict()
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Interaktion-med-tv&#229;-kontinuerliga-variabler">Interaktion med tv&#229; kontinuerliga variabler<a class="anchor-link" href="#Interaktion-med-tv&#229;-kontinuerliga-variabler">&#182;</a></h2><p>Nu är det dags att komplicera det hela ytterligare. Hur blir det om vi har två variabler som båda är skalor med många värden? I grund och botten gör vi exakt samma sak som vi gjort i de två tidigare fallen. Vi får bara tänka på att tolka det hela rätt.</p>
-<p>Säg att vi nu vill titta på sambandet mellan barnafödande och ålder, istället för kön. Det blir lite mystiskt i och med att hur många barn man har är så starkt förknippat med ålder, men vi prövar, för exemplets skull. Vi kör en regression där vi interagerar antal barn med ålder:</p>
+<p>Säg att vi nu vill titta på sambandet mellan barnafödande och ålder, istället för kön. Det blir lite mystiskt i och med att hur många barn man har är så starkt förknippat med ålder, men vi prövar, för exemplets skull. Vi kör en regression där vi interagerar antal barn med ålder (och skriver c. framför båda variablerna, eftersom de är skalor):</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc c<span class="m">.</span>woman c<span class="m">.</span>childs##c<span class="m">.</span>age
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman c<span class="m">.</span>childs##c<span class="m">.</span>age
 </pre></div>
 
     </div>
@@ -14043,7 +14048,7 @@ c.childs#c.age |  -138.2845   32.94967    -4.20   0.000    -202.9129   -73.65609
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(childs) at(age=(<span class="m">20</span>(<span class="m">10</span>)<span class="m">60</span>))
@@ -14382,7 +14387,7 @@ age          |
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[65]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span>margins, at(age=(<span class="m">20</span>(<span class="m">10</span>)<span class="m">70</span>) childs=(<span class="m">0</span> <span class="m">3</span> <span class="m">6</span>))
@@ -14697,10 +14702,23 @@ Expression   : Linear prediction, predict()
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Interaktionsanalyser är ofta teoretiskt motiverade, och kan visa på intressanta skillnader i datan. Men tänk på att målsättningen vanligtvis inte är att bygga en karta i skala 1:1 av verkligheten, utan att koka ner stora mängder data till något enkelt och begripligt. Bara för att det går att hitta en signifikant interaktion betyder inte det att den är intressant, eftersom det alltid finns en risk för overfitting, att man bygger en modell som passar perfekt till just det urval vi jobbar med för stunden.</p>
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Interaktionsanalyser är ofta teoretiskt motiverade, och kan visa på intressanta skillnader i datan. Men tänk på att målsättningen vanligtvis inte är att bygga en karta i skala 1:1 av verkligheten, utan att koka ner stora mängder data till något enkelt och begripligt. Bara för att det går att hitta en signifikant interaktion betyder inte det att den är intressant, eftersom det alltid finns en risk för "overfitting", att man bygger en modell som passar perfekt till just det urval vi jobbar med för stunden.</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
     </div>
   </div>
