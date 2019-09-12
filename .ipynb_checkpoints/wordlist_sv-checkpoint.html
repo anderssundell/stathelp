@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>esttab_sv</title>
+<title>wordlist</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13089,7 +13089,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13116,401 +13116,8 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Tabeller-f&#246;r-resultat-av-regressionsanalys">Tabeller f&#246;r resultat av regressionsanalys<a class="anchor-link" href="#Tabeller-f&#246;r-resultat-av-regressionsanalys">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
-<p>När man gjort en statistisk analys är det viktigt att presentera resultaten på ett överskådligt och pedagogiskt sätt. Ofta handlar det om en kombination av text, tabeller och grafik. Syftet ska vara att presentera så mycket information att läsaren får med sig de viktigaste slutsatserna och har möjlighet att se hur de dragits, men utan att överlasta med för mycket. Särskilt gäller det siffror som man inte tolkar eller kommenterar i texten.</p>
-<p>Statas normaloutput efter regressionsanalys är inte lämplig för publicering. Man kan visserligen själv plocka ut de viktigaste uppgifterna och göra en egen tabell i till exempel Word, men det finns enklare sätt, med tilläggskommandon.</p>
-<p>Ett sådant är <code>esttab</code>. I den här guiden kommer vi gå igenom hur man använder det för att göra en enkel och snygg regressionstabell. Men först måste vi installera esttab, eftersom det inte följer med Stata som standard. Det gör vi genom att skriva följande (och det behöver man bara göra en gång):</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">ssc</span> install estout,<span class="k"> replace</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>checking estout consistency and verifying not already installed...
-installing into /Users/anderssundell/Library/Application Support/Stata/ado/plus/...
-installation complete.
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Sedan laddar vi in data. I det här exemplet använder vi QoG-institutets QoG Basic data, version 2018. Man kan antingen ladda ned den till sin dator och öppna den där, eller ansluta till den direkt, som jag gör här.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(Quality of Government Basic dataset 2018 - Cross-Section)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Hypotes:-Demokrati-&#228;r-bra-f&#246;r-livsl&#228;ngd">Hypotes: Demokrati &#228;r bra f&#246;r livsl&#228;ngd<a class="anchor-link" href="#Hypotes:-Demokrati-&#228;r-bra-f&#246;r-livsl&#228;ngd">&#182;</a></h2><p>Analysenheten är här länder. Vi ska göra en enkel analys där vi ska undersöka det möjliga sambandet mellan demokrati och förväntad livslängd. Lever folk längre i demokratier? Och i så fall, håller det sambandet under kontroll för andra variabler, till exempel geografisk placering? Vissa teorier säger att demokratier haft lättare att etablera sig i mer tempererade klimat, långt bort från ekvatorn. Och där är det dessutom mindre tropiska sjukdomar.</p>
-<p>Om demokrati är bra för hälsan borde vi finna ett samband mellan demokrati och livslängd, och det sambandet borde hålla även under kontroll för landets geografiska placering.</p>
-<p>Variablerna vi ska använda är:
-Förväntad livslängd: <code>wdi_lifexp</code>
-Grad av demokrati: <code>p_polity2</code> (-10 till -10)
-Avstånd från ekvatorn: <code>lp_lat_abst</code></p>
-<p>Nedan visas beskrivande statistik för de tre variablerna.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> wdi_lifexp p_polity2 lp_lat_abst
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-  wdi_lifexp |        185    71.25413    8.138066   50.59105   83.58781
-   p_polity2 |        165    4.072727    6.158044        -10         10
- lp_lat_abst |        153    .2572459    .1806333          0   .7222222
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Spara-resultat-av-regressionsanalyser-med-estimates-store">Spara resultat av regressionsanalyser med <code>estimates store</code><a class="anchor-link" href="#Spara-resultat-av-regressionsanalyser-med-estimates-store">&#182;</a></h2><p>Vi ska göra tre regressionsanalyser. Först med demokrati som oberoende variabel, sedan med avstånd från ekvatorn, och sedan med både demokrati och avstånd från ekvatorn. Efter varje analys vi gör skriver vi <code>estimates store m1</code> där m1 är namnet på en modell (som vi hittar på själv). Jag brukar döpa modellerna till m1, m2, m3 och så vidare. I blocket nedan kör jag de tre analyserna och sparar resultaten efter varje analys.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> wdi_lifexp p_polity2<span class="k"></span>
-<span class="k">estimates</span> store m1
-
-<span class="k">reg</span> wdi_lifexp lp_lat_abst<span class="k"></span>
-<span class="k">estimates</span> store m2
-
-<span class="k">reg</span> wdi_lifexp p_polity2 lp_lat_abst<span class="k"></span>
-<span class="k">estimates</span> store m3
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-      Source |       SS           df       MS      Number of obs   =       164
--------------+----------------------------------   F(1, 162)       =     14.93
-       Model |  961.395196         1  961.395196   Prob &gt; F        =    0.0002
-    Residual |  10432.0079       162  64.3951106   R-squared       =    0.0844
--------------+----------------------------------   Adj R-squared   =    0.0787
-       Total |  11393.4031       163  69.8981786   Root MSE        =    8.0247
-
-------------------------------------------------------------------------------
-  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-   p_polity2 |   .3942974   .1020468     3.86   0.000      .192784    .5958109
-       _cons |   69.20107   .7498878    92.28   0.000     67.72025    70.68188
-------------------------------------------------------------------------------
-
-
-
-      Source |       SS           df       MS      Number of obs   =       147
--------------+----------------------------------   F(1, 145)       =     84.04
-       Model |  4054.91479         1  4054.91479   Prob &gt; F        =    0.0000
-    Residual |  6996.60328       145  48.2524364   R-squared       =    0.3669
--------------+----------------------------------   Adj R-squared   =    0.3625
-       Total |  11051.5181       146  75.6953292   Root MSE        =    6.9464
-
-------------------------------------------------------------------------------
-  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
- lp_lat_abst |   29.18116   3.183254     9.17   0.000     22.88959    35.47274
-       _cons |   63.61518   1.000886    63.56   0.000     61.63697    65.59339
-------------------------------------------------------------------------------
-
-
-
-      Source |       SS           df       MS      Number of obs   =       133
--------------+----------------------------------   F(2, 130)       =     41.40
-       Model |  4023.70805         2  2011.85402   Prob &gt; F        =    0.0000
-    Residual |  6316.99515       130  48.5922704   R-squared       =    0.3891
--------------+----------------------------------   Adj R-squared   =    0.3797
-       Total |  10340.7032       132  78.3386606   Root MSE        =    6.9708
-
-------------------------------------------------------------------------------
-  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-   p_polity2 |   .1551679   .1043416     1.49   0.139    -.0512595    .3615953
- lp_lat_abst |   29.32883   3.561611     8.23   0.000     22.28261    36.37505
-       _cons |   62.38807   1.092712    57.09   0.000     60.22627    64.54987
-------------------------------------------------------------------------------
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Presentera-resultaten-med-esttab">Presentera resultaten med <code>esttab</code><a class="anchor-link" href="#Presentera-resultaten-med-esttab">&#182;</a></h2><p>Som synes är resultattabellerna ganska otympliga, och innehåller mycket information som vi vanligtvis inte är intresserade av. Till exempel uttrycker standardfel, t-värde, p-värde och konfidensintervall ungefär samma sak - graden av osäkerhet kring koefficientens skattning. Man behöver inte redovisa alltihopa. Vanligt inom samhällsvetenskap är att man redovisar koefficienten, standardfelet (eller t-värdet) och sätter ut stjärnor som visar signifikansnivån (alltså p-värdet).</p>
-<p><code>esttab</code> gör mycket av detta automatiskt. För att göra en minimal tabell av de tre analyserna vi gjort skriver vi bara:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-------------------------------------------------------------
-                      (1)             (2)             (3)   
-               wdi_lifexp      wdi_lifexp      wdi_lifexp   
-------------------------------------------------------------
-p_polity2           0.394***                        0.155   
-                   (3.86)                          (1.49)   
-
-lp_lat_abst                         29.18***        29.33***
-                                   (9.17)          (8.23)   
-
-_cons               69.20***        63.62***        62.39***
-                  (92.28)         (63.56)         (57.09)   
-------------------------------------------------------------
-N                     164             147             133   
-------------------------------------------------------------
-t statistics in parentheses
-* p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Mycket bättre! Varje kolumn representerar en analys - en "modell." Längst upp anges vad som var beroende variabel i analysen. Siffrorna visar b-koefficienterna för respektive variabel. Inom parenteserna står t-värdet, och längst ner n-talet.</p>
-<p>Vi ser då att i den första modellen finns det ett signifikant samband mellan demokrati och förväntad livslängd - varje steg upp på demokratiskalan hänger ihop med en ökning av livslängden på 0.394 år. Men vi ser också i modell 2 att länder som ligger längre bort från ekvatorn har högre förväntad livslängd. Och vi vet (men det syns inte här) att länder längre bort från ekvatorn har högre grader av demokrati. Så när vi kontrollerar för avstånd från ekvatorn i modell 3 ser vi att koefficienten för demokrati mer än halveras, till 0.155, och den är inte heller längre statistiskt signifikant (vilket vi ser eftersom det inte är några stjärnor utsatta, och t-värdet är under 1.96).</p>
-<p>Men det finns också annat vi skulle vilja se i tabellen, till exempel R<sup>2</sup>-värdet, eller det justerat R<sup>2</sup>. Och vi kanske hellre vill ha standardfelet inom parenteser, istället för t-värdet. Då kan vi lägga till options på vårt esttab-kommando. Man väljer själv vad man vill lägga till. Använd <code>help esttab</code> för att se en fullständig lista.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3,<span class="k"> se</span> r2 ar2
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-------------------------------------------------------------
-                      (1)             (2)             (3)   
-               wdi_lifexp      wdi_lifexp      wdi_lifexp   
-------------------------------------------------------------
-p_polity2           0.394***                        0.155   
-                  (0.102)                         (0.104)   
-
-lp_lat_abst                         29.18***        29.33***
-                                  (3.183)         (3.562)   
-
-_cons               69.20***        63.62***        62.39***
-                  (0.750)         (1.001)         (1.093)   
-------------------------------------------------------------
-N                     164             147             133   
-R-sq                0.084           0.367           0.389   
-adj. R-sq           0.079           0.363           0.380   
-------------------------------------------------------------
-Standard errors in parentheses
-* p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Den här tabellen är överskådlig och lätt att läsa. Enda problemet är att den inte är så lätt att klistra in i ett Worddokument. Om man gör det måste man sätta typsnittet till courier eller något annat där alla bokstäver är lika stora, annars kommer alla siffror hamna fel.</p>
-<p>Men ett bättre sätt är att exportera tabellen till en separat fil som är anpassad för till exempel Word. Då kan man sedan öppna den filen och kopiera tabellen därifrån in i sin rapport.</p>
-<p>För att exportera filen lägger vi till <code>using "filnamn.rtf"</code> i koden. Då sparas filen i den aktiva mappen. Den anger man genom att skriva <code>cd "/Users/mindator/statistiskanalys"</code> till exempel. Jag lägger också till <code>replace</code> som option, vilket betyder att om det redan fanns en sådan fil så ska den skrivas över.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3 using <span class="s">&quot;regressiontabell.rtf&quot;</span>,<span class="k"> se</span> r2 ar2<span class="k"> replace</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(output written to regressiontabell.rtf)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Om man sedan öppnar filen med Word ser det ut på följande sätt:
-<img src="esttabexample.png" alt="Exempel på regressiontabell"></p>
-<p>Sedan kan man naturligtvis göra det ännu mer pedagogiskt genom att byta ut variabelnamnen till förklarande etiketter, till exempel "Demokrati (-10 till 10)" eller motsvarande. Men det här är ändå ett stort lyft jämfört med den råa outputen.</p>
+<h1 id="Ordlista-med-korta-f&#246;rklaringar">Ordlista med korta f&#246;rklaringar<a class="anchor-link" href="#Ordlista-med-korta-f&#246;rklaringar">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<p>Här är en ordlista med kortfattade förklaringar av vanliga begrepp inom statistisk analys.</p>
 
 </div>
 </div>
@@ -13518,8 +13125,200 @@ Standard errors in parentheses
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Att göra tabeller med <code>esttab</code> kräver alltså tre steg. Först gör man analysen, sedan sparar man resultaten från den med <code>estimates store</code> och sedan presenterar man resultaten med <code>esttab</code>.</p>
-<p>Tänk på att alltid försöka vara maximalt pedagogisk och tydlig. Den som förlorar mest på att läsaren inte förstår dina resultat är du!</p>
+<table>
+<thead><tr>
+<th></th>
+<th><strong>ORDLISTA</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GENERELLA BEGREPP</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><em>Analysenhet</em></td>
+<td>De enheter som vi jämför. Till exempel länder, individer, år, aktier, kommuner, osv.</td>
+</tr>
+<tr>
+<td><em>Variabel</em></td>
+<td>Egenskap hos analysenheterna som varierar. Till exempel längd, ålder eller partillhörighet hos individer, eller befolkning, grad av demokrati eller klimat hos länder.</td>
+</tr>
+<tr>
+<td><em>Kausalitet</em></td>
+<td>Orsaksförhållande. I ett kausalt samband förväntas den ena variabeln ha påverkat den andra.</td>
+</tr>
+<tr>
+<td><em>Centralmått</em></td>
+<td>Ett värde som sammanfattar tendensen i ett datamaterial.</td>
+</tr>
+<tr>
+<td><em>Fördelning</em></td>
+<td>Hur värdena fördelar sig över alla möjliga värden.</td>
+</tr>
+<tr>
+<td><em>Spridning</em></td>
+<td>Hur värdena är fördelade kring centralmåttet.</td>
+</tr>
+<tr>
+<td><em>Korrelation</em></td>
+<td>Grad av samvariation mellan två variabler.</td>
+</tr>
+<tr>
+<td><em>Kovarians</em></td>
+<td>Grad av samvariation mellan två variabler.</td>
+</tr>
+<tr>
+<td><strong>CENTRALMÅTT</strong></td>
+</tr>
+<tr>
+<td><em>Medelvärde</em></td>
+<td>Det värde man får om man summerar alla enskilda värden och dividerar med antalet enheter. <br> Formel: $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$</td>
+</tr>
+<tr>
+<td><em>Median</em></td>
+<td>Det värde man får om man arrangerar alla värden i storleksordning, och tar det som är på mitten (eller mittemellan de två som är i mitten).</td>
+</tr>
+<tr>
+<td><em>Typvärde</em></td>
+<td>Det enskilt vanligaste värdet.</td>
+</tr>
+<tr>
+<td><strong>SPRIDNINGSMÅTT</strong></td>
+</tr>
+<tr>
+<td><em>Varians</em></td>
+<td><br> Ett mått på avvikelsen från medelvärdet, som används i många andra beräkningar. <br> Formel: $V = \frac{\sum_{i=1}^n (x_i - \bar{x})^2)}{n-1}$ <br> Formeln betyder att man tar varje enskild observations avvikelse från medelvärdet, kvadrerar den, och sedan summerar man alla de kvadrerade avvikelserna, delar med n-1, och tar sedan roten ur detta.</td>
+</tr>
+<tr>
+<td><em>Standardavvikelse</em></td>
+<td>Ett mått på den typiska avvikelsen från medelvärdet. Beräknas som roten av variansen. <br> Formel: $s = \sqrt{V}$</td>
+</tr>
+<tr>
+<td><strong>VARIABELSPRÅKET</strong></td>
+</tr>
+<tr>
+<td><em>Beroende variabel</em></td>
+<td>Den variabel vi vill förklara. Kallas ibland utfallsvariabel, eller på engelska dependent variable eller outcome variable.</td>
+</tr>
+<tr>
+<td><em>Oberoende variabel</em></td>
+<td>Den variabel vi tror förklarar den beroende variabeln. Kallas ibland prediktor, eller på engelska independent varaible, determinant eller predictor.</td>
+</tr>
+<tr>
+<td><em>Kontrollvariabel</em></td>
+<td>Ytterligare variabel som förs in i analysen, oftast för att utesluta spuriositet.</td>
+</tr>
+<tr>
+<td><em>Bakomliggande variabel</em></td>
+<td>Variabel som kommer före den oberoende variabeln i den tänkta orsakskedjan. Kan ofta vara bra att kontrollera för.</td>
+</tr>
+<tr>
+<td><em>Mellanliggande variabel</em></td>
+<td>Variabel som kommer mellan den oberoende variabeln och den beroende variabeln i den tänkta orsakskedjan. Ska <em>inte</em> kontrolleras för om man vill utesluta spuriositet.</td>
+</tr>
+<tr>
+<td><strong>TYPER AV SAMBAND</strong></td>
+</tr>
+<tr>
+<td><em>Nollsamband</em></td>
+<td>Brist på korrelation mellan två variabler.</td>
+</tr>
+<tr>
+<td><em>Positivt samband</em></td>
+<td>Samband där mer av den ena variabeln hänger ihop med mer av den andra, och där mindre av den ena variabeln hänger ihop med mindre av den andra.</td>
+</tr>
+<tr>
+<td><em>Negativt samband</em></td>
+<td>Samband där mer av den ena variabeln hänger ihop med mindre av den andra, och där mindre av den ena variabeln hänger ihop med mer av den andra.</td>
+</tr>
+<tr>
+<td><em>Kausalt samband</em></td>
+<td>Samband där den oberoende variabeln orsakar den beroende.</td>
+</tr>
+<tr>
+<td><em>Spuriöst samband</em></td>
+<td>Samband mellan två variabler som orsakats av att en tredje variabel orsakat både oberoende och beroende.</td>
+</tr>
+<tr>
+<td><em>Undertryckt samband</em></td>
+<td>Egentligen existerande samband mellan två variabler, som döljs av att en tredje variabel hänger ihop med mindre värden på den ena variabeln och högre på den andra, eller tvärtom.</td>
+</tr>
+<tr>
+<td><strong>ANALYSTEKNIKER</strong></td>
+</tr>
+<tr>
+<td><em>Univariat analys</em></td>
+<td>Analys av en variabel. Till exempel beräkning av medelvärde.</td>
+</tr>
+<tr>
+<td><em>Bivariat analys</em></td>
+<td>Analys av samband mellan två variabler.</td>
+</tr>
+<tr>
+<td><em>Korrelationsanalys</em></td>
+<td>Analys som visar sambandets riktning och styrka mellan två variabler. Det finns många olika korrelationsmått, men det vanligaste är Pearson's R.</td>
+</tr>
+<tr>
+<td><em>Regressionsanalys</em></td>
+<td>Analys där linje passas till en mängd punkter. Ger uppgifter om linjens lutning, sambandets styrka, osäkerhet i skattningen av linjen, m.m.</td>
+</tr>
+<tr>
+<td><em>Multipel regressionsanalys</em></td>
+<td>Regressionsanalys med fler än en oberoende variabel.</td>
+</tr>
+<tr>
+<td><em>Logistisk regressionsanalys</em></td>
+<td>Typ av regressionsanalys anpassat för fall där den beroende variabeln bara har värdet 0 eller 1.</td>
+</tr>
+<tr>
+<td><em>Faktoranalys</em></td>
+<td>Analys där man försöker hitta gemensamma nämnare mellan olika variabler. Dvs reducera datan för att se om det finns någon latent variabel, som vi inte observerat, som kan förklara variationen i flera variabler.</td>
+</tr>
+<tr>
+<td><strong>DIAGRAM</strong></td>
+</tr>
+<tr>
+<td><em>Histogram</em></td>
+<td>Visar fördelningen av en variabel. Heter samma på engelska.</td>
+</tr>
+<tr>
+<td><em>Spridningsdiagram</em></td>
+<td>Visar sambandet mellan två variabler genom att rita ut analysenheterna som punkter utifrån två axlar. Engelska: Scatterplot.</td>
+</tr>
+<tr>
+<td><strong>BEGREPP INOM REGRESSIONSANALYS</strong></td>
+</tr>
+<tr>
+<td><em>Regressionslinje</em></td>
+<td>Den linje som passar bäst till punktmängden.</td>
+</tr>
+<tr>
+<td><em>B-koefficient</em></td>
+<td>Lutning på regressionslinjen. Hur mycket den beroende variabeln förväntas öka när den oberoende variabeln ökar med ett steg.</td>
+</tr>
+<tr>
+<td><em>Konstant/intercept</em></td>
+<td>Det förväntade värdet på den beroende variabeln när alla oberoende variabler i analysen har värdet 0.</td>
+</tr>
+<tr>
+<td><em>$R^2$</em></td>
+<td>Ett mått på hur mycket av variationen i den beroende variabeln som kan förklaras av de oberoende variablerna. Går mellan 0 och 1. 0.5 kan tolkas som "50% av variationen i den beroende variabeln förklaras av de oberoende variablerna."</td>
+</tr>
+<tr>
+<td><em>Standardfel</em></td>
+<td>Ett mått på osäkerheten i skattningen av b-koefficienten. Engelska: Standard error.</td>
+</tr>
+<tr>
+<td><em>t-värde</em></td>
+<td>B-koefficienten delat med standardfelet. Används för att beräkna signifikansvärdet.</td>
+</tr>
+<tr>
+<td><em>p-värde</em></td>
+<td>Signifikansvärdet. Visar hur osannolikt det är att man skulle få en b-koefficient som är minst så stor, givet att nollhypotesen stämmer. Är egentligen bara intressant när man analyserar ett urval, eller har en slumpmässig tilldelning i ett experiment. Men trots detta används det ofta som beslutsregel för att avgöra när samband är starka nog att tolkas. Den vanliga beslutsregeln är att p-värden under 0.05 räknas som signifikanta. Räknas fram genom att jämföra t-värdet med en t-fördelning, som beror på hur många analysenheter man har med i analysen. </td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
