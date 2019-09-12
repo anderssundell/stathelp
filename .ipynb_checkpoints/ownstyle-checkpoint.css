@@ -200,6 +200,7 @@ table, tr, td {
     border: 0;
     padding: 0px;
     border-spacing: 0px;
+    text-align: left;
 }
 
 
