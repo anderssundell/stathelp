@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
@@ -10,9 +9,10 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-132683642-1');
-</script>    
+</script>
     
-<title>wordlist_sv</title>
+    
+<title>ifstatements_sv</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13126,331 +13126,1135 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Ordlista-med-korta-f&#246;rklaringar">Ordlista med korta f&#246;rklaringar<a class="anchor-link" href="#Ordlista-med-korta-f&#246;rklaringar">&#182;</a></h1><p><em>av Anders Sundell</em></p>
-<p>Här är en ordlista med kortfattade förklaringar av vanliga begrepp inom statistisk analys.</p>
-
+<h1 id="If-satser-och-villkor">If-satser och villkor<a class="anchor-link" href="#If-satser-och-villkor">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Av Anders Sundell</em></p>
+<p>Nästan alla kommandon i Stata går att kombinera med så kallade if-satser. Det är villkor som anger på vilka observationer kommandot ska köras. Det kan handla om att man vill koda om vissa specifika observationer, eller göra en analys bara på en del av datamängden, och så vidare.</p>
+<p>Villkoren utgår från en uppsättning "logiska operatorer," byggstenar med vilka vi kan konstruera både enkla och komplicerade villkor. De känns också igen från många andra datorprogram. De viktigaste operatorerna är:</p>
 <table>
 <thead><tr>
-<th><strong>ORDLISTA</strong></th>
-<th></th>
+<th>Operator</th>
+<th>Betydelse</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>GENERELLA BEGREPP</strong></td>
-<td></td>
+<td>==</td>
+<td>Lika med</td>
 </tr>
 <tr>
-<td><em>Analysenhet</em></td>
-<td>De enheter som vi jämför. Till exempel länder, individer, år, aktier, kommuner, osv.</td>
+<td>!=</td>
+<td>Inte lika med</td>
 </tr>
 <tr>
-<td><em>Variabel</em></td>
-<td>Egenskap hos analysenheterna som varierar. Till exempel längd, ålder eller partillhörighet hos individer, eller befolkning, grad av demokrati eller klimat hos länder.</td>
+<td>&gt;</td>
+<td>Större än</td>
 </tr>
 <tr>
-<td><em>Variabelvärde</em></td>
-<td>Det faktiska värde en analysenhet har på en variabel.</td>
+<td>&lt;</td>
+<td>Mindre än</td>
 </tr>
 <tr>
-<td><em>Kausalitet</em></td>
-<td>Orsaksförhållande. I ett kausalt samband förväntas den ena variabeln ha påverkat den andra.</td>
+<td>&gt;=</td>
+<td>Större eller lika med</td>
 </tr>
 <tr>
-<td><em>Centralmått</em></td>
-<td>Ett värde som sammanfattar tendensen i ett datamaterial.</td>
+<td>&lt;=</td>
+<td>Mindre än eller lika med</td>
 </tr>
 <tr>
-<td><em>Fördelning</em></td>
-<td>Hur värdena fördelar sig över alla möjliga värden. Kan se ut på alla möjliga sätt.</td>
+<td>&amp;</td>
+<td>Och</td>
 </tr>
 <tr>
-<td><em>Normalfördelning</em></td>
-<td>En specifik fördelning, där de flesta värdena återfinns i mitten, och förre ute i kanterna.</td>
-</tr>
-<tr>
-<td><em>Spridning</em></td>
-<td>Hur värdena är fördelade kring centralmåttet.</td>
-</tr>
-<tr>
-<td><em>Korrelation</em></td>
-<td>Grad av samvariation mellan två variabler.</td>
-</tr>
-<tr>
-<td><em>Kovarians</em></td>
-<td>Grad av samvariation mellan två variabler, fast uttryckt i den skala som variablerna är mätta i, dvs svårare att jämföra än korrelation.</td>
-</tr>
-<tr>
-<td><strong>URVAL OCH INFERENS</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Population</em></td>
-<td>Den grupp vi vill dra slutsatser om, till exempel väljare i Sverige.</td>
-</tr>
-<tr>
-<td><em>Urval</em></td>
-<td> Den del av populationen (som kan väljas ut på olika sätt) som vi faktiskt studerar. Engelska: sample.</td>
-</tr>
-<tr>
-<td><em>Slumpmässigt urval</em></td>
-<td>När vi slumpmässigt drar enheter ur populationen till urvalet. Generellt sett det urvalssätt som ger bäst möjligheter till generalisering.</td>
-</tr>
-<tr>
-<td><em>Kvoturval</em></td>
-<td>När vi sätter ihop urvalet för att fylla vissa kvoter, som matchar populationen.</td>
-</tr>
-<tr>
-<td><em>Självselekterat urval</em></td>
-<td>När analysenheterna själva får anmäla sig till urvalet. Ger mycket dåliga möjligheter att generalisera till populationen, eftersom de som anmäler sig ofta inte är representativa.</td>
-</tr>
-<tr>
-<td><em>Inferens</em></td>
-<td>Att generalisera slutsatser om urvalet till populationen som helhet.</td>
-</tr>
-<tr>
-<td><em>Centrala gränsvärdessatsen</em></td>
-<td>Teori som säger att när vi tar många urval ur en population kommer medelvärdet i urvalen bilda en normalfördelning centrerat på det sanna medelvärdet i populationen. Ligger till grund för signifikansberäkningar. Engelska: Central limit theorem.</td>
-</tr>
-<tr>
-<td><em>Konfidensintervall</em></td>
-<td> Intervall av värden som uttrycker graden av osäkerhet. Till exempel kring vad det sanna medelvärdet är i en population, eller vad det sanna sambandet mellan två variabler är.</td>
-</tr>
-<tr>
-<td><strong>VARIABELTYPER (SKALNIVÅ)</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Nominalskala</em></td>
-<td>Kategorisering utan rangording. Variabeln "frukt" kan ha värdena "apelsin," "päron" eller "äpple" men de kan inte rangordnas.</td>
-</tr>
-<tr>
-<td><em>Ordinalskala</em></td>
-<td>Kategorisering med rangordning, men utan ekvidistans (dvs det är olika avstånd mellan de olika skalstegen). Till exempel kan variabeln "Inställning till förslag" ha värdena "Mycket bra," "Ganska bra," "Varken bra eller dåligt," "Ganska dåligt" eller "Mycket dåligt." Mycket bra är bättre än ganska bra, och ganska bra är bättre än varken bra eller dåligt, men vi vet inte att hoppen däremellan är lika stora.</td>
-</tr>
-<tr>
-<td><em>Intervallskala</em></td>
-<td>Kategorisering med rangordning och ekvidistans. Till exempel längd i centimeter. Varje steg uppåt på skalan är lika långt.</td>
-</tr>
-<tr>
-<td><strong>CENTRALMÅTT</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Typvärde</em></td>
-<td>Det enskilt vanligaste värdet. Lämpligt för nominalskalor.</td>
-</tr>
-<tr>
-<td><em>Median</em></td>
-<td>Det värde man får om man arrangerar alla värden i storleksordning, och tar det som är på mitten (eller mittemellan de två som är i mitten). Lämpligt för ordinalskalor, men går även att använda på intervallskalor.</td>
-</tr>
-<tr>
-<td><em>Medelvärde</em></td>
-<td>Det värde man får om man summerar alla enskilda värden och dividerar med antalet enheter. Kan bara användas på intervallskalor. <br> Formel: $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$</td>
-</tr>
-<tr>
-<td><strong>SPRIDNINGSMÅTT</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Varians</em></td>
-<td><br> Ett mått på avvikelsen från medelvärdet, som används i många andra beräkningar. <br> Formel: $V = \frac{\sum_{i=1}^n (x_i - \bar{x})^2)}{n-1}$ <br> Formeln betyder att man tar varje enskild observations avvikelse från medelvärdet, kvadrerar den, och sedan summerar man alla de kvadrerade avvikelserna, delar med n-1, och tar sedan roten ur detta.</td>
-</tr>
-<tr>
-<td><em>Standardavvikelse</em></td>
-<td>Ett mått på den typiska avvikelsen från medelvärdet. Beräknas som roten av variansen. <br> Formel: $s = \sqrt{V}$</td>
-</tr>
-<tr>
-<td><strong>VARIABELSPRÅKET</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Beroende variabel</em></td>
-<td>Den variabel vi vill förklara. Kallas ibland utfallsvariabel, eller på engelska dependent variable eller outcome variable.</td>
-</tr>
-<tr>
-<td><em>Oberoende variabel</em></td>
-<td>Den variabel vi tror förklarar den beroende variabeln. Kallas ibland prediktor, eller på engelska independent varaible, determinant eller predictor.</td>
-</tr>
-<tr>
-<td><em>Kontrollvariabel</em></td>
-<td>Ytterligare variabel som förs in i analysen, oftast för att utesluta spuriositet.</td>
-</tr>
-<tr>
-<td><em>Bakomliggande variabel</em></td>
-<td>Variabel som kommer före den oberoende variabeln i den tänkta orsakskedjan. Kan ofta vara bra att kontrollera för.</td>
-</tr>
-<tr>
-<td><em>Mellanliggande variabel</em></td>
-<td>Variabel som kommer mellan den oberoende variabeln och den beroende variabeln i den tänkta orsakskedjan. Ska <em>inte</em> kontrolleras för om man vill utesluta spuriositet.</td>
-</tr>
-<tr>
-<td><em>Interaktionsvariabel</em></td>
-<td>Variabel som styr vilken effekt den oberoende variabeln har. Kallas ibland för modererande variabel.</td>
-</tr>
-<tr>
-<td><em>Dummyvariabel</em></td>
-<td>Variabel som visar om en analysenhet har en egenskap (1), eller inte (0).</td>
-</tr>
-<tr>
-<td><strong>TYPER AV SAMBAND</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Nollsamband</em></td>
-<td>Brist på korrelation mellan två variabler.</td>
-</tr>
-<tr>
-<td><em>Positivt samband</em></td>
-<td>Samband där mer av den ena variabeln hänger ihop med mer av den andra, och där mindre av den ena variabeln hänger ihop med mindre av den andra.</td>
-</tr>
-<tr>
-<td><em>Negativt samband</em></td>
-<td>Samband där mer av den ena variabeln hänger ihop med mindre av den andra, och där mindre av den ena variabeln hänger ihop med mer av den andra.</td>
-</tr>
-<tr>
-<td><em>Kausalt samband</em></td>
-<td>Samband där den oberoende variabeln orsakar den beroende.</td>
-</tr>
-<tr>
-<td><em>Spuriöst samband</em></td>
-<td>Samband mellan två variabler som orsakats av att en tredje variabel orsakat både oberoende och beroende.</td>
-</tr>
-<tr>
-<td><em>Undertryckt samband</em></td>
-<td>Egentligen existerande samband mellan två variabler, som döljs av att en tredje variabel hänger ihop med mindre värden på den ena variabeln och högre på den andra, eller tvärtom.</td>
-</tr>
-<tr>
-<td><em>Ickelinjärt samband</em></td>
-<td>Samband som förändras beroende på variabelns värde. Till exempel sambandet mellan ålder och valdeltagande. Sannolikheten att rösta ökar när man blir äldre, men bara till en viss gräns: riktigt gamla röstar i mindre utsträckning än de i medelåldern.</td>
-</tr>
-<tr>
-<td><strong>ANALYSTEKNIKER</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Univariat analys</em></td>
-<td>Analys av en variabel. Till exempel beräkning av medelvärde.</td>
-</tr>
-<tr>
-<td><em>Bivariat analys</em></td>
-<td>Analys av samband mellan två variabler.</td>
-</tr>
-<tr>
-<td><em>Korrelationsanalys</em></td>
-<td>Analys som visar sambandets riktning och styrka mellan två variabler. Det finns många olika korrelationsmått, men det vanligaste är Pearson's R.</td>
-</tr>
-<tr>
-<td><em>Regressionsanalys</em></td>
-<td>Analys där linje passas till en mängd punkter. Ger uppgifter om linjens lutning, sambandets styrka, osäkerhet i skattningen av linjen, m.m.</td>
-</tr>
-<tr>
-<td><em>Multipel regressionsanalys</em></td>
-<td>Regressionsanalys med fler än en oberoende variabel.</td>
-</tr>
-<tr>
-<td><em>Logistisk regressionsanalys</em></td>
-<td>Typ av regressionsanalys anpassat för fall där den beroende variabeln bara har värdet 0 eller 1.</td>
-</tr>
-<tr>
-<td><em>Faktoranalys</em></td>
-<td>Analys där man försöker hitta gemensamma nämnare mellan olika variabler. Dvs reducera datan för att se om det finns någon latent variabel, som vi inte observerat, som kan förklara variationen i flera variabler.</td>
-</tr>
-<tr>
-<td><strong>DESIGNTYPER</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Experimentell design</em></td>
-<td>När vi har kontroll över den oberoende variabeln, och slumpar analysenheter in i experimentgrupp (som utsätts för en behandling) och kontrollgrupp (som inte utsätts för behandling eller utsätts för en annan behandling). Ger goda möjligheter att uttala sig om kausalitet.</td>
-</tr>
-<tr>
-<td><em>Pseudoexperimentell design</em></td>
-<td>När vi utnyttjar naturlig variation för att hitta specialfall där det blivit ungefär som slumpmässig tilldelning till någon "behandling."</td>
-</tr>
-<tr>
-<td><em>Regression discontinuity design</em></td>
-<td>När det finns någon skarp gräns som styr tilldelning till någon specifik variabel, och vi antar att analysenheter precis ovan och under gränsen är ungefär lika, och att slumpen avgör vilka som hamnar ovan och under.</td>
-</tr>
-<tr>
-<td><em>Matchning</em></td>
-<td>När analysenheter matchas ihop med sina "statistiska tvillingar," dvs enheter som har samma värden på alla relevanta variabler förutom den oberoende.</td>
-</tr>
-<tr>
-<td><em>Tvärsnittsdesign</em></td>
-<td>När vi jämför många analysenheter vid ett tillfälle. Engelska: Crosssectional analysis.</td>
-</tr>
-<tr>
-<td><em>Longitudinell design</em></td>
-<td>När vi jämför analysenheter med sig själva över tid.</td>
-</tr>
-<tr>
-<td><em>Paneldesign</em></td>
-<td>När vi jämför många enheter med varandra, och över tid. Kallas också Time Series-Cross Section.</td>
-</tr>
-<tr>
-<td><strong>BEGREPP INOM REGRESSIONSANALYS</strong></td>
-</tr>
-<tr>
-<td><em>Regressionslinje</em></td>
-<td>Den linje som passar bäst till punktmängden.</td>
-</tr>
-<tr>
-<td><em>b-koefficient</em></td>
-<td>Lutning på regressionslinjen. Hur mycket den beroende variabeln förväntas öka när den oberoende variabeln ökar med ett steg.</td>
-</tr>
-<tr>
-<td><em>Konstant/intercept</em></td>
-<td>Det förväntade värdet på den beroende variabeln när alla oberoende variabler i analysen har värdet 0.</td>
-</tr>
-<tr>
-<td><em>$R^2$</em></td>
-<td>Ett mått på hur mycket av variationen i den beroende variabeln som kan förklaras av de oberoende variablerna. Går mellan 0 och 1. 0.5 kan tolkas som "50% av variationen i den beroende variabeln förklaras av de oberoende variablerna."</td>
-</tr>
-<tr>
-<td><em>Standardfel</em></td>
-<td>Ett mått på osäkerheten i skattningen av b-koefficienten. Engelska: Standard error.</td>
-</tr>
-<tr>
-<td><em>t-värde</em></td>
-<td>B-koefficienten delat med standardfelet. Används för att beräkna signifikansvärdet.</td>
-</tr>
-<tr>
-<td><em>p-värde</em></td>
-<td>Signifikansvärdet. Visar hur osannolikt det är att man skulle få en b-koefficient som är minst så stor, givet att nollhypotesen stämmer. Är egentligen bara intressant när man analyserar ett urval, eller har en slumpmässig tilldelning i ett experiment. Men trots detta används det ofta som beslutsregel för att avgöra när samband är starka nog att tolkas. Den vanliga beslutsregeln är att p-värden under 0.05 räknas som signifikanta. Räknas fram genom att jämföra t-värdet med en t-fördelning, som beror på hur många analysenheter man har med i analysen.</td>
-</tr>
-<tr>
-<td><em>n-tal</em></td>
-<td>Hur många analysenheter som ingick i analysen.</td>
-</tr>
-<tr>
-<td><em>Ostandardiserad regressionskoefficient</em></td>
-<td> Den vanliga b-koefficienten, som då är uttryckt i den beroende variabelns enhet. Om tex beroende variabel är BNP per capita visar koefficienten hur mycket BNP per capita förväntas öka om den oberoende variabeln ökar med ett skalsteg.</td>
-</tr>
-<tr>
-<td><em>Standardiserad regressionskoefficient</em></td>
-<td>b-koefficienten, fast standardiserad så att variansen i både oberoende och beroende variabel är 1. Möjliggör jämförelse mellan koefficienter mätta med olika skalor, vilket annars är svårt.</td>
-</tr>
-<tr>
-<td><strong>DIAGRAM</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Histogram</em></td>
-<td>Visar fördelningen av en variabel. Heter samma på engelska.</td>
-</tr>
-<tr>
-<td><em>Spridningsdiagram</em></td>
-<td>Visar sambandet mellan två variabler genom att rita ut analysenheterna som punkter utifrån två axlar. Engelska: Scatterplot.</td>
+<td>|</td>
+<td>Eller</td>
 </tr>
 </tbody>
 </table>
+<p>De två sista, och och eller, kan användas för att länka ihop flera villkor. Om man till exempel jobbar med individdata kan man göra ett villkor som kräver att individen är över 25 år OCH är arbetslös, till exempel. Eller att vi vill välja ut de personer som är under 22 år ELLER aldrig har röstat i ett riksdagsval.</p>
+<p><strong>If-satserna går in efter att man har listat variablerna, och innan man anger options (,).</strong></p>
+<p>Med hjälp av QoG basic-datamängden ska vi se hur dessa villkor kan användas i alla möjliga sammanhang.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(Quality of Government Basic dataset 2018 - Cross-Section)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="I-beskrivande-statistik">I beskrivande statistik<a class="anchor-link" href="#I-beskrivande-statistik">&#182;</a></h2><p>If-satser är bra för att välja ut särskila grupper av analysenheter. Säg att vi vill undersöka graden av korruption i världen. För att räkna ut medelvärdet kan vi skriva:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> ti_cpi
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      ti_cpi |        181    42.82476     19.5057          8         92
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Men säg nu att vi vill göra detta för en mindre grupp länder. Till exempel de som räknas som fria enligt Freedom House, dvs har värdet 1 på variabeln <code>fh_status</code>. Vi lägger då till en if-sats i kommandot:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> ti_cpi<span class="k"> if</span> fh_status<span class="o">==</span><span class="m">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      ti_cpi |         77    57.25041    17.40723         30         92
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Antalet observationer är nu mycket lägre, 77 istället för 181. Och medelvärdet är högre: 57.3 istället för 42.8. Korruptionen är i allmänhet inte lika allvarlig i demokratiska länder. Vi kan också använda if-satser för att undersöka observationer som kommer över något tröskelvärde, tex länder med befolkning <code>unna_pop</code> som överstiger 50 miljoner:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> ti_cpi<span class="k"> if</span> unna_pop <span class="o">&gt;</span> <span class="m">50000000</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      ti_cpi |         28    42.71429    17.87168         21         79
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If-satserna fungerar som sagt på i princip alla kommandon. Till exempel också kommandot <code>list</code>. Säg att vi vill ha ut en lista över alla länder i Östeuropa och forna Sovjetunionen, och om de räknas som demokratier eller diktaturer. Vi utgår då från variabeln <code>ht_region</code>, där Östeuropa har koden 1. Vi tar ut en lista över två varibler, landets namn <code>cname</code> och dess demokratistatus <code>fh_status</code>. Vi lägger också till option <code>clean</code> som tar bort linjerna i tabellen. Options kommer efter if-satsen.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list</span> cname fh_status<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">1</span>, clean
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+                        cname     fh_status  
+  2.                  Albania   Partly Free  
+  7.               Azerbaijan      Not Free  
+ 14.                  Armenia   Partly Free  
+ 19.   Bosnia and Herzegovina   Partly Free  
+ 25.                 Bulgaria          Free  
+ 28.                  Belarus      Not Free  
+ 44.                  Croatia          Free  
+ 47.           Czech Republic          Free  
+ 57.                  Estonia          Free  
+ 63.                  Georgia   Partly Free  
+ 75.                  Hungary          Free  
+ 87.               Kazakhstan      Not Free  
+ 93.               Kyrgyzstan   Partly Free  
+ 97.                   Latvia          Free  
+101.                Lithuania          Free  
+114.                  Moldova   Partly Free  
+115.               Montenegro          Free  
+138.                   Poland          Free  
+143.                  Romania          Free  
+144.                   Russia      Not Free  
+153.                   Serbia          Free  
+157.                 Slovakia          Free  
+159.                 Slovenia          Free  
+171.               Tajikistan      Not Free  
+179.             Turkmenistan      Not Free  
+182.                  Ukraine   Partly Free  
+183.                Macedonia   Partly Free  
+190.               Uzbekistan      Not Free  
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Om vi vill komprimera ovanstående lista kan vi istället ta ut den som en frekvenstabell med <code>tab</code>, där vi istället får se hur många länder som faller inom varje kategori.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">tab</span> fh_status<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    Freedom |
+     Status |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       Free |         13       46.43       46.43
+Partly Free |          8       28.57       75.00
+   Not Free |          7       25.00      100.00
+------------+-----------------------------------
+      Total |         28      100.00
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="I-grafer">I grafer<a class="anchor-link" href="#I-grafer">&#182;</a></h2><p>If-satser är väldigt användbara när man gör grafer, särskilt med kommandot <code>twoway</code>, eftersom man med det lätt kan lägga olika lager av grafer ovanpå varandra. Varje lager kan ha egna villkor för vilka enheter som ska ingå, men man kan också göra if-satser som tillämpas på grafen som helhet. I grafen nedan ritar vi upp sambandet mellan korruption <code>ti_cpi</code>och etnisk fragmentering <code>al_ethnic</code>. Vi lägger till en if-sats för hela grafen, som begränsar urvalet till antingen Västeuropa och Nordamerika <code>ht_region==5</code> ELLER Afrika söder om Sahara <code>ht_region==4</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter ti_cpi al_ethnic)<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">5</span> | ht_region<span class="o">==</span><span class="m">4</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_svg output_subarea ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) -->
+
+<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>Stata Graph - Graph</desc>
+	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
+	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
+	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
+	<rect x="390.80" y="100.86" width="3468.22" height="2388.33" style="fill:#FFFFFF"/>
+	<rect x="393.68" y="103.74" width="3462.46" height="2382.57" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
+	<line x1="390.80" y1="2425.82" x2="3859.02" y2="2425.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1973.50" x2="3859.02" y2="1973.50" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1521.18" x2="3859.02" y2="1521.18" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1068.86" x2="3859.02" y2="1068.86" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="616.54" x2="3859.02" y2="616.54" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="164.22" x2="3859.02" y2="164.22" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<circle cx="3082.98" cy="1996.15" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3082.98" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="764.53" cy="616.54" r="26.35" style="fill:#1A476F"/>
+	<circle cx="764.53" cy="616.54" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="810.93" cy="797.47" r="26.35" style="fill:#1A476F"/>
+	<circle cx="810.93" cy="797.47" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2310.04" cy="707.01" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2310.04" cy="707.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1824.94" cy="1001.05" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1824.94" cy="1001.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1440.33" cy="1973.63" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1440.33" cy="1973.63" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3339.52" cy="1815.22" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3339.52" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2834.74" cy="593.89" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2834.74" cy="593.89" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1848.83" cy="1136.80" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1848.83" cy="1136.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3225.91" cy="1883.16" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3225.91" cy="1883.16" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3334.57" cy="1928.33" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3334.57" cy="1928.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="454.04" cy="1837.87" r="26.35" style="fill:#1A476F"/>
+	<circle cx="454.04" cy="1837.87" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1905.69" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3377.01" cy="1905.69" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1928.33" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3377.01" cy="1928.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3084.59" cy="1543.83" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3084.59" cy="1543.83" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="727.65" cy="345.15" r="26.35" style="fill:#1A476F"/>
+	<circle cx="727.65" cy="345.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1612.59" cy="1996.15" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1612.59" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2871.62" cy="1679.59" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2871.62" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2634.14" cy="2018.80" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2634.14" cy="2018.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="893.48" cy="412.97" r="26.35" style="fill:#1A476F"/>
+	<circle cx="893.48" cy="412.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="798.93" cy="865.29" r="26.35" style="fill:#1A476F"/>
+	<circle cx="798.93" cy="865.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3114.54" cy="1656.94" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3114.54" cy="1656.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3023.58" cy="1589.12" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3023.58" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3081.87" cy="1770.05" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3081.87" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1016.11" cy="639.19" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1016.11" cy="639.19" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2704.06" cy="1340.25" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2704.06" cy="1340.25" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="980.84" cy="1453.37" r="26.35" style="fill:#1A476F"/>
+	<circle cx="980.84" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2923.35" cy="1860.52" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2923.35" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="720.72" cy="639.19" r="26.35" style="fill:#1A476F"/>
+	<circle cx="720.72" cy="639.19" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="857.22" cy="752.30" r="26.35" style="fill:#1A476F"/>
+	<circle cx="857.22" cy="752.30" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="836.80" cy="1453.37" r="26.35" style="fill:#1A476F"/>
+	<circle cx="836.80" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3195.60" cy="1702.11" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3195.60" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3323.80" cy="1860.52" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3323.80" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1306.18" cy="1317.73" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1306.18" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3489.50" cy="1589.12" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3489.50" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2225.89" cy="571.37" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2225.89" cy="571.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3391.62" cy="1792.57" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3391.62" cy="1792.57" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2707.65" cy="1679.59" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2707.65" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2761.73" cy="1702.11" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2761.73" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="592.51" cy="1181.97" r="26.35" style="fill:#1A476F"/>
+	<circle cx="592.51" cy="1181.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2509.16" cy="1747.40" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2509.16" cy="1747.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2002.52" cy="1204.62" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2002.52" cy="1204.62" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2770.51" cy="1724.76" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2770.51" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2568.93" cy="1317.73" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2568.93" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="806.23" cy="548.72" r="26.35" style="fill:#1A476F"/>
+	<circle cx="806.23" cy="548.72" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1780.14" cy="367.80" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1780.14" cy="367.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2632.04" cy="1634.29" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2632.04" cy="1634.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3295.96" cy="1815.22" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3295.96" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="649.93" cy="480.91" r="26.35" style="fill:#1A476F"/>
+	<circle cx="649.93" cy="480.91" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="610.34" cy="1001.05" r="26.35" style="fill:#1A476F"/>
+	<circle cx="610.34" cy="1001.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3154.76" cy="1996.15" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3154.76" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1536.11" cy="1317.73" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1536.11" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2772.74" cy="1453.37" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2772.74" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1130.58" cy="1181.97" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1130.58" cy="1181.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3191.14" cy="1724.76" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3191.14" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3166.39" cy="2245.02" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3166.39" cy="2245.02" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2966.04" cy="1430.72" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2966.04" cy="1430.72" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1748.59" cy="1950.98" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1748.59" cy="1950.98" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="1845.73" cy="1068.86" r="26.35" style="fill:#1A476F"/>
+	<circle cx="1845.73" cy="1068.86" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="648.57" cy="1453.37" r="26.35" style="fill:#1A476F"/>
+	<circle cx="648.57" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="654.51" cy="458.26" r="26.35" style="fill:#1A476F"/>
+	<circle cx="654.51" cy="458.26" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2229.85" cy="480.91" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2229.85" cy="480.91" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2826.33" cy="1770.05" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2826.33" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3562.39" cy="1837.87" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3562.39" cy="1837.87" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="858.58" cy="661.84" r="26.35" style="fill:#1A476F"/>
+	<circle cx="858.58" cy="661.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2911.09" cy="1724.76" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2911.09" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2091.87" cy="752.30" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2091.87" cy="752.30" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="2919.26" cy="1566.48" r="26.35" style="fill:#1A476F"/>
+	<circle cx="2919.26" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<circle cx="3063.18" cy="1566.48" r="26.35" style="fill:#1A476F"/>
+	<circle cx="3063.18" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
+	<line x1="390.80" y1="2489.19" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="390.80" y1="2425.82" x2="350.83" y2="2425.82" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="2425.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2425.82)" text-anchor="middle">0</text>
+	<line x1="390.80" y1="1973.50" x2="350.83" y2="1973.50" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1973.50" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1973.50)" text-anchor="middle">20</text>
+	<line x1="390.80" y1="1521.18" x2="350.83" y2="1521.18" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1521.18" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1521.18)" text-anchor="middle">40</text>
+	<line x1="390.80" y1="1068.86" x2="350.83" y2="1068.86" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1068.86" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1068.86)" text-anchor="middle">60</text>
+	<line x1="390.80" y1="616.54" x2="350.83" y2="616.54" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="616.54" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,616.54)" text-anchor="middle">80</text>
+	<line x1="390.80" y1="164.22" x2="350.83" y2="164.22" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="164.22" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,164.22)" text-anchor="middle">100</text>
+	<text x="190.71" y="1294.96" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1294.96)" text-anchor="middle">Corruption Perceptions Index</text>
+	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="454.16" y1="2489.19" x2="454.16" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="454.16" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
+	<line x1="1122.41" y1="2489.19" x2="1122.41" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1122.41" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.2</text>
+	<line x1="1790.79" y1="2489.19" x2="1790.79" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1790.79" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.4</text>
+	<line x1="2459.04" y1="2489.19" x2="2459.04" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="2459.04" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.6</text>
+	<line x1="3127.41" y1="2489.19" x2="3127.41" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3127.41" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.8</text>
+	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
+	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Ethnic Fractionalization</text>
+</svg>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Men vi kan som sagt också använda if-satser inom respektive lager. Vi göra ett lager där bara Västeuropa och Nordamerika ingår, och ett lager där bara Afrika söder om Sahara ingår. Fördelen är att vi då kan modifiera utseendet för varje lager. Vi gör punkterna i Västeuropa och Nordamerika blåa, och Afrika söder om Sahara röda. Notera att if-satserna här står inom parenteserna, och då bara påverkar det andra som står inom just den parentesen. Men också här kommer de före options.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span>  (scatter ti_cpi al_ethnic<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">5</span>, mcolor(blue)) <span class="cs">///</span>
+        (scatter ti_cpi al_ethnic<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">4</span>, mcolor(red))
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_svg output_subarea ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) -->
+
+<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>Stata Graph - Graph</desc>
+	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
+	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
+	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
+	<rect x="390.80" y="100.86" width="3468.22" height="2132.77" style="fill:#FFFFFF"/>
+	<rect x="393.68" y="103.74" width="3462.46" height="2127.01" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
+	<line x1="390.80" y1="2170.27" x2="3859.02" y2="2170.27" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1769.06" x2="3859.02" y2="1769.06" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1367.85" x2="3859.02" y2="1367.85" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="966.64" x2="3859.02" y2="966.64" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="565.43" x2="3859.02" y2="565.43" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="164.22" x2="3859.02" y2="164.22" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<circle cx="764.53" cy="565.43" r="26.35" style="fill:#0000FF"/>
+	<circle cx="764.53" cy="565.43" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="810.93" cy="725.94" r="26.35" style="fill:#0000FF"/>
+	<circle cx="810.93" cy="725.94" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2310.04" cy="645.75" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2310.04" cy="645.75" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2834.74" cy="545.38" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2834.74" cy="545.38" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="727.65" cy="324.73" r="26.35" style="fill:#0000FF"/>
+	<circle cx="727.65" cy="324.73" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="893.48" cy="384.87" r="26.35" style="fill:#0000FF"/>
+	<circle cx="893.48" cy="384.87" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="798.93" cy="786.08" r="26.35" style="fill:#0000FF"/>
+	<circle cx="798.93" cy="786.08" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1016.11" cy="585.48" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1016.11" cy="585.48" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="980.84" cy="1307.71" r="26.35" style="fill:#0000FF"/>
+	<circle cx="980.84" cy="1307.71" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="720.72" cy="585.48" r="26.35" style="fill:#0000FF"/>
+	<circle cx="720.72" cy="585.48" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="857.22" cy="685.84" r="26.35" style="fill:#0000FF"/>
+	<circle cx="857.22" cy="685.84" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="836.80" cy="1307.71" r="26.35" style="fill:#0000FF"/>
+	<circle cx="836.80" cy="1307.71" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2225.89" cy="525.34" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2225.89" cy="525.34" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="592.51" cy="1067.01" r="26.35" style="fill:#0000FF"/>
+	<circle cx="592.51" cy="1067.01" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="806.23" cy="505.29" r="26.35" style="fill:#0000FF"/>
+	<circle cx="806.23" cy="505.29" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1780.14" cy="344.78" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1780.14" cy="344.78" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="649.93" cy="445.14" r="26.35" style="fill:#0000FF"/>
+	<circle cx="649.93" cy="445.14" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="610.34" cy="906.50" r="26.35" style="fill:#0000FF"/>
+	<circle cx="610.34" cy="906.50" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1845.73" cy="966.64" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1845.73" cy="966.64" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="654.51" cy="424.97" r="26.35" style="fill:#0000FF"/>
+	<circle cx="654.51" cy="424.97" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2229.85" cy="445.14" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2229.85" cy="445.14" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="858.58" cy="605.53" r="26.35" style="fill:#0000FF"/>
+	<circle cx="858.58" cy="605.53" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2091.87" cy="685.84" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2091.87" cy="685.84" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="3082.98" cy="1789.23" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3082.98" cy="1789.23" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1824.94" cy="906.50" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1824.94" cy="906.50" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1440.33" cy="1769.19" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1440.33" cy="1769.19" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3339.52" cy="1628.72" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3339.52" cy="1628.72" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1848.83" cy="1026.91" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1848.83" cy="1026.91" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3225.91" cy="1688.87" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3225.91" cy="1688.87" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3334.57" cy="1729.09" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3334.57" cy="1729.09" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="454.04" cy="1648.77" r="26.35" style="fill:#FF0000"/>
+	<circle cx="454.04" cy="1648.77" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1708.92" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3377.01" cy="1708.92" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1729.09" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3377.01" cy="1729.09" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3084.59" cy="1388.02" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3084.59" cy="1388.02" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1612.59" cy="1789.23" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1612.59" cy="1789.23" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2871.62" cy="1508.31" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2871.62" cy="1508.31" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2634.14" cy="1809.28" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2634.14" cy="1809.28" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3114.54" cy="1488.26" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3114.54" cy="1488.26" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3023.58" cy="1428.12" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3023.58" cy="1428.12" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3081.87" cy="1588.63" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3081.87" cy="1588.63" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2704.06" cy="1207.47" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2704.06" cy="1207.47" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2923.35" cy="1668.82" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2923.35" cy="1668.82" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3195.60" cy="1528.36" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3195.60" cy="1528.36" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3323.80" cy="1668.82" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3323.80" cy="1668.82" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1306.18" cy="1187.42" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1306.18" cy="1187.42" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3489.50" cy="1428.12" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3489.50" cy="1428.12" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3391.62" cy="1608.68" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3391.62" cy="1608.68" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2707.65" cy="1508.31" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2707.65" cy="1508.31" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2761.73" cy="1528.36" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2761.73" cy="1528.36" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2509.16" cy="1568.58" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2509.16" cy="1568.58" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2002.52" cy="1087.05" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2002.52" cy="1087.05" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2770.51" cy="1548.53" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2770.51" cy="1548.53" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2568.93" cy="1187.42" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2568.93" cy="1187.42" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2632.04" cy="1468.22" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2632.04" cy="1468.22" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3295.96" cy="1628.72" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3295.96" cy="1628.72" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3154.76" cy="1789.23" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3154.76" cy="1789.23" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1536.11" cy="1187.42" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1536.11" cy="1187.42" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2772.74" cy="1307.71" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2772.74" cy="1307.71" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1130.58" cy="1067.01" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1130.58" cy="1067.01" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3191.14" cy="1548.53" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3191.14" cy="1548.53" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3166.39" cy="2009.89" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3166.39" cy="2009.89" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2966.04" cy="1287.66" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2966.04" cy="1287.66" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1748.59" cy="1749.14" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1748.59" cy="1749.14" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="648.57" cy="1307.71" r="26.35" style="fill:#FF0000"/>
+	<circle cx="648.57" cy="1307.71" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2826.33" cy="1588.63" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2826.33" cy="1588.63" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3562.39" cy="1648.77" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3562.39" cy="1648.77" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2911.09" cy="1548.53" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2911.09" cy="1548.53" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2919.26" cy="1408.07" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2919.26" cy="1408.07" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3063.18" cy="1408.07" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3063.18" cy="1408.07" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<line x1="390.80" y1="2233.63" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="390.80" y1="2170.27" x2="350.83" y2="2170.27" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="2170.27" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2170.27)" text-anchor="middle">0</text>
+	<line x1="390.80" y1="1769.06" x2="350.83" y2="1769.06" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1769.06" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1769.06)" text-anchor="middle">20</text>
+	<line x1="390.80" y1="1367.85" x2="350.83" y2="1367.85" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1367.85" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1367.85)" text-anchor="middle">40</text>
+	<line x1="390.80" y1="966.64" x2="350.83" y2="966.64" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="966.64" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,966.64)" text-anchor="middle">60</text>
+	<line x1="390.80" y1="565.43" x2="350.83" y2="565.43" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="565.43" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,565.43)" text-anchor="middle">80</text>
+	<line x1="390.80" y1="164.22" x2="350.83" y2="164.22" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="164.22" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,164.22)" text-anchor="middle">100</text>
+	<text x="190.71" y="1167.25" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1167.25)" text-anchor="middle">Corruption Perceptions Index</text>
+	<line x1="390.80" y1="2233.63" x2="3859.02" y2="2233.63" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="454.16" y1="2233.63" x2="454.16" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="454.16" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
+	<line x1="1122.41" y1="2233.63" x2="1122.41" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1122.41" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.2</text>
+	<line x1="1790.79" y1="2233.63" x2="1790.79" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1790.79" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.4</text>
+	<line x1="2459.04" y1="2233.63" x2="2459.04" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="2459.04" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.6</text>
+	<line x1="3127.41" y1="2233.63" x2="3127.41" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3127.41" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.8</text>
+	<line x1="3795.66" y1="2233.63" x2="3795.66" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3795.66" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
+	<text x="2124.91" y="2473.60" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Ethnic Fractionalization</text>
+	<rect x="585.83" y="2558.24" width="3078.16" height="186.37" style="fill:#FFFFFF"/>
+	<rect x="588.71" y="2561.12" width="3072.40" height="180.61" style="fill:none;stroke:#000000;stroke-width:5.76"/>
+	<circle cx="651.05" cy="2651.43" r="26.35" style="fill:#0000FF"/>
+	<circle cx="651.05" cy="2651.43" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2216.98" cy="2651.43" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2216.98" cy="2651.43" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<text x="732.97" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Corruption Perceptions Index</text>
+	<text x="2298.90" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Corruption Perceptions Index</text>
+</svg>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Väldigt användbart i den här typen av scatterplots är också att använda ett nytt lager med bara ett fåtal utvalda analysenheter, som markeras särskilt i diagrammet. Vi kanske till exempel vill visa var Sverige och USA. Då gör vi ett nytt lager, med ett villkor att landsnamnet ska vara Sverige ELLER USA, och i det lagret skriver vi också att landsnamnet ska skrivas ut. Vi lägger dessutom till ett option <code>legend(off)</code> som tar bort förklaringen längst ner - man får annars en förklaring per lager, vilket blir fult.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span>  (scatter ti_cpi al_ethnic<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">5</span>, mcolor(blue)) <span class="cs">///</span>
+        (scatter ti_cpi al_ethnic<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">4</span>, mcolor(red)) <span class="cs">///</span>
+        (scatter ti_cpi al_ethnic<span class="k"> if</span> cname<span class="o">==</span><span class="s">&quot;Sweden&quot;</span> | cname<span class="o">==</span><span class="s">&quot;United States&quot;</span>, mlabel(cname)) <span class="cs">///</span>
+        , legend(off)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_svg output_subarea ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) -->
+
+<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>Stata Graph - Graph</desc>
+	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
+	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
+	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
+	<rect x="390.80" y="100.86" width="3468.22" height="2388.33" style="fill:#FFFFFF"/>
+	<rect x="393.68" y="103.74" width="3462.46" height="2382.57" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
+	<line x1="390.80" y1="2425.82" x2="3859.02" y2="2425.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1973.50" x2="3859.02" y2="1973.50" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1521.18" x2="3859.02" y2="1521.18" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1068.86" x2="3859.02" y2="1068.86" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="616.54" x2="3859.02" y2="616.54" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="164.22" x2="3859.02" y2="164.22" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<circle cx="764.53" cy="616.54" r="26.35" style="fill:#0000FF"/>
+	<circle cx="764.53" cy="616.54" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="810.93" cy="797.47" r="26.35" style="fill:#0000FF"/>
+	<circle cx="810.93" cy="797.47" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2310.04" cy="707.01" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2310.04" cy="707.01" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2834.74" cy="593.89" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2834.74" cy="593.89" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="727.65" cy="345.15" r="26.35" style="fill:#0000FF"/>
+	<circle cx="727.65" cy="345.15" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="893.48" cy="412.97" r="26.35" style="fill:#0000FF"/>
+	<circle cx="893.48" cy="412.97" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="798.93" cy="865.29" r="26.35" style="fill:#0000FF"/>
+	<circle cx="798.93" cy="865.29" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1016.11" cy="639.19" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1016.11" cy="639.19" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="980.84" cy="1453.37" r="26.35" style="fill:#0000FF"/>
+	<circle cx="980.84" cy="1453.37" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="720.72" cy="639.19" r="26.35" style="fill:#0000FF"/>
+	<circle cx="720.72" cy="639.19" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="857.22" cy="752.30" r="26.35" style="fill:#0000FF"/>
+	<circle cx="857.22" cy="752.30" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="836.80" cy="1453.37" r="26.35" style="fill:#0000FF"/>
+	<circle cx="836.80" cy="1453.37" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2225.89" cy="571.37" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2225.89" cy="571.37" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="592.51" cy="1181.97" r="26.35" style="fill:#0000FF"/>
+	<circle cx="592.51" cy="1181.97" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="806.23" cy="548.72" r="26.35" style="fill:#0000FF"/>
+	<circle cx="806.23" cy="548.72" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1780.14" cy="367.80" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1780.14" cy="367.80" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="649.93" cy="480.91" r="26.35" style="fill:#0000FF"/>
+	<circle cx="649.93" cy="480.91" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="610.34" cy="1001.05" r="26.35" style="fill:#0000FF"/>
+	<circle cx="610.34" cy="1001.05" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="1845.73" cy="1068.86" r="26.35" style="fill:#0000FF"/>
+	<circle cx="1845.73" cy="1068.86" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="654.51" cy="458.26" r="26.35" style="fill:#0000FF"/>
+	<circle cx="654.51" cy="458.26" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2229.85" cy="480.91" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2229.85" cy="480.91" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="858.58" cy="661.84" r="26.35" style="fill:#0000FF"/>
+	<circle cx="858.58" cy="661.84" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="2091.87" cy="752.30" r="26.35" style="fill:#0000FF"/>
+	<circle cx="2091.87" cy="752.30" r="22.03" style="fill:none;stroke:#0000FF;stroke-width:8.64"/>
+	<circle cx="3082.98" cy="1996.15" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3082.98" cy="1996.15" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1824.94" cy="1001.05" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1824.94" cy="1001.05" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1440.33" cy="1973.63" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1440.33" cy="1973.63" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3339.52" cy="1815.22" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3339.52" cy="1815.22" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1848.83" cy="1136.80" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1848.83" cy="1136.80" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3225.91" cy="1883.16" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3225.91" cy="1883.16" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3334.57" cy="1928.33" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3334.57" cy="1928.33" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="454.04" cy="1837.87" r="26.35" style="fill:#FF0000"/>
+	<circle cx="454.04" cy="1837.87" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1905.69" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3377.01" cy="1905.69" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3377.01" cy="1928.33" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3377.01" cy="1928.33" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3084.59" cy="1543.83" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3084.59" cy="1543.83" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1612.59" cy="1996.15" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1612.59" cy="1996.15" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2871.62" cy="1679.59" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2871.62" cy="1679.59" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2634.14" cy="2018.80" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2634.14" cy="2018.80" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3114.54" cy="1656.94" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3114.54" cy="1656.94" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3023.58" cy="1589.12" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3023.58" cy="1589.12" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3081.87" cy="1770.05" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3081.87" cy="1770.05" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2704.06" cy="1340.25" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2704.06" cy="1340.25" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2923.35" cy="1860.52" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2923.35" cy="1860.52" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3195.60" cy="1702.11" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3195.60" cy="1702.11" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3323.80" cy="1860.52" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3323.80" cy="1860.52" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1306.18" cy="1317.73" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1306.18" cy="1317.73" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3489.50" cy="1589.12" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3489.50" cy="1589.12" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3391.62" cy="1792.57" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3391.62" cy="1792.57" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2707.65" cy="1679.59" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2707.65" cy="1679.59" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2761.73" cy="1702.11" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2761.73" cy="1702.11" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2509.16" cy="1747.40" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2509.16" cy="1747.40" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2002.52" cy="1204.62" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2002.52" cy="1204.62" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2770.51" cy="1724.76" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2770.51" cy="1724.76" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2568.93" cy="1317.73" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2568.93" cy="1317.73" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2632.04" cy="1634.29" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2632.04" cy="1634.29" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3295.96" cy="1815.22" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3295.96" cy="1815.22" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3154.76" cy="1996.15" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3154.76" cy="1996.15" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1536.11" cy="1317.73" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1536.11" cy="1317.73" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2772.74" cy="1453.37" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2772.74" cy="1453.37" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1130.58" cy="1181.97" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1130.58" cy="1181.97" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3191.14" cy="1724.76" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3191.14" cy="1724.76" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3166.39" cy="2245.02" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3166.39" cy="2245.02" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2966.04" cy="1430.72" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2966.04" cy="1430.72" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="1748.59" cy="1950.98" r="26.35" style="fill:#FF0000"/>
+	<circle cx="1748.59" cy="1950.98" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="648.57" cy="1453.37" r="26.35" style="fill:#FF0000"/>
+	<circle cx="648.57" cy="1453.37" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2826.33" cy="1770.05" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2826.33" cy="1770.05" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3562.39" cy="1837.87" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3562.39" cy="1837.87" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2911.09" cy="1724.76" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2911.09" cy="1724.76" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="2919.26" cy="1566.48" r="26.35" style="fill:#FF0000"/>
+	<circle cx="2919.26" cy="1566.48" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="3063.18" cy="1566.48" r="26.35" style="fill:#FF0000"/>
+	<circle cx="3063.18" cy="1566.48" r="22.03" style="fill:none;stroke:#FF0000;stroke-width:8.64"/>
+	<circle cx="654.64" cy="458.14" r="26.35" style="fill:#55752F"/>
+	<circle cx="654.64" cy="458.14" r="22.03" style="fill:none;stroke:#55752F;stroke-width:8.64"/>
+	<text x="696.59" y="486.15" style="font-family:'Helvetica';font-size:79.94px;fill:#55752f">Sweden</text>
+	<circle cx="2091.87" cy="752.18" r="26.35" style="fill:#55752F"/>
+	<circle cx="2091.87" cy="752.18" r="22.03" style="fill:none;stroke:#55752F;stroke-width:8.64"/>
+	<text x="2133.82" y="780.19" style="font-family:'Helvetica';font-size:79.94px;fill:#55752f">United States</text>
+	<line x1="390.80" y1="2489.19" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="390.80" y1="2425.82" x2="350.83" y2="2425.82" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="2425.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2425.82)" text-anchor="middle">0</text>
+	<line x1="390.80" y1="1973.50" x2="350.83" y2="1973.50" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1973.50" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1973.50)" text-anchor="middle">20</text>
+	<line x1="390.80" y1="1521.18" x2="350.83" y2="1521.18" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1521.18" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1521.18)" text-anchor="middle">40</text>
+	<line x1="390.80" y1="1068.86" x2="350.83" y2="1068.86" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1068.86" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1068.86)" text-anchor="middle">60</text>
+	<line x1="390.80" y1="616.54" x2="350.83" y2="616.54" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="616.54" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,616.54)" text-anchor="middle">80</text>
+	<line x1="390.80" y1="164.22" x2="350.83" y2="164.22" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="164.22" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,164.22)" text-anchor="middle">100</text>
+	<text x="190.71" y="1294.96" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1294.96)" text-anchor="middle">Corruption Perceptions Index</text>
+	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="454.16" y1="2489.19" x2="454.16" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="454.16" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
+	<line x1="1122.41" y1="2489.19" x2="1122.41" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1122.41" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.2</text>
+	<line x1="1790.79" y1="2489.19" x2="1790.79" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1790.79" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.4</text>
+	<line x1="2459.04" y1="2489.19" x2="2459.04" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="2459.04" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.6</text>
+	<line x1="3127.41" y1="2489.19" x2="3127.41" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3127.41" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">.8</text>
+	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
+	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Ethnic Fractionalization</text>
+</svg>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="I-regressionsanalyser">I regressionsanalyser<a class="anchor-link" href="#I-regressionsanalyser">&#182;</a></h1><p>If-satser kan användas i regressionsanalyser (eller andra typer av sambandsanalyser) för att göra om analyser i olika subgrupper, eller för att utesluta vissa outliers. Först kan vi prova att göra en regressionsanalys av sambandet mellan korruption och etnisk fragmentering bara i Afrika söder om Sahara. Notera att det bara är 46 enheter med i analysen.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> ti_cpi al_ethnic<span class="k"> if</span> ht_region<span class="o">==</span><span class="m">4</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =        46
+-------------+----------------------------------   F(1, 44)        =      7.85
+       Model |  967.759581         1  967.759581   Prob &gt; F        =    0.0075
+    Residual |  5421.89259        44  123.224832   R-squared       =    0.1515
+-------------+----------------------------------   Adj R-squared   =    0.1322
+       Total |  6389.65217        45  141.992271   Root MSE        =    11.101
+
+------------------------------------------------------------------------------
+      ti_cpi |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   al_ethnic |  -19.91737    7.10718    -2.80   0.008    -34.24095   -5.593787
+       _cons |   46.17676   4.949334     9.33   0.000     36.20203    56.15149
+------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Man kan också utesluta enskilda outliers. Singapore är till exempel ett speciellt land när det gäller korruption. Vi kan prova att utesluta det landet för att säkerställa att inte resultatet påverkas otillbörligt av det. Då använder vi inte lika med, !=, för att ta bort just Singapore.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> ti_cpi al_ethnic<span class="k"> if</span> cname<span class="o">!=</span><span class="s">&quot;Singapore&quot;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =       172
+-------------+----------------------------------   F(1, 170)       =     29.32
+       Model |  9434.28622         1  9434.28622   Prob &gt; F        =    0.0000
+    Residual |   54703.246       170    321.7838   R-squared       =    0.1471
+-------------+----------------------------------   Adj R-squared   =    0.1421
+       Total |  64137.5323       171  375.073288   Root MSE        =    17.938
+
+------------------------------------------------------------------------------
+      ti_cpi |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   al_ethnic |  -28.63565   5.288525    -5.41   0.000    -39.07528   -18.19601
+       _cons |   55.72485   2.684605    20.76   0.000      50.4254    61.02431
+------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Villkor går att använda på mängder av olika sätt. En sak som är viktig att tänka på är dock att när man sätter ihop flera olika delvillkor så ska varje del av villkoret kunna stå på egna ben så att säga. Om vi till exempel vill göra ett villkor som väljer ut Sverige eller USA kan vi INTE skriva:</p>
+<p><code>if cname == ("Sweden" | "United States"</code>)</p>
+<p>utan det måste stå:</p>
+<p><code>if cname == "Sweden" | cname == "United States"</code></p>
+<p>Dvs variabelnamnet måste finnas med i varje delvillkor. Sedan är det viktigt att tänka på skillnaden mellan OCH <code>&amp;</code> och ELLER <code>|</code>. Man hade kunnat tänka sig att man i exemplet ovan skriva <code>if cname == "Sweden" &amp; cname == "United States"</code> för att man tänker sig att båda går bra. Men då skulle Stata letat efter fall där landsnamnet var både "Sweden" och "United States", och det kan det inte vara, alltså skulle inga fall valts ut.</p>
 
 </div>
 </div>
