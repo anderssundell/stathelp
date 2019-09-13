@@ -2,7 +2,17 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>wordlist</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-132683642-1');
+</script>    
+    
+<title>wordlist_sv</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13089,7 +13099,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13127,8 +13137,8 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <table>
 <thead><tr>
-<th></th>
 <th><strong>ORDLISTA</strong></th>
+<th></th>
 </tr>
 </thead>
 <tbody>
@@ -13145,6 +13155,10 @@ div#notebook {
 <td>Egenskap hos analysenheterna som varierar. Till exempel längd, ålder eller partillhörighet hos individer, eller befolkning, grad av demokrati eller klimat hos länder.</td>
 </tr>
 <tr>
+<td><em>Variabelvärde</em></td>
+<td>Det faktiska värde en analysenhet har på en variabel.</td>
+</tr>
+<tr>
 <td><em>Kausalitet</em></td>
 <td>Orsaksförhållande. I ett kausalt samband förväntas den ena variabeln ha påverkat den andra.</td>
 </tr>
@@ -13154,7 +13168,11 @@ div#notebook {
 </tr>
 <tr>
 <td><em>Fördelning</em></td>
-<td>Hur värdena fördelar sig över alla möjliga värden.</td>
+<td>Hur värdena fördelar sig över alla möjliga värden. Kan se ut på alla möjliga sätt.</td>
+</tr>
+<tr>
+<td><em>Normalfördelning</em></td>
+<td>En specifik fördelning, där de flesta värdena återfinns i mitten, och förre ute i kanterna.</td>
 </tr>
 <tr>
 <td><em>Spridning</em></td>
@@ -13166,25 +13184,79 @@ div#notebook {
 </tr>
 <tr>
 <td><em>Kovarians</em></td>
-<td>Grad av samvariation mellan två variabler.</td>
+<td>Grad av samvariation mellan två variabler, fast uttryckt i den skala som variablerna är mätta i, dvs svårare att jämföra än korrelation.</td>
+</tr>
+<tr>
+<td><strong>URVAL OCH INFERENS</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><em>Population</em></td>
+<td>Den grupp vi vill dra slutsatser om, till exempel väljare i Sverige.</td>
+</tr>
+<tr>
+<td><em>Urval</em></td>
+<td> Den del av populationen (som kan väljas ut på olika sätt) som vi faktiskt studerar. Engelska: sample.</td>
+</tr>
+<tr>
+<td><em>Slumpmässigt urval</em></td>
+<td>När vi slumpmässigt drar enheter ur populationen till urvalet. Generellt sett det urvalssätt som ger bäst möjligheter till generalisering.</td>
+</tr>
+<tr>
+<td><em>Kvoturval</em></td>
+<td>När vi sätter ihop urvalet för att fylla vissa kvoter, som matchar populationen.</td>
+</tr>
+<tr>
+<td><em>Självselekterat urval</em></td>
+<td>När analysenheterna själva får anmäla sig till urvalet. Ger mycket dåliga möjligheter att generalisera till populationen, eftersom de som anmäler sig ofta inte är representativa.</td>
+</tr>
+<tr>
+<td><em>Inferens</em></td>
+<td>Att generalisera slutsatser om urvalet till populationen som helhet.</td>
+</tr>
+<tr>
+<td><em>Centrala gränsvärdessatsen</em></td>
+<td>Teori som säger att när vi tar många urval ur en population kommer medelvärdet i urvalen bilda en normalfördelning centrerat på det sanna medelvärdet i populationen. Ligger till grund för signifikansberäkningar. Engelska: Central limit theorem.</td>
+</tr>
+<tr>
+<td><em>Konfidensintervall</em></td>
+<td> Intervall av värden som uttrycker graden av osäkerhet. Till exempel kring vad det sanna medelvärdet är i en population, eller vad det sanna sambandet mellan två variabler är.</td>
+</tr>
+<tr>
+<td><strong>VARIABELTYPER (SKALNIVÅ)</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><em>Nominalskala</em></td>
+<td>Kategorisering utan rangording. Variabeln "frukt" kan ha värdena "apelsin," "päron" eller "äpple" men de kan inte rangordnas.</td>
+</tr>
+<tr>
+<td><em>Ordinalskala</em></td>
+<td>Kategorisering med rangordning, men utan ekvidistans (dvs det är olika avstånd mellan de olika skalstegen). Till exempel kan variabeln "Inställning till förslag" ha värdena "Mycket bra," "Ganska bra," "Varken bra eller dåligt," "Ganska dåligt" eller "Mycket dåligt." Mycket bra är bättre än ganska bra, och ganska bra är bättre än varken bra eller dåligt, men vi vet inte att hoppen däremellan är lika stora.</td>
+</tr>
+<tr>
+<td><em>Intervallskala</em></td>
+<td>Kategorisering med rangordning och ekvidistans. Till exempel längd i centimeter. Varje steg uppåt på skalan är lika långt.</td>
 </tr>
 <tr>
 <td><strong>CENTRALMÅTT</strong></td>
-</tr>
-<tr>
-<td><em>Medelvärde</em></td>
-<td>Det värde man får om man summerar alla enskilda värden och dividerar med antalet enheter. <br> Formel: $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$</td>
-</tr>
-<tr>
-<td><em>Median</em></td>
-<td>Det värde man får om man arrangerar alla värden i storleksordning, och tar det som är på mitten (eller mittemellan de två som är i mitten).</td>
+<td></td>
 </tr>
 <tr>
 <td><em>Typvärde</em></td>
-<td>Det enskilt vanligaste värdet.</td>
+<td>Det enskilt vanligaste värdet. Lämpligt för nominalskalor.</td>
+</tr>
+<tr>
+<td><em>Median</em></td>
+<td>Det värde man får om man arrangerar alla värden i storleksordning, och tar det som är på mitten (eller mittemellan de två som är i mitten). Lämpligt för ordinalskalor, men går även att använda på intervallskalor.</td>
+</tr>
+<tr>
+<td><em>Medelvärde</em></td>
+<td>Det värde man får om man summerar alla enskilda värden och dividerar med antalet enheter. Kan bara användas på intervallskalor. <br> Formel: $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$</td>
 </tr>
 <tr>
 <td><strong>SPRIDNINGSMÅTT</strong></td>
+<td></td>
 </tr>
 <tr>
 <td><em>Varians</em></td>
@@ -13196,6 +13268,7 @@ div#notebook {
 </tr>
 <tr>
 <td><strong>VARIABELSPRÅKET</strong></td>
+<td></td>
 </tr>
 <tr>
 <td><em>Beroende variabel</em></td>
@@ -13218,7 +13291,16 @@ div#notebook {
 <td>Variabel som kommer mellan den oberoende variabeln och den beroende variabeln i den tänkta orsakskedjan. Ska <em>inte</em> kontrolleras för om man vill utesluta spuriositet.</td>
 </tr>
 <tr>
+<td><em>Interaktionsvariabel</em></td>
+<td>Variabel som styr vilken effekt den oberoende variabeln har. Kallas ibland för modererande variabel.</td>
+</tr>
+<tr>
+<td><em>Dummyvariabel</em></td>
+<td>Variabel som visar om en analysenhet har en egenskap (1), eller inte (0).</td>
+</tr>
+<tr>
 <td><strong>TYPER AV SAMBAND</strong></td>
+<td></td>
 </tr>
 <tr>
 <td><em>Nollsamband</em></td>
@@ -13245,7 +13327,12 @@ div#notebook {
 <td>Egentligen existerande samband mellan två variabler, som döljs av att en tredje variabel hänger ihop med mindre värden på den ena variabeln och högre på den andra, eller tvärtom.</td>
 </tr>
 <tr>
+<td><em>Ickelinjärt samband</em></td>
+<td>Samband som förändras beroende på variabelns värde. Till exempel sambandet mellan ålder och valdeltagande. Sannolikheten att rösta ökar när man blir äldre, men bara till en viss gräns: riktigt gamla röstar i mindre utsträckning än de i medelåldern.</td>
+</tr>
+<tr>
 <td><strong>ANALYSTEKNIKER</strong></td>
+<td></td>
 </tr>
 <tr>
 <td><em>Univariat analys</em></td>
@@ -13276,15 +13363,36 @@ div#notebook {
 <td>Analys där man försöker hitta gemensamma nämnare mellan olika variabler. Dvs reducera datan för att se om det finns någon latent variabel, som vi inte observerat, som kan förklara variationen i flera variabler.</td>
 </tr>
 <tr>
-<td><strong>DIAGRAM</strong></td>
+<td><strong>DESIGNTYPER</strong></td>
+<td></td>
 </tr>
 <tr>
-<td><em>Histogram</em></td>
-<td>Visar fördelningen av en variabel. Heter samma på engelska.</td>
+<td><em>Experimentell design</em></td>
+<td>När vi har kontroll över den oberoende variabeln, och slumpar analysenheter in i experimentgrupp (som utsätts för en behandling) och kontrollgrupp (som inte utsätts för behandling eller utsätts för en annan behandling). Ger goda möjligheter att uttala sig om kausalitet.</td>
 </tr>
 <tr>
-<td><em>Spridningsdiagram</em></td>
-<td>Visar sambandet mellan två variabler genom att rita ut analysenheterna som punkter utifrån två axlar. Engelska: Scatterplot.</td>
+<td><em>Pseudoexperimentell design</em></td>
+<td>När vi utnyttjar naturlig variation för att hitta specialfall där det blivit ungefär som slumpmässig tilldelning till någon "behandling."</td>
+</tr>
+<tr>
+<td><em>Regression discontinuity design</em></td>
+<td>När det finns någon skarp gräns som styr tilldelning till någon specifik variabel, och vi antar att analysenheter precis ovan och under gränsen är ungefär lika, och att slumpen avgör vilka som hamnar ovan och under.</td>
+</tr>
+<tr>
+<td><em>Matchning</em></td>
+<td>När analysenheter matchas ihop med sina "statistiska tvillingar," dvs enheter som har samma värden på alla relevanta variabler förutom den oberoende.</td>
+</tr>
+<tr>
+<td><em>Tvärsnittsdesign</em></td>
+<td>När vi jämför många analysenheter vid ett tillfälle. Engelska: Crosssectional analysis.</td>
+</tr>
+<tr>
+<td><em>Longitudinell design</em></td>
+<td>När vi jämför analysenheter med sig själva över tid.</td>
+</tr>
+<tr>
+<td><em>Paneldesign</em></td>
+<td>När vi jämför många enheter med varandra, och över tid. Kallas också Time Series-Cross Section.</td>
 </tr>
 <tr>
 <td><strong>BEGREPP INOM REGRESSIONSANALYS</strong></td>
@@ -13294,7 +13402,7 @@ div#notebook {
 <td>Den linje som passar bäst till punktmängden.</td>
 </tr>
 <tr>
-<td><em>B-koefficient</em></td>
+<td><em>b-koefficient</em></td>
 <td>Lutning på regressionslinjen. Hur mycket den beroende variabeln förväntas öka när den oberoende variabeln ökar med ett steg.</td>
 </tr>
 <tr>
@@ -13315,7 +13423,31 @@ div#notebook {
 </tr>
 <tr>
 <td><em>p-värde</em></td>
-<td>Signifikansvärdet. Visar hur osannolikt det är att man skulle få en b-koefficient som är minst så stor, givet att nollhypotesen stämmer. Är egentligen bara intressant när man analyserar ett urval, eller har en slumpmässig tilldelning i ett experiment. Men trots detta används det ofta som beslutsregel för att avgöra när samband är starka nog att tolkas. Den vanliga beslutsregeln är att p-värden under 0.05 räknas som signifikanta. Räknas fram genom att jämföra t-värdet med en t-fördelning, som beror på hur många analysenheter man har med i analysen. </td>
+<td>Signifikansvärdet. Visar hur osannolikt det är att man skulle få en b-koefficient som är minst så stor, givet att nollhypotesen stämmer. Är egentligen bara intressant när man analyserar ett urval, eller har en slumpmässig tilldelning i ett experiment. Men trots detta används det ofta som beslutsregel för att avgöra när samband är starka nog att tolkas. Den vanliga beslutsregeln är att p-värden under 0.05 räknas som signifikanta. Räknas fram genom att jämföra t-värdet med en t-fördelning, som beror på hur många analysenheter man har med i analysen.</td>
+</tr>
+<tr>
+<td><em>n-tal</em></td>
+<td>Hur många analysenheter som ingick i analysen.</td>
+</tr>
+<tr>
+<td><em>Ostandardiserad regressionskoefficient</em></td>
+<td> Den vanliga b-koefficienten, som då är uttryckt i den beroende variabelns enhet. Om tex beroende variabel är BNP per capita visar koefficienten hur mycket BNP per capita förväntas öka om den oberoende variabeln ökar med ett skalsteg.</td>
+</tr>
+<tr>
+<td><em>Standardiserad regressionskoefficient</em></td>
+<td>b-koefficienten, fast standardiserad så att variansen i både oberoende och beroende variabel är 1. Möjliggör jämförelse mellan koefficienter mätta med olika skalor, vilket annars är svårt.</td>
+</tr>
+<tr>
+<td><strong>DIAGRAM</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><em>Histogram</em></td>
+<td>Visar fördelningen av en variabel. Heter samma på engelska.</td>
+</tr>
+<tr>
+<td><em>Spridningsdiagram</em></td>
+<td>Visar sambandet mellan två variabler genom att rita ut analysenheterna som punkter utifrån två axlar. Engelska: Scatterplot.</td>
 </tr>
 </tbody>
 </table>
