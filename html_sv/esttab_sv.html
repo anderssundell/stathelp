@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-    
-           <!-- Global site tag (gtag.js) - Google Analytics -->
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -10,9 +10,9 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-132683642-1');
-</script>
-
-<title>regression_interaction_sv</title>
+</script>    
+    
+<title>esttab_sv</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13099,7 +13099,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13126,76 +13126,27 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Regressionsanalys-med-interaktionseffekter">Regressionsanalys med interaktionseffekter<a class="anchor-link" href="#Regressionsanalys-med-interaktionseffekter">&#182;</a></h1><p><em>av Anders Sundell</em></p>
-<p>Med regressionsanalys kan man undersöka samband mellan variabler, med eller utan kontroll för andra variabler. I verkligheten är det dock ofta så att samband ser olika ut i olika grupper, eller under olika omständigheter. Effekten av att bli förälder på arbetsinkomst är till exempel mycket olika för kvinnor och män; kvinnor ser en mycket större nedgång i inkomster.</p>
-<p>Hur ska man ta hänsyn till detta i sina analyser? Ett sätt kan vara att göra två separata analyser, där man jämför kvinnor som fått barn med kvinnor som inte fått barn, och motsvarande för män. Men det går faktiskt att baka ihop det i en regressionsanalys. Vi kan då se hur effekten skiljer sig åt, och också om skillnaden i effekt är statistiskt signifikant. På så sätt kan vi se om det är värt att komplicera modellen ytterligare genom att införa dessa separata effekter. Vi håller också effekten av alla kontrollvariabler konstant. Gör man separata analyser kommer de också kunna få olika effekter i varje analys, och det är vi kanske inte intresserade av.</p>
-<p><strong>Detta kallas för en interaktionsanalys. Det kan också kallas för en moderationsanalys, moderering, eller på engelska att man undersöker conditional effects. Poängen är oavsett att man låter effekten av en variabel variera över värdena på en annan variabel.</strong> Schematiskt brukar det representeras av ett diagram med en "pil på pilen" - dvs den tredje variabeln påverkar <em>effekten</em> av den oberoende variabeln, snarare än värdet på någon av de andra variablerna.</p>
-<p><img src = "images/interaktionsdiagram.svg" alt="En interaktion"></p>
-<p>I det här inlägget kommer vi gå igenom hur man gör regressionsanalyser där både oberoende variabel och interaktionsvariabel bara har två värden, och hur man bäst ska presentera resultaten.</p>
-<p>För att ha något att jobba med kommer vi i det här exemplet att använda oss av data från den amerikanska <a href="http://gss.norc.org/get-the-data/stata">General Social Survey</a>, som är en enkätundersökning med vanliga medborgare, med frågor om allt möjligt. Vi kommer använda versionen från 2016. Ladda ned den och lägg den i projektmappen för att följa med i exemplet. Jag har lagt den i en undermapp som heter data, och anger därför också det när jag öppnar filen.</p>
-
+<h1 id="Tabeller-f&#246;r-resultat-av-regressionsanalys">Tabeller f&#246;r resultat av regressionsanalys<a class="anchor-link" href="#Tabeller-f&#246;r-resultat-av-regressionsanalys">&#182;</a></h1>
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/Users/xsunde/Dropbox/Jupyter/stathelp&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>/Users/xsunde/Dropbox/Jupyter/stathelp
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;data/GSS2016.dta&quot;</span>,<span class="k"> clear</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="F&#246;rbereda-datan-f&#246;r-analys">F&#246;rbereda datan f&#246;r analys<a class="anchor-link" href="#F&#246;rbereda-datan-f&#246;r-analys">&#182;</a></h2><p>Frågeställningen vi ska undersöka först är just den som nämndes ovan, hur barnafödande hänger ihop med inkomst för kvinnor och män. Egentligen undersöks en sådan frågeställning bäst med data över tid, där vi kan följa individer före och efter att de får barn. Eftersom det här är tvärsnittsdata och vi bara har data från en tidpunkt är inte det möjligt, och vi kommer därför bara att jämföra dem som har barn med dem som inte har det. Vi måste därför vara försiktiga med att dra slutsatser om orsak och verkan.</p>
-<p>Vi behöver tre variabler: kön, inkomst, och antal barn. Kön finns beskrivet i variabeln <strong>sex</strong>, där 1 betyder "male" och 2 "female". För att det ska bli lättare att tolka resultaten framöver gör vi dock om variabeln, så att den får värdet 0 för män, och 1 för kvinnor. Dessutom döper vi om den till "woman" istället för sex. När vi ökar variabeln blir det alltså "mer kvinna".</p>
+<p><em>Av Anders Sundell</em></p>
+<p>När man gjort en statistisk analys är det viktigt att presentera resultaten på ett överskådligt och pedagogiskt sätt. Ofta handlar det om en kombination av text, tabeller och grafik. Syftet ska vara att presentera så mycket information att läsaren får med sig de viktigaste slutsatserna och har möjlighet att se hur de dragits, men utan att överlasta med för mycket. Särskilt gäller det siffror som man inte tolkar eller kommenterar i texten.</p>
+<p>Statas normaloutput efter regressionsanalys är inte lämplig för publicering. Man kan visserligen själv plocka ut de viktigaste uppgifterna och göra en egen tabell i till exempel Word, men det finns enklare sätt, med tilläggskommandon.</p>
+<p>Ett sådant är <code>esttab</code>. I den här guiden kommer vi gå igenom hur man använder det för att göra en enkel och snygg regressionstabell. Men först måste vi installera esttab, eftersom det inte följer med Stata som standard. Det gör vi genom att skriva följande (och det behöver man bara göra en gång):</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">recode</span> sex (<span class="m">1</span>=<span class="m">0</span>) (<span class="m">2</span>=<span class="m">1</span>),<span class="k"> generate</span>(woman)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">ssc</span> install estout,<span class="k"> replace</span>
 </pre></div>
 
     </div>
@@ -13212,47 +13163,9 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>(2867 differences between sex and woman)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[63]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">tab</span> woman
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-  RECODE of |
-        sex |
-(respondent |
-     s sex) |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |      1,276       44.51       44.51
-          1 |      1,591       55.49      100.00
-------------+-----------------------------------
-      Total |      2,867      100.00
+<pre>checking estout consistency and verifying not already installed...
+installing into /Users/anderssundell/Library/Application Support/Stata/ado/plus/...
+installation complete.
 </pre>
 </div>
 </div>
@@ -13264,17 +13177,62 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Därefter behöver vi en variabel för inkomst. Det finns några olika att välja på, men den enklaste verkar vara <strong>realrinc</strong>, som beskriver respondentens inkomst i antal dollar per år. Vi ser nedan att medelvärdet är 23772.</p>
+<p>Sedan laddar vi in data. I det här exemplet använder vi QoG-institutets QoG Basic data, version 2018. Man kan antingen ladda ned den till sin dator och öppna den där, eller ansluta till den direkt, som jag gör här.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> realrinc
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(Quality of Government Basic dataset 2018 - Cross-Section)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hypotes:-Demokrati-&#228;r-bra-f&#246;r-livsl&#228;ngd">Hypotes: Demokrati &#228;r bra f&#246;r livsl&#228;ngd<a class="anchor-link" href="#Hypotes:-Demokrati-&#228;r-bra-f&#246;r-livsl&#228;ngd">&#182;</a></h2><p>Analysenheten är här länder. Vi ska göra en enkel analys där vi ska undersöka det möjliga sambandet mellan demokrati och förväntad livslängd. Lever folk längre i demokratier? Och i så fall, håller det sambandet under kontroll för andra variabler, till exempel geografisk placering? Vissa teorier säger att demokratier haft lättare att etablera sig i mer tempererade klimat, långt bort från ekvatorn. Och där är det dessutom mindre tropiska sjukdomar.</p>
+<p>Om demokrati är bra för hälsan borde vi finna ett samband mellan demokrati och livslängd, och det sambandet borde hålla även under kontroll för landets geografiska placering.</p>
+<p>Variablerna vi ska använda är:
+Förväntad livslängd: <code>wdi_lifexp</code>
+Grad av demokrati: <code>p_polity2</code> (-10 till -10)
+Avstånd från ekvatorn: <code>lp_lat_abst</code></p>
+<p>Nedan visas beskrivande statistik för de tre variablerna.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> wdi_lifexp p_polity2 lp_lat_abst
 </pre></div>
 
     </div>
@@ -13294,7 +13252,9 @@ div#notebook {
 <pre>
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-    realrinc |      1,632    23772.92    29407.37        234     164382
+  wdi_lifexp |        185    71.25413    8.138066   50.59105   83.58781
+   p_polity2 |        165    4.072727    6.158044        -10         10
+ lp_lat_abst |        153    .2572459    .1806333          0   .7222222
 </pre>
 </div>
 </div>
@@ -13306,17 +13266,24 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Slutligen behöver vi en variabel för barn. Det finns en sådan, som visar hur många barn respondenten har, <strong>childs</strong>:</p>
+<h2 id="Spara-resultat-av-regressionsanalyser-med-estimates-store">Spara resultat av regressionsanalyser med <code>estimates store</code><a class="anchor-link" href="#Spara-resultat-av-regressionsanalyser-med-estimates-store">&#182;</a></h2><p>Vi ska göra tre regressionsanalyser. Först med demokrati som oberoende variabel, sedan med avstånd från ekvatorn, och sedan med både demokrati och avstånd från ekvatorn. Efter varje analys vi gör skriver vi <code>estimates store m1</code> där m1 är namnet på en modell (som vi hittar på själv). Jag brukar döpa modellerna till m1, m2, m3 och så vidare. I blocket nedan kör jag de tre analyserna och sparar resultaten efter varje analys.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">tab</span> childs
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> wdi_lifexp p_polity2<span class="k"></span>
+<span class="k">estimates</span> store m1
+
+<span class="k">reg</span> wdi_lifexp lp_lat_abst<span class="k"></span>
+<span class="k">estimates</span> store m2
+
+<span class="k">reg</span> wdi_lifexp p_polity2 lp_lat_abst<span class="k"></span>
+<span class="k">estimates</span> store m3
 </pre></div>
 
     </div>
@@ -13334,342 +13301,54 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-    number of |
-     children |      Freq.     Percent        Cum.
---------------+-----------------------------------
-            0 |        797       27.88       27.88
-            1 |        459       16.05       43.93
-            2 |        733       25.64       69.57
-            3 |        467       16.33       85.90
-            4 |        213        7.45       93.35
-            5 |         92        3.22       96.57
-            6 |         51        1.78       98.36
-            7 |         25        0.87       99.23
-eight or more |         22        0.77      100.00
---------------+-----------------------------------
-        Total |      2,859      100.00
-</pre>
-</div>
-</div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Dock är vi först bara intresserade av att jämföra dem som har barn med dem som inte har det. Troligtvis ser vi de största effekterna när man skaffar det första barnet, även om senare barn också kan påverka, men det återkommer vi till. Nu vill vi göra en ny dummyvariabel som är 0 om man har 0 barn, och 1 om man har 1 eller fler. Det blir en så kallad dummyvariabel, och vi kallar den <strong>dum_kids</strong>:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">recode</span> childs (<span class="m">0</span>=<span class="m">0</span>) (<span class="m">1</span><span class="o">/</span><span class="m">8</span> = <span class="m">1</span>),<span class="k"> generate</span>(dum_kids)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(1603 differences between childs and dum_kids)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">tab</span> dum_kids
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-  RECODE of |
-     childs |
- (number of |
-  children) |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        797       27.88       27.88
-          1 |      2,062       72.12      100.00
-------------+-----------------------------------
-      Total |      2,859      100.00
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Nu har vi alla variabler vi behöver för analysen. Vi kan börja med att göra en korrelationsmatris för att se hur de olika variablerna hänger ihop, och vi lägger där också till variabeln <strong>age</strong>, som visar respondentens ålder. Vi kommer att ha med den som kontrollvariabel.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[65]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">pwcorr</span> woman realrinc dum_kids age
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-             |    woman realrinc dum_kids      age
--------------+------------------------------------
-       woman |   1.0000 
-    realrinc |  -0.1628   1.0000 
-    dum_kids |   0.1047   0.0821   1.0000 
-         age |   0.0418   0.1332   0.3493   1.0000 
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Korrelationen mellan kön och inkomst är negativ, och eftersom vi kommer ihåg att kvinna hade det högre värdet på woman-variabeln innebär det att kvinnor har lägre inkomster. Mer kvinna hänger ihop med mindre inkomst. Kvinna har också en positiv korrelation med att ha barn. Barn har i sin tur en positiv korrelation med inkomst - antagligen beroende på att de som har barn är äldre och har högre inkomster. Vi ser att ålder har ett positivt samband både med inkomst och att ha barn.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Interaktionsanalys-d&#228;r-interaktionsvariablerna-bara-har-tv&#229;-v&#228;rden">Interaktionsanalys d&#228;r interaktionsvariablerna bara har tv&#229; v&#228;rden<a class="anchor-link" href="#Interaktionsanalys-d&#228;r-interaktionsvariablerna-bara-har-tv&#229;-v&#228;rden">&#182;</a></h2><p>I den första analysen ska vi alltså se på hur att ha barn hänger ihop med inkomst, och sedan dela upp det på kvinnor och män. Men först gör vi en vanlig regressionsanalys, utan interaktion, där vi bara lägger in alla variablerna som de är. Beroende variabel är alltså inkomst.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman dum_kids age
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-      Source |       SS           df       MS      Number of obs   =     1,627
--------------+----------------------------------   F(3, 1623)      =     26.64
-       Model |  6.5114e+10         3  2.1705e+10   Prob &gt; F        =    0.0000
-    Residual |  1.3225e+12     1,623   814854652   R-squared       =    0.0469
--------------+----------------------------------   Adj R-squared   =    0.0452
-       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28546
+      Source |       SS           df       MS      Number of obs   =       164
+-------------+----------------------------------   F(1, 162)       =     14.93
+       Model |  961.395196         1  961.395196   Prob &gt; F        =    0.0002
+    Residual |  10432.0079       162  64.3951106   R-squared       =    0.0844
+-------------+----------------------------------   Adj R-squared   =    0.0787
+       Total |  11393.4031       163  69.8981786   Root MSE        =    8.0247
 
 ------------------------------------------------------------------------------
-    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-       woman |  -9748.911   1421.057    -6.86   0.000    -12536.21   -6961.612
-    dum_kids |    3603.04   1636.325     2.20   0.028     393.5083    6812.571
-         age |   241.0386   52.86283     4.56   0.000      137.352    344.7252
-       _cons |   15430.49   2452.935     6.29   0.000     10619.24    20241.74
+   p_polity2 |   .3942974   .1020468     3.86   0.000      .192784    .5958109
+       _cons |   69.20107   .7498878    92.28   0.000     67.72025    70.68188
 ------------------------------------------------------------------------------
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Resultaten är som man kan förvänta sig. Koefficienten för <strong>woman</strong> är -9748, vilket innebär att kvinnor i genomsnitt har 9748 dollar lägre årsinkomst än män, även med hänsyn taget till ålder och om man har barn eller ej.</p>
-<p>Koefficienten för ålder är 241, vilket innebär att de som är ett år äldre i genomsnitt har 241 dollar mer i årsinkomst. Att vara man hänger alltså ihop med samma inkomstökning som att bli 9748/241=40 år äldre!</p>
-<p>Och de som har barn har i genomsnitt 3603 dollar mer i årsinkomst. Vi kan dock se att signifikansvärdet är högre här än för de andra variablerna. Det finns alltså en lite större osäkerhet på om det verkligen handlar om ett riktigt samband som syns i hela befolkningen, och inte bara består på slump i urvalet. Men värdet är ändå lägre än den konventionella gränsen på 0.050.</p>
-<p>Men effekten av barn antas här vara samma för både kvinnor och män, och vi ska nu undersöka om det är ett rimligt antagande. För att göra det behöver vi lägga till en så kallad interaktionsterm, en ny variabel som är produkten av <strong>woman</strong> gånger <strong>dum_kids</strong>. Bekvämt nog finns det automatiska funktioner för det i Stata, och vi kan låta Stata göra variabeln direkt i analysen. Vi lägger bara in ## mellan variablerna vi vill interagera, så får vi interaktionstermen automatiskt.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[80]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman##dum_kids age
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
 
 
-<div class="output_area">
 
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-      Source |       SS           df       MS      Number of obs   =     1,627
--------------+----------------------------------   F(4, 1622)      =     23.62
-       Model |  7.6368e+10         4  1.9092e+10   Prob &gt; F        =    0.0000
-    Residual |  1.3113e+12     1,622   808418921   R-squared       =    0.0550
--------------+----------------------------------   Adj R-squared   =    0.0527
-       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28433
-
---------------------------------------------------------------------------------
-      realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
----------------+----------------------------------------------------------------
-       1.woman |   -1673.06   2586.229    -0.65   0.518     -6745.76    3399.641
-    1.dum_kids |    9213.15   2217.508     4.15   0.000     4863.668    13562.63
-               |
-woman#dum_kids |
-          1 1  |  -11546.67   3094.776    -3.73   0.000    -17616.85   -5476.495
-               |
-           age |   228.0699   52.76827     4.32   0.000     124.5687     331.571
-         _cons |   12306.06   2582.758     4.76   0.000     7240.167    17371.95
---------------------------------------------------------------------------------
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Det dök nu upp en ny variabel i tabellen, "woman#dum_kids". Det är den så kallade interaktionstermen. Det hände också mycket med koefficienterna för woman och dum_kids, och de kan nu inte heller tolkas på vanligt sätt. <strong>Koefficienterna visar nu effekten av variabeln när den andra variabeln i interaktionen är noll.</strong> Variabeln <strong>woman</strong> visar alltså skillnaden mellan kvinnor och män <em>som inte har barn</em>. Variabeln <strong>dum_kids</strong> visar skillnaden mellan <em>män</em> som har barn och män som inte har det.</p>
-<p>För att räkna ut vad effekten blir för de andra grupperna behöver vi lägga ihop koefficienterna med interaktionstermen. Den visar hur koefficienterna förändras när den andra variabeln ökar ett steg.</p>
-<p>"Effekten" av att få barn är alltså +9213 för män (!). För att få effekten för kvinnor behöver vi ta 9213.15 - 11546.67 * 1 = -2333.52. <strong>Det betyder att kvinnor som har barn har lägre inkomster än kvinnor som inte har barn, medan män som har barn har högre inkomster än män som inte har det</strong>.</p>
-<p>Är den skillnaden att lita på? Ja, eftersom interaktionstermen är signifikant. Det är osannolikt att en så stor skillnad i effekt skulle uppstå bara på grund av slump i urvalet. Om interaktionstermen däremot inte hade varit signifikant hade det varit bättre att utgå från den enklare modellen utan interaktionsterm, både för att den är enklare att tolka, och för att enklare modeller är att föredra om de mer komplicerade inte tillför någon förklaringskraft.</p>
-<p>På motsvarande sätt har kvinnor som inte har barn också 1673.06 lägre inkomst än män som inte har barn. Men hur mycket lägre inkomst har kvinnor som har barn jämfört med män som har barn? Det får vi fram genom att ta -1673.06 - 11546.67 * 1 = -13219.73. Skillnaden i inkomster mellan män och kvinnor växer alltså dramatiskt efter barnafödandet.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Presentera-resultaten-n&#228;r-variablerna-bara-har-tv&#229;-v&#228;rden">Presentera resultaten n&#228;r variablerna bara har tv&#229; v&#228;rden<a class="anchor-link" href="#Presentera-resultaten-n&#228;r-variablerna-bara-har-tv&#229;-v&#228;rden">&#182;</a></h2><p>Att tolka interaktionseffekter är inte enkelt. Därför måste de presenteras på ett bättre sätt än en tabell. Dessutom kan vi från tabellen inte utläsa om effekten av att få barn är signifikant för kvinnor.</p>
-<p>Först kan vi ta fram marginaleffekterna, dvs koefficienterna för variablerna, när de andra variablerna i interaktionen intar olika värden. Det gör vi med kommandot <strong>margins</strong>, med options <strong>dydx()</strong> och <strong>at()</strong>. dydx står för delta Y och delta X, och delta används inom matematiken för att visa förändring. Vi vill alltså se hur mycket Y (den beroende variabeln) förändras när vi förändrar X. at-option använder vi för att visa vilka värden vi vill se dydx för.</p>
-<p>För att få ut effekten av att få barn för kvinnor och män skriver vi:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(dum_kids) at(woman=(<span class="m">0</span> <span class="m">1</span>))
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : 1.dum_kids
-
-1._at        : woman           =           0
-
-2._at        : woman           =           1
+      Source |       SS           df       MS      Number of obs   =       147
+-------------+----------------------------------   F(1, 145)       =     84.04
+       Model |  4054.91479         1  4054.91479   Prob &gt; F        =    0.0000
+    Residual |  6996.60328       145  48.2524364   R-squared       =    0.3669
+-------------+----------------------------------   Adj R-squared   =    0.3625
+       Total |  11051.5181       146  75.6953292   Root MSE        =    6.9464
 
 ------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-0.dum_kids   |  (base outcome)
+ lp_lat_abst |   29.18116   3.183254     9.17   0.000     22.88959    35.47274
+       _cons |   63.61518   1.000886    63.56   0.000     61.63697    65.59339
+------------------------------------------------------------------------------
+
+
+
+      Source |       SS           df       MS      Number of obs   =       133
+-------------+----------------------------------   F(2, 130)       =     41.40
+       Model |  4023.70805         2  2011.85402   Prob &gt; F        =    0.0000
+    Residual |  6316.99515       130  48.5922704   R-squared       =    0.3891
+-------------+----------------------------------   Adj R-squared   =    0.3797
+       Total |  10340.7032       132  78.3386606   Root MSE        =    6.9708
+
+------------------------------------------------------------------------------
+  wdi_lifexp |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-1.dum_kids   |
-         _at |
-          1  |    9213.15   2217.508     4.15   0.000     4863.668    13562.63
-          2  |  -2333.525   2277.746    -1.02   0.306    -6801.159     2134.11
+   p_polity2 |   .1551679   .1043416     1.49   0.139    -.0512595    .3615953
+ lp_lat_abst |   29.32883   3.561611     8.23   0.000     22.28261    36.37505
+       _cons |   62.38807   1.092712    57.09   0.000     60.22627    64.54987
 ------------------------------------------------------------------------------
-Note: dy/dx for factor levels is the discrete change from the base level.
+
 </pre>
 </div>
 </div>
@@ -13681,18 +13360,18 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Eftersom vi skrev at(woman=(0 1)) får vi ut två koefficienter: en när woman är 0, och en när woman är 1. Vi ser då att koefficienten för <strong>dum_kids</strong> är 9213.15 när woman är 0, och -2333.525 när woman är 1. Barnafödande är positivt för män, och negativt för kvinnor. Men den negativa effekten för kvinnor är dock inte signifikant, eftersom signifikansvärdet är 0.306.</p>
-<p>Vi kan illustrera det hela genom att bara köra kommandot <strong>marginsplot</strong> efter marginskommandot. Genom att lägga till option , yline(0) får vi en referenslinje. Om konfindensintervallen som visas i grafen inte överlappar nollstrecket är de statistiskt signifikanta.</p>
+<h2 id="Presentera-resultaten-med-esttab">Presentera resultaten med <code>esttab</code><a class="anchor-link" href="#Presentera-resultaten-med-esttab">&#182;</a></h2><p>Som synes är resultattabellerna ganska otympliga, och innehåller mycket information som vi vanligtvis inte är intresserade av. Till exempel uttrycker standardfel, t-värde, p-värde och konfidensintervall ungefär samma sak - graden av osäkerhet kring koefficientens skattning. Man behöver inte redovisa alltihopa. Vanligt inom samhällsvetenskap är att man redovisar koefficienten, standardfelet (eller t-värdet) och sätter ut stjärnor som visar signifikansnivån (alltså p-värdet).</p>
+<p><code>esttab</code> gör mycket av detta automatiskt. För att göra en minimal tabell av de tre analyserna vi gjort skriver vi bara:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>marginsplot, yline(<span class="m">0</span>)
+<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3
 </pre></div>
 
     </div>
@@ -13710,78 +13389,23 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-  Variables that uniquely identify margins: woman
-</pre>
-</div>
-</div>
+------------------------------------------------------------
+                      (1)             (2)             (3)   
+               wdi_lifexp      wdi_lifexp      wdi_lifexp   
+------------------------------------------------------------
+p_polity2           0.394***                        0.155   
+                   (3.86)                          (1.49)   
 
-<div class="output_area">
+lp_lat_abst                         29.18***        29.33***
+                                   (9.17)          (8.23)   
 
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.1 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="261.37" width="3468.22" height="2227.82" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="264.25" width="3462.46" height="2222.06" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2252.20" x2="3859.02" y2="2252.20" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1770.42" x2="3859.02" y2="1770.42" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1288.53" x2="3859.02" y2="1288.53" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="806.63" x2="3859.02" y2="806.63" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="324.73" x2="3859.02" y2="324.73" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1770.42" x2="3859.02" y2="1770.42" style="stroke:#C10534;stroke-width:8.64"/>
-	<line x1="454.16" y1="1301.64" x2="454.16" y2="463.21" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="463.21" x2="476.19" y2="463.21" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="1301.64" x2="476.19" y2="1301.64" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3795.66" y1="2425.82" x2="3795.66" y2="1564.74" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="1564.74" x2="3817.69" y2="1564.74" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="2425.82" x2="3817.69" y2="2425.82" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="454.04" y1="882.49" x2="3795.66" y2="1995.28" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="882.49" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="882.49" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1995.28" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1995.28" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="390.80" y1="2489.19" x2="390.80" y2="261.37" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2252.20" x2="350.83" y2="2252.20" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2252.20" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2252.20)" text-anchor="middle">-5000</text>
-	<line x1="390.80" y1="1770.42" x2="350.83" y2="1770.42" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1770.42" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1770.42)" text-anchor="middle">0</text>
-	<line x1="390.80" y1="1288.53" x2="350.83" y2="1288.53" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1288.53" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1288.53)" text-anchor="middle">5000</text>
-	<line x1="390.80" y1="806.63" x2="350.83" y2="806.63" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="806.63" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,806.63)" text-anchor="middle">10000</text>
-	<line x1="390.80" y1="324.73" x2="350.83" y2="324.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="324.73" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,324.73)" text-anchor="middle">15000</text>
-	<text x="190.71" y="1375.28" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1375.28)" text-anchor="middle">Effects on Linear Prediction</text>
-	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="454.16" y1="2489.19" x2="454.16" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="454.16" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
-	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
-	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">RECODE of sex (respondents sex)</text>
-	<text x="1979.88" y="206.19" style="font-family:'Helvetica';font-size:125.98px;fill:#1E2D53" text-anchor="middle">Average Marginal Effects of dum_kids with 95% CIs</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
+_cons               69.20***        63.62***        62.39***
+                  (92.28)         (63.56)         (57.09)   
+------------------------------------------------------------
+N                     164             147             133   
+------------------------------------------------------------
+t statistics in parentheses
+* p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001
 </pre>
 </div>
 </div>
@@ -13793,18 +13417,19 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Koefficientens konfidensintervall överlappar inte noll för woman = 0, men gör det för woman = 1. Det betyder som vi såg i tabellen tidigare att det bara är den positiva effekten av att få barn för män som är signifikant; den negativa effekten för kvinnor är det inte.</p>
-<p>På motsvarande sätt kan vi ta fram koefficenterna för woman, över de olika värdena på dum_kids. För att marginskommandot ska funka måste man dock ha kört regressionskommandot innan.</p>
+<p>Mycket bättre! Varje kolumn representerar en analys - en "modell." Längst upp anges vad som var beroende variabel i analysen. Siffrorna visar b-koefficienterna för respektive variabel. Inom parenteserna står t-värdet, och längst ner n-talet.</p>
+<p>Vi ser då att i den första modellen finns det ett signifikant samband mellan demokrati och förväntad livslängd - varje steg upp på demokratiskalan hänger ihop med en ökning av livslängden på 0.394 år. Men vi ser också i modell 2 att länder som ligger längre bort från ekvatorn har högre förväntad livslängd. Och vi vet (men det syns inte här) att länder längre bort från ekvatorn har högre grader av demokrati. Så när vi kontrollerar för avstånd från ekvatorn i modell 3 ser vi att koefficienten för demokrati mer än halveras, till 0.155, och den är inte heller längre statistiskt signifikant (vilket vi ser eftersom det inte är några stjärnor utsatta, och t-värdet är under 1.96).</p>
+<p>Men det finns också annat vi skulle vilja se i tabellen, till exempel R<sup>2</sup>-värdet, eller det justerat R<sup>2</sup>. Och vi kanske hellre vill ha standardfelet inom parenteser, istället för t-värdet. Då kan vi lägga till options på vårt esttab-kommando. Man väljer själv vad man vill lägga till. Använd <code>help esttab</code> för att se en fullständig lista.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(woman) at(dum_kids=(<span class="m">0</span> <span class="m">1</span>))
+<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3,<span class="k"> se</span> r2 ar2
 </pre></div>
 
     </div>
@@ -13822,28 +13447,25 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
+------------------------------------------------------------
+                      (1)             (2)             (3)   
+               wdi_lifexp      wdi_lifexp      wdi_lifexp   
+------------------------------------------------------------
+p_polity2           0.394***                        0.155   
+                  (0.102)                         (0.104)   
 
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : 1.woman
+lp_lat_abst                         29.18***        29.33***
+                                  (3.183)         (3.562)   
 
-1._at        : dum_kids        =           0
-
-2._at        : dum_kids        =           1
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-0.woman      |  (base outcome)
--------------+----------------------------------------------------------------
-1.woman      |
-         _at |
-          1  |   -1673.06   2586.229    -0.65   0.518     -6745.76    3399.641
-          2  |  -13219.73   1693.765    -7.80   0.000    -16541.93   -9897.537
-------------------------------------------------------------------------------
-Note: dy/dx for factor levels is the discrete change from the base level.
+_cons               69.20***        63.62***        62.39***
+                  (0.750)         (1.001)         (1.093)   
+------------------------------------------------------------
+N                     164             147             133   
+R-sq                0.084           0.367           0.389   
+adj. R-sq           0.079           0.363           0.380   
+------------------------------------------------------------
+Standard errors in parentheses
+* p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001
 </pre>
 </div>
 </div>
@@ -13855,17 +13477,19 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Kvinnor tjänar mindre än män, oavsett om de har barn eller ej. Men bland de som har barn är skillnaden inte signifikant. Det är bara bland de som har barn som könsskillnaden blir påtaglig. Det ser vi också i grafen nedan:</p>
+<p>Den här tabellen är överskådlig och lätt att läsa. Enda problemet är att den inte är så lätt att klistra in i ett Worddokument. Om man gör det måste man sätta typsnittet till courier eller något annat där alla bokstäver är lika stora, annars kommer alla siffror hamna fel.</p>
+<p>Men ett bättre sätt är att exportera tabellen till en separat fil som är anpassad för till exempel Word. Då kan man sedan öppna den filen och kopiera tabellen därifrån in i sin rapport.</p>
+<p>För att exportera filen lägger vi till <code>using "filnamn.rtf"</code> i koden. Då sparas filen i den aktiva mappen. Den anger man genom att skriva <code>cd "/Users/mindator/statistiskanalys"</code> till exempel. Jag lägger också till <code>replace</code> som option, vilket betyder att om det redan fanns en sådan fil så ska den skrivas över.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[82]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>marginsplot, yline(<span class="m">0</span>)
+<div class=" highlight hl-stata"><pre><span></span>esttab m1 m2 m3 using <span class="s">&quot;regressiontabell.rtf&quot;</span>,<span class="k"> se</span> r2 ar2<span class="k"> replace</span>
 </pre></div>
 
     </div>
@@ -13882,79 +13506,7 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>
-  Variables that uniquely identify margins: dum_kids
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.1 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="261.37" width="3468.22" height="2227.82" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="264.25" width="3462.46" height="2222.06" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2275.46" x2="3859.02" y2="2275.46" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1787.75" x2="3859.02" y2="1787.75" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1300.03" x2="3859.02" y2="1300.03" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="812.44" x2="3859.02" y2="812.44" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="324.73" x2="3859.02" y2="324.73" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="812.44" x2="3859.02" y2="812.44" style="stroke:#C10534;stroke-width:8.64"/>
-	<line x1="454.16" y1="1470.32" x2="454.16" y2="480.78" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="480.78" x2="476.19" y2="480.78" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="1470.32" x2="476.19" y2="1470.32" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3795.66" y1="2425.82" x2="3795.66" y2="1777.72" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="1777.72" x2="3817.69" y2="1777.72" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="2425.82" x2="3817.69" y2="2425.82" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="454.04" y1="975.68" x2="3795.66" y2="2101.84" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="975.68" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="975.68" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="2101.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="2101.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="390.80" y1="2489.19" x2="390.80" y2="261.37" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2275.46" x2="350.83" y2="2275.46" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2275.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2275.46)" text-anchor="middle">-15000</text>
-	<line x1="390.80" y1="1787.75" x2="350.83" y2="1787.75" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1787.75" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1787.75)" text-anchor="middle">-10000</text>
-	<line x1="390.80" y1="1300.03" x2="350.83" y2="1300.03" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1300.03" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1300.03)" text-anchor="middle">-5000</text>
-	<line x1="390.80" y1="812.44" x2="350.83" y2="812.44" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="812.44" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,812.44)" text-anchor="middle">0</text>
-	<line x1="390.80" y1="324.73" x2="350.83" y2="324.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="324.73" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,324.73)" text-anchor="middle">5000</text>
-	<text x="190.71" y="1375.28" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1375.28)" text-anchor="middle">Effects on Linear Prediction</text>
-	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="454.16" y1="2489.19" x2="454.16" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="454.16" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
-	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
-	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">RECODE of childs (number of children)</text>
-	<text x="1979.88" y="206.19" style="font-family:'Helvetica';font-size:125.98px;fill:#1E2D53" text-anchor="middle">Average Marginal Effects of 1.woman with 95% CIs</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
+<pre>(output written to regressiontabell.rtf)
 </pre>
 </div>
 </div>
@@ -13966,207 +13518,9 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Slutligen kan vi illustrera alltihopa genom att räkna ut predicerade värden, dvs förväntade värden på den beroende variabelm, utifrån siffrorna i tabellerna ovan. Vi gör det med marginskommandot, fast utan dydx-option.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[83]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins, at(dum_kids=(<span class="m">0</span> <span class="m">1</span>) woman=(<span class="m">0</span> <span class="m">1</span>))
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-Predictive margins                              Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-
-1._at        : woman           =           0
-               dum_kids        =           0
-
-2._at        : woman           =           0
-               dum_kids        =           1
-
-3._at        : woman           =           1
-               dum_kids        =           0
-
-4._at        : woman           =           1
-               dum_kids        =           1
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |    22425.8   1777.756    12.61   0.000     18938.86    25912.74
-          2  |   31638.95   1258.823    25.13   0.000     29169.86    34108.04
-          3  |   20752.74   1944.967    10.67   0.000     16937.83    24567.65
-          4  |   18419.22   1154.571    15.95   0.000     16154.61    20683.82
-------------------------------------------------------------------------------
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Här visas nu alltså inte koefficienter, utan gissningar på den beroende variabeln. Koefficienterna symboliserar skillnaderna mellan de olika värdena.</p>
-<p>För att verkligen synliggöra slutsatsen kan vi direkt efter marginskommandot skriva <strong>marginsplot:</strong>.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[84]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>marginsplot
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-  Variables that uniquely identify margins: dum_kids woman
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.1 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="261.37" width="3468.22" height="1972.27" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="264.25" width="3462.46" height="1966.51" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2170.27" x2="3859.02" y2="2170.27" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1708.92" x2="3859.02" y2="1708.92" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1247.56" x2="3859.02" y2="1247.56" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="786.08" x2="3859.02" y2="786.08" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="324.73" x2="3859.02" y2="324.73" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="454.16" y1="1806.81" x2="454.16" y2="1163.29" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="1163.29" x2="476.19" y2="1163.29" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="432.13" y1="1806.81" x2="476.19" y2="1806.81" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3795.66" y1="862.69" x2="3795.66" y2="407.03" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="407.03" x2="3817.69" y2="407.03" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="3773.63" y1="862.69" x2="3817.69" y2="862.69" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="454.16" y1="1991.45" x2="454.16" y2="1287.41" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="432.13" y1="1287.41" x2="476.19" y2="1287.41" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="432.13" y1="1991.45" x2="476.19" y2="1991.45" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="3795.66" y1="2063.72" x2="3795.66" y2="1645.80" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="3773.63" y1="1645.80" x2="3817.69" y2="1645.80" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="3773.63" y1="2063.72" x2="3817.69" y2="2063.72" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="454.04" y1="1485.17" x2="3795.66" y2="634.98" stroke-linecap="round" style="stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1485.17" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="1485.17" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="634.98" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="634.98" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="454.04" y1="1639.49" x2="3795.66" y2="1854.82" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1639.49" r="26.35" style="fill:#90353B"/>
-	<circle cx="454.04" cy="1639.49" r="22.03" style="fill:none;stroke:#90353B;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1854.82" r="26.35" style="fill:#90353B"/>
-	<circle cx="3795.66" cy="1854.82" r="22.03" style="fill:none;stroke:#90353B;stroke-width:8.64"/>
-	<line x1="390.80" y1="2233.63" x2="390.80" y2="261.37" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2170.27" x2="350.83" y2="2170.27" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2170.27" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2170.27)" text-anchor="middle">15000</text>
-	<line x1="390.80" y1="1708.92" x2="350.83" y2="1708.92" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1708.92" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1708.92)" text-anchor="middle">20000</text>
-	<line x1="390.80" y1="1247.56" x2="350.83" y2="1247.56" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1247.56" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1247.56)" text-anchor="middle">25000</text>
-	<line x1="390.80" y1="786.08" x2="350.83" y2="786.08" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="786.08" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,786.08)" text-anchor="middle">30000</text>
-	<line x1="390.80" y1="324.73" x2="350.83" y2="324.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="324.73" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,324.73)" text-anchor="middle">35000</text>
-	<text x="190.71" y="1247.56" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1247.56)" text-anchor="middle">Linear Prediction</text>
-	<line x1="390.80" y1="2233.63" x2="3859.02" y2="2233.63" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="454.16" y1="2233.63" x2="454.16" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="454.16" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
-	<line x1="3795.66" y1="2233.63" x2="3795.66" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">1</text>
-	<text x="2124.91" y="2473.60" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">RECODE of childs (number of children)</text>
-	<rect x="1134.29" y="2558.24" width="1981.36" height="186.37" style="fill:#FFFFFF"/>
-	<rect x="1137.17" y="2561.12" width="1975.60" height="180.61" style="fill:none;stroke:#000000;stroke-width:5.76"/>
-	<line x1="1177.48" y1="2651.43" x2="1551.83" y2="2651.43" style="stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1364.71" cy="2651.43" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1364.71" cy="2651.43" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="2194.95" y1="2651.43" x2="2569.30" y2="2651.43" style="stroke:#90353B;stroke-width:8.64"/>
-	<circle cx="2382.06" cy="2651.43" r="26.35" style="fill:#90353B"/>
-	<circle cx="2382.06" cy="2651.43" r="22.03" style="fill:none;stroke:#90353B;stroke-width:8.64"/>
-	<text x="1611.84" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">woman=0</text>
-	<text x="2629.32" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">woman=1</text>
-	<text x="1979.88" y="206.19" style="font-family:'Helvetica';font-size:125.98px;fill:#1E2D53" text-anchor="middle">Predictive Margins with 95% CIs</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Poängen illustreras här tydligt: Kvinnor och män ligger rätt lika bland dem som inte har barn, men ökar dramatiskt mellan edem som har barn och dem som inte har det.</p>
-<p>Alla tre graferna här hänger ihop. De två tidigare, som visade koefficienterna, visar alltså på relationerna mellan de olika punkterna i den sista grafen. Den första, som visade effekten av dum_kids, visar vad som händer när vi går till höger i diagrammet, från noll till ett. Den blåa linjen (männen) går då upp, och den röda linjen (kvinnorna) går ner.</p>
-<p>Den andra grafen, som visade effekten av woman, visar vad som händer när vi byter från den blåa till den röda linjen. När vi är på dum_kids = 0 blir det en liten nedgång från den blåa till den röda linjen. När vi är på dum_kids = 1 blir det ett stort hopp ned från den blåa till den röda.</p>
+<p>Om man sedan öppnar filen med Word ser det ut på följande sätt:
+<img src="../images/esttabexample.png" alt="Exempel på regressiontabell"></p>
+<p>Sedan kan man naturligtvis göra det ännu mer pedagogiskt genom att byta ut variabelnamnen till förklarande etiketter, till exempel "Demokrati (-10 till 10)" eller motsvarande. Men det här är ändå ett stort lyft jämfört med den råa outputen.</p>
 
 </div>
 </div>
@@ -14174,10 +13528,8 @@ Expression   : Linear prediction, predict()
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h1><p>Slutsatsen av analysen är alltså att könsskillnaderna ser ut att öka kraftigt i samband med barnafödande. Män med barn tjänar mycket mer än män utan barn, medan kvinnor med barn tjänar mindre än kvinnor utan barn. Därför tjänar män utan barn bara lite mer än kvinnor utan barn, medan män med barn tjänar mycket mer än kvinnor med barn.</p>
-<p>Annan forskning har visat på rimliga förklaringar till detta; till exempel att barnafödandet leder till att kvinnor i familjer arbetar mindre, och män mer, för att täcka upp. Men det kan vi inte avgöra utifrån den här tvärsnittsanalysen. Här jämför vi bara olika individer med varandra, och det kan finnas mycket som skiljer de olika individerna åt som vi inte tar hänsyn till här.. Men vi har i alla fall kontrollerat för ålder, så skillnaderna beror inte bara på att de som har barn är äldre, till exempel.</p>
-<p>Mer allmänt ser vi att viktiga effekter kan döljas när de smetas ut över flera grupper i ett urval: den ursprungliga effekten av barnafödande var svagt positiv. Och många teorier leder till förväntningar på att effekter kommer skilja sig beroende på någon tredje variabels värde. Då är regressionsanalyser med interaktionseffekter viktiga.</p>
-<p>Dock blir det lite (men inte mycket) mer komplicerat när en eller båda variabler är kontinuerliga, och har skalor med många värden. Det kommer vi diskutera mer i ett annat inlägg.</p>
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Att göra tabeller med <code>esttab</code> kräver alltså tre steg. Först gör man analysen, sedan sparar man resultaten från den med <code>estimates store</code> och sedan presenterar man resultaten med <code>esttab</code>.</p>
+<p>Tänk på att alltid försöka vara maximalt pedagogisk och tydlig. Den som förlorar mest på att läsaren inte förstår dina resultat är du!</p>
 
 </div>
 </div>
