@@ -228,6 +228,31 @@ display:inline-block;
       border-radius: 50%
     }
 
+.lcircley {
+      width: 24px;
+      height: 24px;
+      background: #ffd84f;
+display:inline-block;
+      border-radius: 50%
+    }
+
+.lcircleb {
+        width: 24px;
+        height: 24px;
+        background: #4feaff;
+        display:inline-block;
+        border-radius: 50%
+    }
+
+.lcirclep {
+      width: 24px;
+      height: 24px;
+      background: #ff4f9e;
+    display:inline-block;
+      border-radius: 50%
+    }
+
+
 .circlew {
         width: 12px;
         height: 12px;
