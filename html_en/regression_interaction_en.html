@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+<head><meta charset="utf-8" />
+
+<title>Regression analysis with interaction effects - two values</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,10 +13,6 @@
   gtag('config', 'UA-132683642-1');
 </script>
 
-    
-    <meta charset="utf-8" />
-
-<title>regression_english_nb</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13101,7 +13099,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13128,307 +13126,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Introduction-to-regression-analysis-in-Stata">Introduction to regression analysis in Stata<a class="anchor-link" href="#Introduction-to-regression-analysis-in-Stata">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Regression analysis is one of the most common forms of statistical analysis, and one of the most flexible. It can be done with two or more variables, and be used to investigate a range of relationships, with or without controls for alternative explanations.</p>
-<p>In general, it is about fitting a line to a group of points. The formula for "normal regression analysis" - Ordinary Least Squares (OLS) - does this in a very good way.</p>
-<p>In this guide we will cover the most simple form of regression analysis, where we only have two variables, and the intuition behind the analysis. It can then be built upon and extended in a multitude of ways, but we will not cover that in this post.</p>
-<p>We start by opening a data set. In this example we'll use a practice dataset that comes preinstalled in Stata, the "auto" dataset. It holds information about different cars - their gasoline consumption, the model, their weight and length, and so on. Each row in the dataset is one car.</p>
-<p>To open this practice dataset you only have to enter into your do-file:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">sysuse</span> auto,<span class="k"> clear</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(1978 Automobile Data)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>There are 12 variables in the dataset. We'll look at the possible relationship between the number of miles the car can run on one gallon of gasoline and the weight of the car, in pounts. A reasonable hypothesis is that heavier cars require more gas per mile, resulting in a lower average miles per gallon (mpg). We call the weight the independent variable, and miles per gallon the dependent variable. We believe that mpg is affected by the weight, but not that the weight is affected by the mpg.</p>
-<p>Let's start by visualizing the relationship in what is called a scatterplot. We do that by writing, in the do-file:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter mpg weight)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-(note: file /Users/anderssundell/.stata_kernel_cache/graph3.svg not found)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.0 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="100.86" width="3468.22" height="2388.33" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="103.74" width="3462.46" height="2382.57" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="3859.02" y2="2425.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1696.29" x2="3859.02" y2="1696.29" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="966.64" x2="3859.02" y2="966.64" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="237.11" x2="3859.02" y2="237.11" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<circle cx="1660.72" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1660.72" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2093.97" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2093.97" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1361.62" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1361.62" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1990.77" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1990.77" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2846.87" cy="2061.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2846.87" cy="2061.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2424.01" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2424.01" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="938.77" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="938.77" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2021.70" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2021.70" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2640.58" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2640.58" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2145.45" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2145.45" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3104.64" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3104.64" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2661.12" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2661.12" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3063.43" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3063.43" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="815.02" cy="1039.66" r="26.35" style="fill:#1A476F"/>
-	<circle cx="815.02" cy="1039.66" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2444.56" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2444.56" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1918.62" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1918.62" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1959.83" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1959.83" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1475.10" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1475.10" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2176.39" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2176.39" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="825.41" cy="966.77" r="26.35" style="fill:#1A476F"/>
-	<circle cx="825.41" cy="966.77" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2351.74" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2351.74" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2351.74" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2351.74" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2496.16" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2496.16" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="495.37" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="495.37" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1372.02" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1372.02" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3630.70" cy="2280.04" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3630.70" cy="2280.04" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3506.83" cy="2280.04" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3506.83" cy="2280.04" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2588.97" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2588.97" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.75" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.75" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2826.20" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2826.20" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2475.49" cy="2061.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2475.49" cy="2061.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2114.52" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2114.52" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2898.35" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2898.35" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1557.64" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1557.64" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2826.20" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2826.20" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2052.64" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2052.64" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2042.37" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2042.37" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2444.56" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2444.56" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2114.52" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2114.52" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1454.43" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1454.43" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2795.26" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2795.26" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2001.16" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2001.16" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="495.37" cy="674.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="495.37" cy="674.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="907.83" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="907.83" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1237.87" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1237.87" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2073.31" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2073.31" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2454.95" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2454.95" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2217.72" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2217.72" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1949.56" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1949.56" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1939.29" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1939.29" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2166.12" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2166.12" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1413.22" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1413.22" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1557.64" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1557.64" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="773.81" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="773.81" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1372.02" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1372.02" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1083.18" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1083.18" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="722.21" cy="601.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="722.21" cy="601.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="990.37" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="990.37" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1475.10" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1475.10" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="835.68" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="835.68" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="949.16" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="949.16" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="681.00" cy="966.77" r="26.35" style="fill:#1A476F"/>
-	<circle cx="681.00" cy="966.77" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2166.12" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2166.12" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="526.31" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="526.31" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="753.14" cy="601.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="753.14" cy="601.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1124.52" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1124.52" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="907.83" cy="893.75" r="26.35" style="fill:#1A476F"/>
-	<circle cx="907.83" cy="893.75" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1392.56" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1392.56" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="866.62" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="866.62" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="742.87" cy="164.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="742.87" cy="164.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="629.39" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="629.39" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="691.27" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="691.27" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1908.22" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1908.22" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="390.80" y1="2489.19" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="350.83" y2="2425.82" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2425.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2425.82)" text-anchor="middle">10</text>
-	<line x1="390.80" y1="1696.29" x2="350.83" y2="1696.29" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1696.29" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1696.29)" text-anchor="middle">20</text>
-	<line x1="390.80" y1="966.64" x2="350.83" y2="966.64" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="966.64" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,966.64)" text-anchor="middle">30</text>
-	<line x1="390.80" y1="237.11" x2="350.83" y2="237.11" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="237.11" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,237.11)" text-anchor="middle">40</text>
-	<text x="190.71" y="1294.96" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1294.96)" text-anchor="middle">Mileage (mpg)</text>
-	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="701.66" y1="2489.19" x2="701.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="701.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">2,000</text>
-	<line x1="1732.99" y1="2489.19" x2="1732.99" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="1732.99" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">3,000</text>
-	<line x1="2764.33" y1="2489.19" x2="2764.33" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2764.33" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">4,000</text>
-	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">5,000</text>
-	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Weight (lbs.)</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Each dot here represents one car, that is placed on the horizontal axis according to its weight, and on the vertical axis according to the number of mpg. There is some spread, but we can discern a pattern: Dots to the right in the graph tend to be placed lower. The heaviest cars can only run 11-12 miles per gallon. In contrast, the car that can run the farthest on one gallon (and that is accordingly placed at the top of the graph) is comparatively light, weighing about 2000 lbs.</p>
-<p><strong>We can visualize this relationship</strong> - that heavier cars go fewer miles per gallon - by fitting a line to the points, but we let Stata fit the line as good as possible. Specifically, Stata tries to minimize the vertical distance between the line and all the points. Even more specifically, Stata tries to minimize the total squared distance, which gives the name "Ordinary Least Squares". <a href="http://setosa.io/ev/ordinary-least-squares-regression/">On this page</a> you can find good visualizations of an explanation for how the formula works. But the gist of it is that we want the line to be as close as possible to the points.</p>
-<p>To actually draw the line in our graph we add another layer. In the first layer we show the dots. In the second we draw our line, with the command "lfit". Each layer has its own set of parentheses in the graph command. This is how it looks:</p>
+<h1 id="Regression-analysis-with-interaction-effects">Regression analysis with interaction effects<a class="anchor-link" href="#Regression-analysis-with-interaction-effects">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<p>Regression analysis is used to investigate relationships between variables, with or without control for other vairables. However, in the real world, we often find that relationships are different in different sub-groups of the population, or during different circumstances. The effect of becoming a parent is for instance different among women and men; women see a much larger drop in incomes.</p>
+<p>How to account for this in our analyses? One way is to run two separate analyses, one for each group we are interested in (in this case women and men). We then get the effect of becoming a parent among men, and among women.</p>
+<p>But we can also do this in one single regression analysis. We then get a sense of how much the effect differs between groups, and also whether the <em>difference</em> in effect is statistically significant. We can then decide whether it is worth the effort to complicate our theoretical model by introducing these separate effects. We can then also hold the effects of all control variables constant. If we run two separate analyses, the control variables would also get different effects in the two models, and that might not be part of our theory.</p>
+<p><strong>This is called an interaction analysis. It can also be called a moderation analysis, or that we are investigating conditional effects. It means that we let the effect of one variable vary over the values of another variable.</strong> It is often graphically represented by a a diagram with an arrow pointing at another arrow. The third variable in this schematic affects <em>the effect</em> of the main independent variable, rather than <em>the value</em> of the independent and dependent variables.</p>
+<p><img src = "../images/interaction_en.png" alt="An interaktion" width=451></p>
+<p>In this guide we will discuss how to do regression analyses where both independent variable and interaction variable only has two values, and how to best present the results.</p>
+<p>We will work with data from the american <a href="http://gss.norc.org/get-the-data/stata">General Social Survey</a>, which is a survey with regular citizens, with questions about a lot of subjects. We will use the 2016 edition. Download the data and put it in your project folder to follow along in the example.</p>
 
 </div>
 </div>
@@ -13438,241 +13143,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter mpg weight) (lfit mpg weight)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.0 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="290.81" y="100.86" width="3568.21" height="2132.77" style="fill:#FFFFFF"/>
-	<rect x="293.69" y="103.74" width="3562.45" height="2127.01" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="290.81" y1="2170.27" x2="3859.02" y2="2170.27" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="1523.16" x2="3859.02" y2="1523.16" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="876.05" x2="3859.02" y2="876.05" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="228.82" x2="3859.02" y2="228.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<circle cx="1596.87" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1596.87" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2042.99" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2042.99" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1288.86" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1288.86" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1936.81" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1936.81" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2818.41" cy="1846.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2818.41" cy="1846.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2382.93" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2382.93" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="853.38" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="853.38" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1968.62" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1968.62" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2605.93" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2605.93" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2096.08" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2096.08" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3083.97" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3083.97" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2627.21" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2627.21" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3041.53" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3041.53" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="725.92" cy="940.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="725.92" cy="940.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2404.22" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2404.22" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1862.44" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1862.44" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1904.88" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1904.88" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1405.68" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1405.68" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2128.01" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2128.01" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="736.44" cy="876.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="736.44" cy="876.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2308.56" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2308.56" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2308.56" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2308.56" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2457.30" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2457.30" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="396.62" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="396.62" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.50" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.50" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3625.75" cy="2040.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3625.75" cy="2040.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3498.29" cy="2040.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3498.29" cy="2040.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2552.84" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2552.84" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1225.12" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1225.12" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2797.12" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2797.12" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2436.02" cy="1846.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2436.02" cy="1846.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2064.27" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2064.27" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2871.49" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2871.49" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1490.69" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1490.69" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2797.12" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2797.12" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2000.54" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2000.54" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1989.90" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1989.90" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2404.22" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2404.22" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2064.27" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2064.27" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1384.39" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1384.39" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2765.32" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2765.32" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1947.45" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1947.45" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="396.62" cy="617.28" r="26.35" style="fill:#1A476F"/>
-	<circle cx="396.62" cy="617.28" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="821.45" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="821.45" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1161.39" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1161.39" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2021.70" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2021.70" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2414.73" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2414.73" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2170.45" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2170.45" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1894.24" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1894.24" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1883.72" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1883.72" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2117.36" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2117.36" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1341.94" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1341.94" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1490.69" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1490.69" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="683.35" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="683.35" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.50" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.50" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1002.00" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1002.00" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="630.26" cy="552.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="630.26" cy="552.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="906.47" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="906.47" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1405.68" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1405.68" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="747.08" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="747.08" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="863.90" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="863.90" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="354.05" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="354.05" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="587.81" cy="876.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="587.81" cy="876.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2117.36" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2117.36" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="428.42" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="428.42" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="662.06" cy="552.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="662.06" cy="552.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1044.57" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1044.57" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="821.45" cy="811.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="821.45" cy="811.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1320.66" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1320.66" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="779.01" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="779.01" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="651.54" cy="164.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="651.54" cy="164.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="534.60" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="534.60" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="598.33" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="598.33" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1851.80" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1851.80" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="354.05" y1="949.56" x2="1989.90" y2="1548.41" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="1989.90" y1="1548.41" x2="3625.75" y2="2147.25" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="290.81" y1="2233.63" x2="290.81" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="290.81" y1="2170.27" x2="250.84" y2="2170.27" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="2170.27" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,2170.27)" text-anchor="middle">10</text>
-	<line x1="290.81" y1="1523.16" x2="250.84" y2="1523.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="1523.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,1523.16)" text-anchor="middle">20</text>
-	<line x1="290.81" y1="876.05" x2="250.84" y2="876.05" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="876.05" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,876.05)" text-anchor="middle">30</text>
-	<line x1="290.81" y1="228.82" x2="250.84" y2="228.82" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="228.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,228.82)" text-anchor="middle">40</text>
-	<line x1="290.81" y1="2233.63" x2="3859.02" y2="2233.63" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="609.10" y1="2233.63" x2="609.10" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="609.10" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">2,000</text>
-	<line x1="1671.24" y1="2233.63" x2="1671.24" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="1671.24" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">3,000</text>
-	<line x1="2733.51" y1="2233.63" x2="2733.51" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2733.51" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">4,000</text>
-	<line x1="3795.66" y1="2233.63" x2="3795.66" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">5,000</text>
-	<text x="2074.92" y="2473.60" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Weight (lbs.)</text>
-	<rect x="1073.65" y="2558.24" width="2002.65" height="186.37" style="fill:#FFFFFF"/>
-	<rect x="1076.53" y="2561.12" width="1996.89" height="180.61" style="fill:none;stroke:#000000;stroke-width:5.76"/>
-	<circle cx="1138.75" cy="2651.43" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1138.75" cy="2651.43" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="2012.79" y1="2651.43" x2="2387.14" y2="2651.43" style="stroke:#90353B;stroke-width:8.64"/>
-	<text x="1220.79" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Mileage (mpg)</text>
-	<text x="2447.16" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Fitted values</text>
-</svg>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This line is the best possible. If we were to change the angle, or the vertical position of the line, the total squared distance between the line and all the points would increase. This is the so called <em>regression line</em>.</p>
-<p>Since it slopes down to the right it is a <em>negative relationship</em>. More of one variable (weight) is associated with less of the other (miles per gallon). More miles per gallon is associated with less weight.</p>
-<p><strong>Regression analysis is to put numbers on this line.</strong> In a regression analysis we primarily obtain the <em>slope coefficient</em>, that is, how much the line is tilted up or down. We also get the <em>intercept</em> or the <em>constant</em>, which shows where the line ends up on the vertical axis when we are at zero on the horizontal. Expressed differently: The expected value on the dependent variable when all the independent variables in the model are zero.</p>
-<p>To do a regression analysis on these two variables we write:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> mpg weight
+<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/Users/xsunde/Dropbox/Jupyter/stathelp/data/&quot;</span><span class="k"></span>
+<span class="k">use</span> <span class="s">&quot;GSS2016.dta&quot;</span>,<span class="k"> clear</span>
 </pre></div>
 
     </div>
@@ -13690,18 +13162,314 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-      Source |       SS           df       MS      Number of obs   =        74
--------------+----------------------------------   F(1, 72)        =    134.62
-       Model |   1591.9902         1   1591.9902   Prob &gt; F        =    0.0000
-    Residual |  851.469256        72  11.8259619   R-squared       =    0.6515
--------------+----------------------------------   Adj R-squared   =    0.6467
-       Total |  2443.45946        73  33.4720474   Root MSE        =    3.4389
+/Users/xsunde/Dropbox/Jupyter/stathelp/data
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Prepare-the-data-for-analysis">Prepare the data for analysis<a class="anchor-link" href="#Prepare-the-data-for-analysis">&#182;</a></h2><p>The question to investigate is the one mentioned above: how becoming a parent affects incomes for women and men. We should really have longitudinal data to properly investigate the question. It would allow us to track individuals before and after they have kids. Since this is cross-sectional data, with information from one point in time, this is not possible. Our conclusions will thus be based on comparisons between parents and non-parents. Of course, this limits our ability to draw conclusions about cause and effect.</p>
+<p>We need three variables: gender, income, and number of kids. Information about gender is found in the variable <code>sex</code> where 1 means "male" and 2 "female". To make results more easy to interpret later, we will recode the variable so men have the value 0 and women the value 1. We also rename the variable to "woman" instead of sex. When we increase our variable, it means that the respondent becomes "more woman", metaphorically speaking.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">recode</span> sex (<span class="m">1</span>=<span class="m">0</span>) (<span class="m">2</span>=<span class="m">1</span>),<span class="k"> generate</span>(woman)<span class="k"></span>
+<span class="k">tab</span> woman
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(2867 differences between sex and woman)
+
+
+  RECODE of |
+        sex |
+(respondent |
+     s sex) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,276       44.51       44.51
+          1 |      1,591       55.49      100.00
+------------+-----------------------------------
+      Total |      2,867      100.00
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We also need a variable for income. There are some to choose from, but the simplest seem to be <code>realrinc</code>, which expresses the respondent's income in dolalrs per year. We can see below that the mean is 23773.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">sum</span> realrinc
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    realrinc |      1,632    23772.92    29407.37        234     164382
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, we need a variable for the number of kids. There is one that shows exactly that, <code>childs</code>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">tab</span> childs
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+    number of |
+     children |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+            0 |        797       27.88       27.88
+            1 |        459       16.05       43.93
+            2 |        733       25.64       69.57
+            3 |        467       16.33       85.90
+            4 |        213        7.45       93.35
+            5 |         92        3.22       96.57
+            6 |         51        1.78       98.36
+            7 |         25        0.87       99.23
+eight or more |         22        0.77      100.00
+--------------+-----------------------------------
+        Total |      2,859      100.00
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this guide we will only compare parents to non-parents, that is the zeros on the varibale to the rest. The largest effects are probably found when you get your first child. Now we create a dummy variable that has the value 0 for respondents without kids, and 1 for respondents with one or more kids. We call it <code>dum_kids</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">recode</span> childs (<span class="m">0</span>=<span class="m">0</span>) (<span class="m">1</span><span class="o">/</span><span class="m">8</span> = <span class="m">1</span>),<span class="k"> generate</span>(dum_kids)<span class="k"></span>
+<span class="k">tab</span> dum_kids
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(1603 differences between childs and dum_kids)
+
+
+  RECODE of |
+     childs |
+ (number of |
+  children) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        797       27.88       27.88
+          1 |      2,062       72.12      100.00
+------------+-----------------------------------
+      Total |      2,859      100.00
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now have all the variables we need for the analysis. We can start by doing a correlation matrix that shows how the variables are related, and we also add the variable <code>age</code>, that shows the respondent's age. We will include it as a control variable later on.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">pwcorr</span> woman realrinc dum_kids age
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+             |    woman realrinc dum_kids      age
+-------------+------------------------------------
+       woman |   1.0000 
+    realrinc |  -0.1628   1.0000 
+    dum_kids |   0.1047   0.0821   1.0000 
+         age |   0.0418   0.1332   0.3493   1.0000 
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The correlation between woman and income is negative, which means that women earn less. More woman = less income. Woman is also positively correlated with having kids. Having kids is in turn positively correlated with incomes - possibly owing to the fact that parents are older, and older people have higher incomes. Age has a positive relationship both with incomes and kids.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Interaction-analysis-where-variables-have-two-values">Interaction analysis where variables have two values<a class="anchor-link" href="#Interaction-analysis-where-variables-have-two-values">&#182;</a></h2><p>In the first analysis we will examine how being a parent is related to income, and then redo the analysis for women and men. But first we run a regular regression analysis, without interaction, where we just enter all variables like they are. The dependent variable is income.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman dum_kids age
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =     1,627
+-------------+----------------------------------   F(3, 1623)      =     26.64
+       Model |  6.5114e+10         3  2.1705e+10   Prob &gt; F        =    0.0000
+    Residual |  1.3225e+12     1,623   814854652   R-squared       =    0.0469
+-------------+----------------------------------   Adj R-squared   =    0.0452
+       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28546
 
 ------------------------------------------------------------------------------
-         mpg |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-      weight |  -.0060087   .0005179   -11.60   0.000    -.0070411   -.0049763
-       _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
+       woman |  -9748.911   1421.057    -6.86   0.000    -12536.21   -6961.612
+    dum_kids |    3603.04   1636.325     2.20   0.028     393.5083    6812.571
+         age |   241.0386   52.86283     4.56   0.000      137.352    344.7252
+       _cons |   15430.49   2452.935     6.29   0.000     10619.24    20241.74
 ------------------------------------------------------------------------------
 </pre>
 </div>
@@ -13714,12 +13482,72 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The principle is that you write the command for regression "reg", followed by the dependent variable "mpg" and then a list of all the independent variables (in this case, just "weight".)</p>
-<p>The table may look a bit confusing, but not all numbers are equally important. The most important one we find towards the bottom, especially in the row "weight." <strong>In the column "Coef." we see the most important number, the slope coefficient.</strong> It shows the tilt of the line, expressed as <em>how much the dependent variable changes when we increase the independent variable by one.</em></p>
-<p>In this case it is -.006. It means that a car that weighs one pound more on average can travel .006 miles less on each gallon of gas. It also means that a car that weighs 1000 pounds more will travel 6 miles less per gallon. This is also evident from the graph with the line above.</p>
-<p>In the row "cons" we see what the so called <em>intercept</em> or <em>constant</em> is. It is the average value for the dependent variable when all the independent variables are zero. That is, how many miles per gallon a car that weighs 0 pound can drive: 39.44. This is obviously not how it works in the real world; no cars weigh zero pounds. But that is not a problem for the analysis. It is just the value we get when we extend the regression line so far left, far beyond the possible weights of a car. We therefore don't need to interpret this intercept in any way.</p>
-<p>Finally, we can look at the number to the right of "R-squared", in the top right part of the output. This value is 0.6515. R-square is a measure that stretches from 0 to 1, and shows how good our line fits the dots. The more spread out the dots are around the line, the lower the R-squared value. The closer they are to the line, the higher the R-squared value.</p>
-<p>You can also interpret this value as the percentage of variance in the dependent variable that is explained by the independent variable(s). In this case, 65.15% of the variation in mpg can be explained by the variable weight. Weight is thus an important explanation for why different cars can go different number of miles per gallon, even if other factors also matter (as is evident by the fact that R-squared is not one).</p>
+<p>Results are as expected. The coefficient for <code>woman</code> is -9748, which means that women in general have 9748 less income (per year) than men, even when controlling for age and having kids.</p>
+<p>The coefficient for age is 241, which means that for each extra year of age, the respondents in general have 241 dollars more in yearly income. Being a man does thus has the same effect on income as being $9748/241=40$ years older!</p>
+<p>Parents on average have 3603 dollars more in yearly income (when controlling for age and gender).</p>
+<p>The effect of having kids is here assumed to be the same for women and men, and we will now investigate whether that is a reasonable assumption. TO do so we need to add what is called an <em>interaction term</em>, a new variable that is the product of <code>woman</code> times <code>dum_kids</code>. Conveniently enough there are automatic functions for doing so in Stata, so we can let Stata create the variable within the analysis. We just add ## between the variables we want to interacti to get the interaction term automatically:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman##dum_kids age
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =     1,627
+-------------+----------------------------------   F(4, 1622)      =     23.62
+       Model |  7.6368e+10         4  1.9092e+10   Prob &gt; F        =    0.0000
+    Residual |  1.3113e+12     1,622   808418921   R-squared       =    0.0550
+-------------+----------------------------------   Adj R-squared   =    0.0527
+       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28433
+
+--------------------------------------------------------------------------------
+      realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       1.woman |   -1673.06   2586.229    -0.65   0.518     -6745.76    3399.641
+    1.dum_kids |    9213.15   2217.508     4.15   0.000     4863.668    13562.63
+               |
+woman#dum_kids |
+          1 1  |  -11546.67   3094.776    -3.73   0.000    -17616.85   -5476.495
+               |
+           age |   228.0699   52.76827     4.32   0.000     124.5687     331.571
+         _cons |   12306.06   2582.758     4.76   0.000     7240.167    17371.95
+--------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now have a new variable in the table, <code>woman#dum_kids</code>. This is the interaction term. We can also note that the coefficients for <code>woman</code> and <code>dum_kids</code> changed a lot. They can now not be interpreted in the same way. <strong>The coefficients now show the effect of the variable when the other variable in the interaction is zero.</strong> The variable <code>woman</code> shows the difference between women and men <em>that don't have kids.</em> The variable <code>dum_kids</code> shows the difference between parents and non-parents <em>among men</em>.</p>
+<p>We need to add the coefficients with the interaction term to calculate what the effects are for the other groups. <strong>The interaction term shows how the COEFFICIENTS change when the other variable increases with one unit.</strong></p>
+<p>The "effect" of having kids is thus +9213.15 for men. To get the effect for women we need to add the <code>dum_kids</code> coefficient with the interaction term: $9213.15 - 11546.67 * 1 = -2333.52$. <strong>This means that mothers have lower incomes than women who are not parents, while fathers have higher income than men who are not parents.</strong></p>
+<p>Can we trust this difference in effects? Yes, since the interaction term is significant. It is unlikely that a difference in effects of this size would arise simply because of randomness in the sampling. If the interaction term had been insignificant, it would have been better to trust the simpler model without interaction term, both because it is easier to interpret, and because simpler models all else equal are preferrable (if the more complicated models don't add any explanatory power).</p>
+<p>Conversely, women who don't have kids have 1673.06 lower incomes than men without kids. But how much lower are incomes for mothers compared to fathers? We get this effect by calculating $-1673.06 - 11546.67 * 1 = -13219.73$. The difference in incomes between men and women thus grows dramatically after having kids.</p>
 
 </div>
 </div>
@@ -13727,16 +13555,692 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Finally">Finally<a class="anchor-link" href="#Finally">&#182;</a></h2>
+<h2 id="Comparison-with-separate-analyses">Comparison with separate analyses<a class="anchor-link" href="#Comparison-with-separate-analyses">&#182;</a></h2><p>Let's now try to run the analysis in the other way, separating the sample on men and women. We then only include the variables <code>dum_kids</code> and <code>age</code> - woman cannot be included, as there will only be one gender in each analysis. To do these analyses, we use <a href="ifstatements_en.html" target="_new">if qualifiers</a> to separate the genders. First we get the analysis for men, and then for women. Not that we now have much fewer observations in the analysis:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc dum_kids age<span class="k"> if</span> woman<span class="o">==</span><span class="m">0</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =       795
+-------------+----------------------------------   F(2, 792)       =     15.24
+       Model |  3.2066e+10         2  1.6033e+10   Prob &gt; F        =    0.0000
+    Residual |  8.3316e+11       792  1.0520e+09   R-squared       =    0.0371
+-------------+----------------------------------   Adj R-squared   =    0.0346
+       Total |  8.6522e+11       794  1.0897e+09   Root MSE        =     32434
+
+------------------------------------------------------------------------------
+    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    dum_kids |   9325.868   2635.179     3.54   0.000     4153.107    14498.63
+         age |   218.5634   86.61915     2.52   0.012     48.53316    388.5937
+       _cons |   12652.01   3717.253     3.40   0.001     5355.177    19948.84
+------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc dum_kids age<span class="k"> if</span> woman<span class="o">==</span><span class="m">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+      Source |       SS           df       MS      Number of obs   =       832
+-------------+----------------------------------   F(2, 829)       =      7.34
+       Model |  8.4705e+09         2  4.2353e+09   Prob &gt; F        =    0.0007
+    Residual |  4.7807e+11       829   576687842   R-squared       =    0.0174
+-------------+----------------------------------   Adj R-squared   =    0.0150
+       Total |  4.8654e+11       831   585493068   Root MSE        =     24014
+
+------------------------------------------------------------------------------
+    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    dum_kids |  -2404.498   1954.356    -1.23   0.219    -6240.567     1431.57
+         age |   236.9486   61.97975     3.82   0.000     115.2929    358.6043
+       _cons |   10289.93   2892.852     3.56   0.000     4611.756    15968.11
+------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that the coefficients for <code>dum_kids</code> are very similar to the ones we calculated in the previous analysis. For men the effect of having kids is +9326, while it was +9213 in the previous analysis. For women, the effect is -2404, and was -2334 in the previous analysis. The reason for why they are not exactly the same is because the effect of <code>age</code> here is allowed to vary - it is slightly higher for women than for men. When the control variable gets different coefficients, the other variables are affected as well. In the integrated analysis, <code>age</code> only had one coefficient (288, almost in the middle between 219 and 237).</p>
+<p>This way of doing the analysis might seem more intuitive, but we don't get a significance test for the difference in effect. And we also here model an interaction with age and gender. If we don't have a theory about that, it is better to assume that the effect is the same, which we do in the other, integrated analysis.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Regression analysis is not harder than that, in its simplest form. It is about fitting a line to a swarm of dots, and we get informatino about this line: its slope, where it starts, and how well it fits to the dots.</p>
-<p>In practical terms, we use this analysis to investigate a relationship between to variables, and to find out whether the relationship is weak or strong. In this example, we saw  that there was a negative relationship: cars with a lot of weight have few miles per gallon. Cars with a lot of miles per gallon have less weight.</p>
-<p>We can also use regression analysis to control for other variables, ruling out other explanations. For instance, one could imagine that some car manufacturers for some reason make their cars heavier, and that they, for some other reason, also consume more gas per mile. If that is the case, maybe there is no causal effect of weight on mpg, but rather a brand effect (even though this sounds unlikely). By adding control variables we can investigate whether this is the case or not. We can also look at p-values and confidence intervals to find out how generalizible these results are to a wider population. But that is for other posts.</p>
+<h2 id="Presenting-results-when-the-values">Presenting results when the values<a class="anchor-link" href="#Presenting-results-when-the-values">&#182;</a></h2><p>To interpret interaction effects is difficult (to most people). They therefore need to be presented in a more intutive way than a regression table. And the table also does not show whether the effect of having kids is significant for women or not.</p>
+<p>In order to get the conditional effects, the coefficients for the variables over values of the other variables, we use the command <code>margins</code> together with options <code>dydx()</code> and <code>at()</code>. Dydx stands for delta Y and delta X. Delta is in mathematics used to signify change. We want to see how much Y (the dependent variable) changes when we increase X (the independnet variable). We use the <code>at</code> opion to tell Stata for which values of the interaction variable we want to see the marginal effect of the independent variable.</p>
+<p>To get the effect of having kids for women and men we write the following. The margins command has to follow a regression command, and I have here suppressed the output of the regression table with <code>quietly</code>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">quietly reg</span> realrinc woman##dum_kids age
+margins,<span class="k"> dydx</span>(dum_kids) at(woman=(<span class="m">0</span> <span class="m">1</span>))
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+
+Average marginal effects                        Number of obs     =      1,627
+Model VCE    : OLS
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : 1.dum_kids
+
+1._at        : woman           =           0
+
+2._at        : woman           =           1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+0.dum_kids   |  (base outcome)
+-------------+----------------------------------------------------------------
+1.dum_kids   |
+         _at |
+          1  |    9213.15   2217.508     4.15   0.000     4863.668    13562.63
+          2  |  -2333.525   2277.746    -1.02   0.306    -6801.159     2134.11
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since we wrote <code>at(woman=(0 1))</code> we get two coefficients: one when woman is 0, and one when woman is 1. We can then see that the coefficient for <code>dum_kids</code> is 9213.15 when <code>woman</code> is 0, and -2333.525 when <code>woman</code> is 1. Having kids is positive for men, and negative for women. The coefficients are the same as what we calculated by hand above. The negative effect for women is however not significant, since the p-value is 0.306.</p>
+<p>We can illustrate this by just running the command <code>marginsplot</code> after the margins command. By adding the option <code>yline(0)</code> we also get a reference line, drawn at 0. If the confidence intervals do not cover the line, the variable is statistically significant.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>marginsplot, yline(<span class="m">0</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+  Variables that uniquely identify margins: woman
+
+.     noi gr export /Users/xsunde/.stata_kernel_cache/graph$stata_kernel_graph_
+&gt; counter.svg, width(600) replace
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2252.20&quot; x2=&quot;3859.02&quot; y2=&quot;2252.20&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1770.42&quot; x2=&quot;3859.02&quot; y2=&quot;1770.42&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1288.53&quot; x2=&quot;3859.02&quot; y2=&quot;1288.53&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;806.63&quot; x2=&quot;3859.02&quot; y2=&quot;806.63&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1770.42&quot; x2=&quot;3859.02&quot; y2=&quot;1770.42&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;1301.64&quot; x2=&quot;454.16&quot; y2=&quot;463.21&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;463.21&quot; x2=&quot;476.19&quot; y2=&quot;463.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1301.64&quot; x2=&quot;476.19&quot; y2=&quot;1301.64&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2425.82&quot; x2=&quot;3795.66&quot; y2=&quot;1564.74&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;1564.74&quot; x2=&quot;3817.69&quot; y2=&quot;1564.74&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;2425.82&quot; x2=&quot;3817.69&quot; y2=&quot;2425.82&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;path d=&quot; M454.04 882.49 L3795.66 1995.28&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;882.49&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;882.49&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1995.28&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1995.28&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2252.20&quot; x2=&quot;350.83&quot; y2=&quot;2252.20&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2252.20&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2252.20)&quot; text-anchor=&quot;middle&quot;&gt;-5000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1770.42&quot; x2=&quot;350.83&quot; y2=&quot;1770.42&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1770.42&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1770.42)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1288.53&quot; x2=&quot;350.83&quot; y2=&quot;1288.53&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1288.53&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1288.53)&quot; text-anchor=&quot;middle&quot;&gt;5000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;806.63&quot; x2=&quot;350.83&quot; y2=&quot;806.63&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;806.63&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,806.63)&quot; text-anchor=&quot;middle&quot;&gt;10000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;15000&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;RECODE of sex (respondents sex)&lt;/text&gt;
+	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of 1.dum_kids with 95% CIs&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+.     global stata_kernel_graph_counter = $stata_kernel_graph_counter + 1
+. }            
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is just a graphical representation of what we saw earlier. This is not predicted values; the Y-axis shows the EFFECT of having kids. The confidence intervals do not cover 0 when woman = 0, but when woman = 1, the confidence intervals do cover 0. This means (as we saw earlier) that only the positive effect for men is significant - the negative effect for women is insignificant.</p>
+<p>In the same way, we can pull out the coefficients for <code>woman</code>, among the different values on <code>dum_kids</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(woman) at(dum_kids=(<span class="m">0</span> <span class="m">1</span>))
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Average marginal effects                        Number of obs     =      1,627
+Model VCE    : OLS
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : 1.woman
+
+1._at        : dum_kids        =           0
+
+2._at        : dum_kids        =           1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+0.woman      |  (base outcome)
+-------------+----------------------------------------------------------------
+1.woman      |
+         _at |
+          1  |   -1673.06   2586.229    -0.65   0.518     -6745.76    3399.641
+          2  |  -13219.73   1693.765    -7.80   0.000    -16541.93   -9897.537
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Women earn less than men, regardless if they have kids or not. But among those that do not have kids, the difference is insignificant. We only find a significant difference between men and women who have kids. We can also see this in the graph below:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>marginsplot, yline(<span class="m">0</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+  Variables that uniquely identify margins: dum_kids
+
+.     noi gr export /Users/xsunde/.stata_kernel_cache/graph$stata_kernel_graph_
+&gt; counter.svg, width(600) replace
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2275.46&quot; x2=&quot;3859.02&quot; y2=&quot;2275.46&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1787.75&quot; x2=&quot;3859.02&quot; y2=&quot;1787.75&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1300.03&quot; x2=&quot;3859.02&quot; y2=&quot;1300.03&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;812.44&quot; x2=&quot;3859.02&quot; y2=&quot;812.44&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;812.44&quot; x2=&quot;3859.02&quot; y2=&quot;812.44&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;1470.32&quot; x2=&quot;454.16&quot; y2=&quot;480.78&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;480.78&quot; x2=&quot;476.19&quot; y2=&quot;480.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1470.32&quot; x2=&quot;476.19&quot; y2=&quot;1470.32&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2425.82&quot; x2=&quot;3795.66&quot; y2=&quot;1777.72&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;1777.72&quot; x2=&quot;3817.69&quot; y2=&quot;1777.72&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;2425.82&quot; x2=&quot;3817.69&quot; y2=&quot;2425.82&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;path d=&quot; M454.04 975.68 L3795.66 2101.84&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;975.68&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;975.68&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;2101.84&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;2101.84&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2275.46&quot; x2=&quot;350.83&quot; y2=&quot;2275.46&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2275.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2275.46)&quot; text-anchor=&quot;middle&quot;&gt;-15000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1787.75&quot; x2=&quot;350.83&quot; y2=&quot;1787.75&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1787.75&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1787.75)&quot; text-anchor=&quot;middle&quot;&gt;-10000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1300.03&quot; x2=&quot;350.83&quot; y2=&quot;1300.03&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1300.03&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1300.03)&quot; text-anchor=&quot;middle&quot;&gt;-5000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;812.44&quot; x2=&quot;350.83&quot; y2=&quot;812.44&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;812.44&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,812.44)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;5000&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;RECODE of childs (number of children)&lt;/text&gt;
+	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of 1.woman with 95% CIs&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+.     global stata_kernel_graph_counter = $stata_kernel_graph_counter + 1
+. }            
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, and most pedagogically, we can illustrate the whole relationship by calculating predicted values on the dependent variable, from the coefficients in the tables above. We do this with the <code>margins</code> command - this time without the <code>dydx</code> option.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>margins, at(dum_kids=(<span class="m">0</span> <span class="m">1</span>) woman=(<span class="m">0</span> <span class="m">1</span>))
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Predictive margins                              Number of obs     =      1,627
+Model VCE    : OLS
+
+Expression   : Linear prediction, predict()
+
+1._at        : woman           =           0
+               dum_kids        =           0
+
+2._at        : woman           =           0
+               dum_kids        =           1
+
+3._at        : woman           =           1
+               dum_kids        =           0
+
+4._at        : woman           =           1
+               dum_kids        =           1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    22425.8   1777.756    12.61   0.000     18938.86    25912.74
+          2  |   31638.95   1258.823    25.13   0.000     29169.86    34108.04
+          3  |   20752.74   1944.967    10.67   0.000     16937.83    24567.65
+          4  |   18419.22   1154.571    15.95   0.000     16154.61    20683.82
+------------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This table does not show coefficients, but rather guesses on the dependent variable. The coefficients we saw earlier represents the differences between the values we see in this table. For instance, the difference between the third row (woman without kids) and the fourth row (woman with kids) is $18419.22-20752.74=-2333.52$ - the coefficent for having kids, as a woman.</p>
+<p>We also present these values with <code>marginsplot</code> (this time without a reference line).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>marginsplot
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+  Variables that uniquely identify margins: dum_kids woman
+
+.     noi gr export /Users/xsunde/.stata_kernel_cache/graph$stata_kernel_graph_
+&gt; counter.svg, width(600) replace
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;1972.27&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;1966.51&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2170.27&quot; x2=&quot;3859.02&quot; y2=&quot;2170.27&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1708.92&quot; x2=&quot;3859.02&quot; y2=&quot;1708.92&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1247.56&quot; x2=&quot;3859.02&quot; y2=&quot;1247.56&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;786.08&quot; x2=&quot;3859.02&quot; y2=&quot;786.08&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;1806.81&quot; x2=&quot;454.16&quot; y2=&quot;1163.29&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1163.29&quot; x2=&quot;476.19&quot; y2=&quot;1163.29&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1806.81&quot; x2=&quot;476.19&quot; y2=&quot;1806.81&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;862.69&quot; x2=&quot;3795.66&quot; y2=&quot;407.03&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;407.03&quot; x2=&quot;3817.69&quot; y2=&quot;407.03&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;862.69&quot; x2=&quot;3817.69&quot; y2=&quot;862.69&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;1991.45&quot; x2=&quot;454.16&quot; y2=&quot;1287.41&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1287.41&quot; x2=&quot;476.19&quot; y2=&quot;1287.41&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;432.13&quot; y1=&quot;1991.45&quot; x2=&quot;476.19&quot; y2=&quot;1991.45&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2063.72&quot; x2=&quot;3795.66&quot; y2=&quot;1645.80&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;1645.80&quot; x2=&quot;3817.69&quot; y2=&quot;1645.80&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;3773.63&quot; y1=&quot;2063.72&quot; x2=&quot;3817.69&quot; y2=&quot;2063.72&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;path d=&quot; M454.04 1485.17 L3795.66 634.98&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;1485.17&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;1485.17&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;634.98&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;634.98&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;path d=&quot; M454.04 1639.49 L3795.66 1854.82&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;1639.49&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
+	&lt;circle cx=&quot;454.04&quot; cy=&quot;1639.49&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1854.82&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
+	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1854.82&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2233.63&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2170.27&quot; x2=&quot;350.83&quot; y2=&quot;2170.27&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2170.27&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2170.27)&quot; text-anchor=&quot;middle&quot;&gt;15000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1708.92&quot; x2=&quot;350.83&quot; y2=&quot;1708.92&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1708.92&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1708.92)&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1247.56&quot; x2=&quot;350.83&quot; y2=&quot;1247.56&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1247.56&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1247.56)&quot; text-anchor=&quot;middle&quot;&gt;25000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;786.08&quot; x2=&quot;350.83&quot; y2=&quot;786.08&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;786.08&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,786.08)&quot; text-anchor=&quot;middle&quot;&gt;30000&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;35000&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1247.56&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1247.56)&quot; text-anchor=&quot;middle&quot;&gt;Linear Prediction&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2233.63&quot; x2=&quot;3859.02&quot; y2=&quot;2233.63&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;454.16&quot; y1=&quot;2233.63&quot; x2=&quot;454.16&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;454.16&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2233.63&quot; x2=&quot;3795.66&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2473.60&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;RECODE of childs (number of children)&lt;/text&gt;
+	&lt;rect x=&quot;1134.29&quot; y=&quot;2558.24&quot; width=&quot;1981.36&quot; height=&quot;186.37&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;1137.17&quot; y=&quot;2561.12&quot; width=&quot;1975.60&quot; height=&quot;180.61&quot; style=&quot;fill:none;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;1177.48&quot; y1=&quot;2651.43&quot; x2=&quot;1551.83&quot; y2=&quot;2651.43&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;1364.71&quot; cy=&quot;2651.43&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
+	&lt;circle cx=&quot;1364.71&quot; cy=&quot;2651.43&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;2194.95&quot; y1=&quot;2651.43&quot; x2=&quot;2569.30&quot; y2=&quot;2651.43&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2651.43&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
+	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2651.43&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
+	&lt;text x=&quot;1611.84&quot; y=&quot;2686.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;woman=0&lt;/text&gt;
+	&lt;text x=&quot;2629.32&quot; y=&quot;2686.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;woman=1&lt;/text&gt;
+	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Predictive Margins with 95% CIs&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+.     global stata_kernel_graph_counter = $stata_kernel_graph_counter + 1
+. }            
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we see the main result clearly: Women (red line) and men (blue line) are close to the left in the graph, without kids. But on the right side of the graph, among those with kids, the difference is stark.</p>
+<p>All three graphs are related. The two previus ones, that showed coefficients, show the relationships between the different points in the final graph. The first coefficient graph, that showed the effect of <code>dum_kids</code>, shows what happens when we move to the right in the graph, from 0 to 1. The blue line (men) goes up, while the red line (women) goes down.</p>
+<p>The second graph, which showed the effect of <code>woman</code>, shows what happens when we switch from the blue to the red line. When we are at <code>dum_kids = 0</code> we have to do a small jump from the blue to the red line. When <code>dum_kids = 1</code> we have to make a large jump down from the blue to the red line.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>The main result from the analysis is thus that gender differences increases dramatically when people have kids. Fathers earn much more than men without kids, while mothers earn less than women without kids. Therefore, men without kids only earn a little more than women without kids, while fathers earn much more than mothers.</p>
+<p>Other research has shown reasonable explanations for this, for example that parenthood lead to lower labor participation for women, while men work more to make up for the loss in income. But we cannot say whether that is the case from this cross-sectional analysis. Here, we are only comparing different individuals with each other, and there are a lot of other differences between individuals, that is unaccounted for here. But we have at least controlled for age, so the differences are not due to that.</p>
+<p>But in general, we can see that important effects can be hidden when they are averaged out over several subgroups in a sample: the original effect of parenthood was weakly positive, while it turned out to be negative for women, and strongly positive for men.</p>
+<p>Furthermore, many of our theories lead to expectations that effects will be different, depending on the value of some third value. In those cases, regression analysis with interaction effects is a good tool.</p>
+<p>So far, we have only looked at the special case where both variables are dichotomous, that is, that they only have two values. Things get a little bit more complicated when the variables are continuous, and have many different values. We will discuss that in another guide.</p>
 
 </div>
 </div>
