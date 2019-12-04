@@ -1,4 +1,4 @@
-https://anderssundell.github.io/stathelp/index.html
+www.stathelp.se/index.html
 https://anderssundell.github.io/stathelp/index_en.html
 https://anderssundell.github.io/stathelp/html_sv/barcharts_sv.html
 https://anderssundell.github.io/stathelp/html_sv/correlation_sv.html
