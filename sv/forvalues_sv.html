@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-        <meta name="description" content="Hur man använder sig av macron i Stata, både global och local.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, grafer, global, local, loopar">   
+    
         <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
@@ -11,10 +10,18 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-132683642-1');
-</script>  
+</script>
+
     
     
-<title>Macron</title>
+    <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <meta name="description" content="Hur man gör loopar med kommandot forvalues i Stata">
+<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, grafer, regression, regressionsanalys, loopar, loop, forvalues, foreach, histogram">   
+    
+    
+
+<title>Loopar med forvalues</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13128,37 +13135,34 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Macron">Macron<a class="anchor-link" href="#Macron">&#182;</a></h1>
+<h1 id="Loopar-med-forvalues">Loopar med <code>forvalues</code><a class="anchor-link" href="#Loopar-med-forvalues">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell.</em></p>
-<p>De viktigaste byggstenarna när vi gör analyser i Stata är variabler. De är delar av datamatrisen, där varje analysenhet har ett eget värde.</p>
-<p>Men i vissa fall kan det vara intressant att använda sig av något som i Stata kallas "macron". Det är tillfälliga objekt, antingen tal eller textsträngar, som kan användas för att effektivisera vår kod.</p>
-<p>Macron är som en sorts "stand-ins" för något annat, ett namn som representerar något annat, så att vi kan referera till namnet istället för själva grejen. Beskrivet så kanske det verkar onödigt, men i större skala är det ibland effektivt. När vi använder oss av loopar är de essentiella.</p>
-<p>Det finns två typer av macro, "local macros" och "global macros". De fyller exakt samma funktion, men är lite olika i teknisk mening. Vi börjar med att gå igenom globala macron, och forstsätter med de lokala.</p>
-<h2 id="Globala-macron">Globala macron<a class="anchor-link" href="#Globala-macron">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Globala macron är symboler som representerar något annat. Vi anger vad symbolen ska representera, och kan sedan hänvisa till symbolen och få ut det den representerar. <strong>När vi jobbar med macron läser Stata vår kod, och byter ut macrot mot det det representerar.</strong></p>
-<p>Men innan vi ger oss in på olika exempel laddar vi in data att jobba med:</p>
+<p><em>Av Anders Sundell</em></p>
+<p>Loopar är ett kraftfullt sätt att effektivisera vår kod, och automatisera uppgifter som kräver en massa upprepning. Till exempel koda om en mängd variabler på samma sätt, göra om en och samma analys på en massa undergrupper, göra om en och samma analys för en mängd variabler, och så vidare.</p>
+<p>Det finns två huvudkommandon för loopar i Stata: <code>forvalues</code> och <code>foreach</code>. Här går vi igenom <code>forvalues</code>, som används när man loopar över tal i en sekvens. Med <code>foreach</code> kan vi istället loopa över både tal och textsträngar.</p>
+<h2 id="En-enkel-loop">En enkel loop<a class="anchor-link" href="#En-enkel-loop">&#182;</a></h2><p>Principen med loopar är att vi berättar för Stata hur många gånger vi vill köra vår loop, och vad som ska ändras varje gång (det vore ju meningslöst att göra exakt samma sak gång på gång). Sen berättar vi vad som ska hända varje "runda", och så körs loopen så många gånger som vi specifierat.</p>
+<p>Den första loop vi ska göra är enklast tänkbara. Vi ska köra loopen fem gånger, och räkna upp ett tal från 1 till 5. Inne i själva loopen händer bara en sak - vi skriver ut talet.</p>
+<p>Koden är <code>forvalues nr = 1(1)5 {}</code>
+forvalues är kommandot. nr är vad vi väljer att kalla värdet vi ändrar för varje runda av loopen. Här kallar vi det "nr". Sedan står att "nr" ska börja på 1, och sedan räknas upp med 1 steg, tills det når värdet 5.</p>
+<p>Klamrarna { } avgränsar loopen. Allt innanför klamrarna upprepas en gång för varje runda. Det går bra att ha dem på olika rader.</p>
+<p>"nr" sparas som ett <a href="macros_sv.html">lokalt macro</a>, och vi kan sedan använda det inne i loopen. I koden nedan händer bara en sak inne i loopen, och det är display `nr', vilket betyder att vi vill visa värdet som "nr" har. Första rundan har det värdet 1, och därför skrivs en etta ut. Andra gången har den värdet 2, osv.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">forvalues</span> nr = <span class="m">1</span>(<span class="m">1</span>)<span class="m">5</span> {
+<span class="k">    display</span> <span class="nv">`nr&#39;</span>
+    }
 </pre></div>
 
     </div>
@@ -13175,7 +13179,12 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>(Quality of Government Basic dataset 2018 - Cross-Section)
+<pre>
+1
+2
+3
+4
+5
 </pre>
 </div>
 </div>
@@ -13187,128 +13196,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Globala macron anges med ett namn. Tex kan vi skriva</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">global</span> seven = <span class="m">7</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>När vi sedan vill hänvisa till det macrot skriver vi ett dollartecken och sedan namnet. Till exempel:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">display</span> <span class="vg">$seven</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>7
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Vi angav först att det globala macrot "seven" skulle få värdet 7, och sedan bad vi stata att visa vad samma makro hade för värde, och då var det sju. Den andra raden läses alltså av Stata som <code>display 7</code> och då visar Stata 7.</p>
-<p>Vi kan göra samma sak med en textsträng, om vi anger textsträngen inom citationstecken:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">global</span> seven = <span class="s">&quot;sju är en siffra&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>och sedan</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">display</span> <span class="s">&quot;</span><span class="vg">$seven</span><span class="s">&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>sju är en siffra
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Notera att jag nu var tvungen att skriva display <code>"$seven"</code>, dvs sätta $seven inom citationstecken. Anledningen är att Stata när den läser koden bara byter ut macrot mot det macrot representerar. Om vi bara hade skrivit</p>
+<p>Man måste inte börja på 1, och måste inte räkna i steg om 1. I koden nedan börjar vi på 200 och räknar uppåt i steg om 100.</p>
 
 </div>
 </div>
@@ -13318,7 +13206,9 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">display</span> <span class="vg">$seven</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">forvalues</span> nr = <span class="m">200</span>(<span class="m">100</span>)<span class="m">600</span> {
+<span class="k">    display</span> <span class="nv">`nr&#39;</span>
+    }
 </pre></div>
 
     </div>
@@ -13328,28 +13218,6 @@ div#notebook {
 <div class="output_wrapper">
 <div class="output">
 
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>sju not found
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>r(111);
-</pre>
-</div>
-</div>
 
 <div class="output_area">
 
@@ -13358,6 +13226,11 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
+200
+300
+400
+500
+600
 </pre>
 </div>
 </div>
@@ -13369,18 +13242,20 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Så får vi ett felmeddelande. Stata läser då koden som <code>display sju är en siffra</code> och förstår inte var "sju" är. Om vi vill att Stata ska behandla vårt macro som text måste vi ange det som text.</p>
-<p>Men ibland vill vi inte det. Vi kan till exempel ange ett macro som är en kodsnutt, inte ett stycke text. Nedan anger vi att ett macrot m_scatter är en del av en kod som gör en graf.</p>
+<p>Svårare än så är det inte. Sen kan vi sätta in "nr" i olika sammanhang. Säg att vi skulle vilja göra tio tomma nya variabler, som vi sedan ska använda för att skriva in arbetslösheten för olika länder under åren 2005-2020. Vi vill ha en variabel som heter unemployment2005, en som heter unemployment2006, osv.</p>
+<p>Då kan vi lätt göra det med en loop:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">global</span> m_scatter = <span class="s">&quot;(scatter ti_cpi p_polity2)&quot;</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">forvalues</span> yr = <span class="m">2005</span>(<span class="m">1</span>)<span class="m">2020</span> {
+<span class="k">    gen</span> unemployment<span class="nv">`yr&#39;</span> = .
+    }
 </pre></div>
 
     </div>
@@ -13391,17 +13266,32 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I macrot <code>m_scatter</code> finns nu sparat textsträngen <code>(scatter ti_cpi p_polity2)</code>. Sedan kan vi använda det macrot för att göra själva grafen:</p>
+<p>Vi har nu fått 16 nya variabler, som heter unemployment2005, unemployment2006, hela vägen upp till unemployment2020.</p>
+<p>Precis som med andra <a href="macros_sv.html">macron</a> går de att stoppa in var som helst i koden.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="En-lite-mer-utvecklad-loop">En lite mer utvecklad loop<a class="anchor-link" href="#En-lite-mer-utvecklad-loop">&#182;</a></h2><p>Vi ska nu prova att göra en lite mer avancerad loop. Den är egentligen inte mer tekniskt avancerad, utan bygger på samma principer, men gör lite mer inne i själva loopen.</p>
+<p>Det vi ska göra är att med hjälp av QoG-data göra en mängd grafer, som visar fördelningen av medellivslängd år för år. Sedan ska vi spara varje enskild graf som en bildfil, så att vi sedan kan sätta ihop dem i en snygg gif.</p>
+<p>I koden nedan laddas datan in, och så gör vi en graf för ett enskilt år, 2000. Vi anger att histogrammet ska börja på 16, att staplarna ska vara 2 år breda, att titeln ska vara "Year: 2000", att x-axeln ska markera tiotals år, och slutligen att y-axeln ska visa procent.</p>
+<p>Sedan sparar vi diagrammet som en .png-fil. Man kan även spara som .pdf till exempel.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> <span class="vg">$m_scatter</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_ts_jan18.dta&quot;</span>,<span class="k"> clear</span>
+
+<span class="k">histogram</span> wdi_lifexp<span class="k"> if</span> year<span class="o">==</span><span class="m">2000</span>, start(<span class="m">16</span>) width(<span class="m">2</span>) title(<span class="s">&quot;Year: 2000&quot;</span>) xlabel(<span class="m">16</span>(<span class="m">10</span>)<span class="m">90</span>) ylabel(<span class="m">0</span>(<span class="m">5</span>)<span class="m">20</span>) percent<span class="k"></span>
+<span class="k">graph</span> export <span class="s">&quot;/Users/anderssundell/Dropbox/Jupyter/stathelp/graphs/lifexp2000.png&quot;</span>,<span class="k"> replace</span>
 </pre></div>
 
     </div>
@@ -13411,6 +13301,20 @@ div#notebook {
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(Quality of Government Basic dataset 2018 - Time-Series)
+
+(bin=33, start=16, width=2)
+</pre>
+</div>
+</div>
 
 <div class="output_area">
 
@@ -13427,428 +13331,90 @@ div#notebook {
 	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
 	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
 	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="100.86" width="3468.22" height="2388.33" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="103.74" width="3462.46" height="2382.57" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="3859.02" y2="2425.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1973.50" x2="3859.02" y2="1973.50" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1521.18" x2="3859.02" y2="1521.18" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1068.86" x2="3859.02" y2="1068.86" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="616.54" x2="3859.02" y2="616.54" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="164.22" x2="3859.02" y2="164.22" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<circle cx="1957.85" cy="2154.55" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1957.85" cy="2154.55" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1679.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2459.04" cy="1611.65" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2459.04" cy="1611.65" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1790.66" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1790.66" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1656.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1656.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="616.54" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="616.54" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="797.47" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="797.47" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2291.97" cy="1860.52" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2291.97" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="707.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="707.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="955.75" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="955.75" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1634.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1634.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1001.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1001.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1476.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1476.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1950.98" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1950.98" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1973.63" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1973.63" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1724.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2459.04" cy="1950.98" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2459.04" cy="1950.98" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1456.54" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1456.54" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="593.89" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="593.89" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1136.80" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1136.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="1883.16" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="1883.16" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2626.10" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2626.10" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1790.66" cy="1928.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1790.66" cy="1928.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="774.82" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="774.82" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1611.65" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1611.65" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1046.34" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1046.34" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1837.87" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1837.87" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1456.54" cy="1905.69" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1456.54" cy="1905.69" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1928.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1928.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1204.62" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1204.62" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1340.25" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1340.25" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1385.55" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1385.55" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1001.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1001.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1272.44" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1272.44" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1543.83" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1543.83" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="345.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="345.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1702.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1679.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1543.83" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1543.83" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1122.41" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1122.41" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1679.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="2018.80" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="2018.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="865.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="865.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="412.97" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="412.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="865.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="865.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2626.10" cy="1656.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2626.10" cy="1656.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2626.10" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2626.10" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1249.79" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1249.79" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1289.47" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1289.47" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="639.19" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="639.19" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1340.25" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1340.25" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1702.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1860.52" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1747.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1747.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1204.62" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1204.62" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1656.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1656.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="2064.09" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="2064.09" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="752.30" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="752.30" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1068.86" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1068.86" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1702.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="707.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="707.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1122.41" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1122.41" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1860.52" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="2245.02" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="2245.02" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1181.97" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1181.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1430.72" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1430.72" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1860.52" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1181.97" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1181.97" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="2018.80" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="2018.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1114.16" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1114.16" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="571.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="571.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1792.57" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1792.57" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1679.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1679.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1249.79" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1249.79" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1702.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1702.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1790.66" cy="1747.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1790.66" cy="1747.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1204.62" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1204.62" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1634.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1634.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1543.83" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1543.83" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1634.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1634.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1476.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1476.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1456.54" cy="1543.83" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1456.54" cy="1543.83" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1724.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="788.29" cy="1408.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="788.29" cy="1408.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="548.72" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="548.72" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="367.80" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="367.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1792.57" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1792.57" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1634.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1634.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="480.91" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="480.91" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1860.52" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1860.52" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1883.16" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1883.16" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1046.34" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1046.34" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1001.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1001.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3127.29" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3127.29" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1792.57" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1792.57" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="865.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="865.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1815.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1815.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1317.73" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="1317.73" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3461.53" cy="1498.66" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3461.53" cy="1498.66" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1724.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1790.66" cy="526.08" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1790.66" cy="526.08" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1295.08" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1295.08" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="955.35" cy="1724.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="955.35" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1114.16" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1114.16" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="2245.02" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="2245.02" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1430.72" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1430.72" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1950.98" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1950.98" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1068.86" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1068.86" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="2086.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="2086.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1456.54" cy="2177.08" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1456.54" cy="2177.08" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2960.22" cy="1611.65" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2960.22" cy="1611.65" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="621.10" cy="1453.37" r="26.35" style="fill:#1A476F"/>
-	<circle cx="621.10" cy="1453.37" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="458.26" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="458.26" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="480.91" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="480.91" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="621.10" cy="1973.63" r="26.35" style="fill:#1A476F"/>
-	<circle cx="621.10" cy="1973.63" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1905.69" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1905.69" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1623.60" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1623.60" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1790.66" cy="1770.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1790.66" cy="1770.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="788.29" cy="842.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="788.29" cy="842.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1521.18" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1521.18" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2626.10" cy="1408.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2626.10" cy="1408.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="788.29" cy="2041.44" r="26.35" style="fill:#1A476F"/>
-	<circle cx="788.29" cy="2041.44" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1957.85" cy="1837.87" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1957.85" cy="1837.87" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1837.87" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1837.87" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3628.60" cy="1408.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3628.60" cy="1408.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1456.54" cy="1589.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1456.54" cy="1589.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="661.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="661.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1957.85" cy="1724.76" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1957.85" cy="1724.76" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="752.30" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="752.30" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3795.66" cy="774.82" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3795.66" cy="774.82" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="621.10" cy="2018.80" r="26.35" style="fill:#1A476F"/>
-	<circle cx="621.10" cy="2018.80" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2793.16" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2793.16" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2124.91" cy="1996.15" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2124.91" cy="1996.15" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3294.47" cy="1566.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3294.47" cy="1566.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="390.80" y1="2489.19" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="350.83" y2="2425.82" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2425.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2425.82)" text-anchor="middle">0</text>
-	<line x1="390.80" y1="1973.50" x2="350.83" y2="1973.50" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1973.50" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1973.50)" text-anchor="middle">20</text>
-	<line x1="390.80" y1="1521.18" x2="350.83" y2="1521.18" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1521.18" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1521.18)" text-anchor="middle">40</text>
-	<line x1="390.80" y1="1068.86" x2="350.83" y2="1068.86" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1068.86" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1068.86)" text-anchor="middle">60</text>
-	<line x1="390.80" y1="616.54" x2="350.83" y2="616.54" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="616.54" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,616.54)" text-anchor="middle">80</text>
-	<line x1="390.80" y1="164.22" x2="350.83" y2="164.22" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="164.22" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,164.22)" text-anchor="middle">100</text>
-	<text x="190.71" y="1294.96" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1294.96)" text-anchor="middle">Corruption Perceptions Index</text>
+	<rect x="390.80" y="275.35" width="3468.22" height="2213.83" style="fill:#FFFFFF"/>
+	<rect x="393.68" y="278.23" width="3462.46" height="2208.07" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
+	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1951.60" x2="3859.02" y2="1951.60" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="1414.01" x2="3859.02" y2="1414.01" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<line x1="390.80" y1="876.30" x2="3859.02" y2="876.30" style="stroke:#EAF2F3;stroke-width:8.64"/>
+	<rect x="1478.94" y="2430.15" width="89.10" height="59.03" style="fill:#CAC27E"/>
+	<rect x="1483.26" y="2434.47" width="80.46" height="50.39" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="1657.14" y="2430.15" width="89.10" height="59.03" style="fill:#CAC27E"/>
+	<rect x="1661.46" y="2434.47" width="80.46" height="50.39" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="1746.24" y="2371.00" width="89.10" height="118.18" style="fill:#CAC27E"/>
+	<rect x="1750.56" y="2375.32" width="80.46" height="109.55" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="1835.34" y="2134.75" width="89.10" height="354.43" style="fill:#CAC27E"/>
+	<rect x="1839.66" y="2139.07" width="80.46" height="345.79" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="1924.44" y="2016.57" width="89.10" height="472.62" style="fill:#CAC27E"/>
+	<rect x="1928.76" y="2020.89" width="80.46" height="463.98" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2013.54" y="1957.54" width="89.10" height="531.65" style="fill:#CAC27E"/>
+	<rect x="2017.86" y="1961.86" width="80.46" height="523.01" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2102.64" y="2252.94" width="89.10" height="236.25" style="fill:#CAC27E"/>
+	<rect x="2106.96" y="2257.26" width="80.46" height="227.61" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2191.74" y="2193.78" width="89.10" height="295.40" style="fill:#CAC27E"/>
+	<rect x="2196.06" y="2198.10" width="80.46" height="286.76" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2280.84" y="2193.78" width="89.10" height="295.40" style="fill:#CAC27E"/>
+	<rect x="2285.16" y="2198.10" width="80.46" height="286.76" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2369.94" y="2075.60" width="89.10" height="413.59" style="fill:#CAC27E"/>
+	<rect x="2374.26" y="2079.92" width="80.46" height="404.95" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2459.04" y="2252.94" width="89.10" height="236.25" style="fill:#CAC27E"/>
+	<rect x="2463.36" y="2257.26" width="80.46" height="227.61" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2548.14" y="1957.54" width="89.22" height="531.65" style="fill:#CAC27E"/>
+	<rect x="2552.46" y="1961.86" width="80.58" height="523.01" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2637.36" y="2075.60" width="89.10" height="413.59" style="fill:#CAC27E"/>
+	<rect x="2641.68" y="2079.92" width="80.46" height="404.95" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2726.46" y="1839.35" width="89.10" height="649.83" style="fill:#CAC27E"/>
+	<rect x="2730.78" y="1843.67" width="80.46" height="641.19" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2815.56" y="1780.20" width="89.10" height="708.99" style="fill:#CAC27E"/>
+	<rect x="2819.88" y="1784.52" width="80.46" height="700.35" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2904.66" y="894.12" width="89.10" height="1595.06" style="fill:#CAC27E"/>
+	<rect x="2908.98" y="898.44" width="80.46" height="1586.42" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="2993.76" y="1366.74" width="89.10" height="1122.45" style="fill:#CAC27E"/>
+	<rect x="2998.08" y="1371.06" width="80.46" height="1113.81" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="3082.86" y="1780.20" width="89.10" height="708.99" style="fill:#CAC27E"/>
+	<rect x="3087.18" y="1784.52" width="80.46" height="700.35" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="3171.96" y="1425.77" width="89.10" height="1063.42" style="fill:#CAC27E"/>
+	<rect x="3176.28" y="1430.09" width="80.46" height="1054.78" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="3261.06" y="1721.17" width="89.10" height="768.02" style="fill:#CAC27E"/>
+	<rect x="3265.38" y="1725.49" width="80.46" height="759.38" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<rect x="3350.16" y="2371.00" width="89.10" height="118.18" style="fill:#CAC27E"/>
+	<rect x="3354.48" y="2375.32" width="80.46" height="109.55" style="fill:none;stroke:#D7D29E;stroke-width:8.64"/>
+	<line x1="390.80" y1="2489.19" x2="390.80" y2="275.35" style="stroke:#000000;stroke-width:5.76"/>
+	<line x1="390.80" y1="2489.19" x2="350.83" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="2489.19" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2489.19)" text-anchor="middle">0</text>
+	<line x1="390.80" y1="1951.60" x2="350.83" y2="1951.60" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1951.60" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1951.60)" text-anchor="middle">5</text>
+	<line x1="390.80" y1="1414.01" x2="350.83" y2="1414.01" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="1414.01" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1414.01)" text-anchor="middle">10</text>
+	<line x1="390.80" y1="876.30" x2="350.83" y2="876.30" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="876.30" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,876.30)" text-anchor="middle">15</text>
+	<line x1="390.80" y1="338.71" x2="350.83" y2="338.71" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="300.72" y="338.71" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,338.71)" text-anchor="middle">20</text>
+	<text x="190.71" y="1382.33" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1382.33)" text-anchor="middle">Percent</text>
 	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="454.16" y1="2489.19" x2="454.16" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="454.16" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">-10</text>
-	<line x1="1289.47" y1="2489.19" x2="1289.47" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="1289.47" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">-5</text>
-	<line x1="2124.91" y1="2489.19" x2="2124.91" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2124.91" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">0</text>
-	<line x1="2960.35" y1="2489.19" x2="2960.35" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2960.35" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">5</text>
-	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">10</text>
-	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Revised Combined Polity Score</text>
+	<line x1="498.71" y1="2489.19" x2="498.71" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="498.71" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">16</text>
+	<line x1="944.21" y1="2489.19" x2="944.21" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="944.21" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">26</text>
+	<line x1="1389.84" y1="2489.19" x2="1389.84" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1389.84" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">36</text>
+	<line x1="1835.34" y1="2489.19" x2="1835.34" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="1835.34" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">46</text>
+	<line x1="2280.84" y1="2489.19" x2="2280.84" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="2280.84" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">56</text>
+	<line x1="2726.46" y1="2489.19" x2="2726.46" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="2726.46" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">66</text>
+	<line x1="3171.96" y1="2489.19" x2="3171.96" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3171.96" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">76</text>
+	<line x1="3617.46" y1="2489.19" x2="3617.46" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
+	<text x="3617.46" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">86</text>
+	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Life expectancy at birth, total (years)</text>
+	<text x="2124.91" y="215.98" style="font-family:'Helvetica';font-size:139.96px;fill:#1E2D53" text-anchor="middle">Year: 2000</text>
 </svg>
 
 </div>
 
 </div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Stata läser ovanstånde kod som <code>twoway (scatter ti_cpi p_polity2)</code> och gör en graf.</p>
-<p>Återigen, vad är poängen? Jo, macron är bra om du ska göra samma sak flera gånger. Till exempel kanske du vill köra flera olika regressionsmodeller, med olika beroende variabler, men med samma uppsättning kontrollvariabler.</p>
-<p>Du kan givetvis skriva ett stycke kod och kopiera den, men om du vill lägga till en variabel måste du uppdatera på många ställen i koden. Bättre då att skriva:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">global</span> controls = <span class="s">&quot;p_polity2 wdi_gdpcapcon2010 lp_lat_abs&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Nu har vi i macrot "controls" sparat textsträngen "p_polity2 wdi_gdpcapcon2010 lp_lat_abs". När vi sedan skriver $controls tolkar stata det som att vi skrivit <code>p_polity2 wdi_gdpcapcon2010 lp_lat_abs</code>. Nedan är ett exempel, där vi gör en regressionsanalys med korruption som beroende variabel, och våra "control variables" som kontrollvariabler, och sedan gör vi om samma analys fast med en annan beroende variabel:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">quietly reg</span> ti_cpi <span class="vg">$controls</span> <span class="k"></span>
-<span class="k">estimates</span> store m1<span class="k"></span>
-<span class="k">quietly reg</span> wdi_lifexp <span class="vg">$controls</span><span class="k"></span>
-<span class="k">estimates</span> store m2
-esttab m1 m2
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
 
 <div class="output_area">
 
@@ -13860,28 +13426,7 @@ esttab m1 m2
 
 
 
-
-
---------------------------------------------
-                      (1)             (2)   
-                   ti_cpi      wdi_lifexp   
---------------------------------------------
-p_polity2           0.488**         0.128   
-                   (2.87)          (1.27)   
-
-wdi_gdp~2010     0.000654***     0.000182***
-                  (10.80)          (5.06)   
-
-lp_lat_abst         19.19**         16.15***
-                   (2.70)          (3.82)   
-
-_cons               27.19***        63.49***
-                  (15.77)         (62.08)   
---------------------------------------------
-N                     129             130   
---------------------------------------------
-t statistics in parentheses
-* p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001
+(file /Users/anderssundell/Dropbox/Jupyter/stathelp/graphs/lifexp2000.pdf written in PDF format)
 </pre>
 </div>
 </div>
@@ -13893,25 +13438,20 @@ t statistics in parentheses
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Poängen här är att vi bara behövde ange kontrollvariablerna en gång. Om vi senare kommer på att vi behöver byta ut en kontrollvariabel, eller lägga till en, gör vi det bara i raden där vi anger vad macrot "controls" ska vara för nånting. Vi behöver inte ändra det i varje enskild regressionsanalys.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Lokala-macron">Lokala macron<a class="anchor-link" href="#Lokala-macron">&#182;</a></h2><p>"Lokala macron" fungerar på precis samma sätt, fast med ett undantag. Vi kan ange globala macron, och så finns de kvar till vi stänger Stata. Men lokala macron finns bara inom ramen för samma kodsnutt. De existerar bara inom ramen för vår do-fil där det lokala macrot också skapades. Vi hänvisar också till dem på ett lite annat sätt: med `' istället för "". Till exempel:</p>
+<p>Ganska fint. Men nu ska vi göra det med en loop. Vi vill ha en sån här graf för alla år mellan 1960 och 2015. Vi tar då och gör en forvalues-loop, kopierar diagramkoden, och byter ut alla ställen där det står 2000 mot `yr'. Det står på tre ställen - dels i villkoret som anger vilken data som ska användas när histogrammet ska ritas, i titeln på grafen, och i filnamnet på pdf-filen som sparas. Det går lika bra att använda i alla sammanhang. Vi lägger även till quietly framför kommandona i loopen för att förhindra att vi här får upp en mängd grafer.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">local</span> eight = <span class="m">8</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">forvalues</span> yr = <span class="m">1960</span>(<span class="m">1</span>)<span class="m">2015</span> {
+<span class="k">    quietly histogram</span> wdi_lifexp<span class="k"> if</span> year<span class="o">==</span><span class="nv">`yr&#39;</span>, start(<span class="m">16</span>) width(<span class="m">2</span>) title(<span class="s">&quot;Year: </span><span class="nv">`yr&#39;</span><span class="s">&quot;</span>) xlabel(<span class="m">16</span>(<span class="m">10</span>)<span class="m">90</span>) ylabel(<span class="m">0</span>(<span class="m">5</span>)<span class="m">20</span>) percent
+<span class="k">    quietly graph</span> export <span class="s">&quot;/Users/anderssundell/Dropbox/Jupyter/stathelp/graphs/lifexp</span><span class="nv">`yr&#39;</span><span class="s">.png&quot;</span>,<span class="k"> replace</span>
+    }
 </pre></div>
 
     </div>
@@ -13919,41 +13459,11 @@ t statistics in parentheses
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">display</span> <span class="nv">`eight&#39;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>8
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Den andra raden visar här att vi refererar till macrot som heter "eight". Om vi inte hade använt oss av tecknen `' så hade Stata letat efter en variabel som hette "eight".</p>
+<p>Vi får nu ut 56 filer, som kan sättas ihop till en animerad gif med något lämpligt program. Att göra den här animerade grafen manuellt, till exempel genom att kopiera samma kod 56 gånger, vore inte att rekommendera. Om man sedan kommer på att man vill ändra på något måste det ändras överallt. Med loopen behöver det bara ändras en gång.</p>
+<img src = "../images/lifexp.gif" width="600" />
 
 </div>
 </div>
@@ -13961,7 +13471,7 @@ t statistics in parentheses
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Globala och lokala macron är alltså två olika sorters "symboler" eller "hållare". Vi kan använda dem istället för något annat, vilket ökar konsekvensen och transparensen i vår kod. Och när vi senare går in på loopar blir de väldigt användbara.</p>
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Loopar är som sagt väldigt kraftfulla, och gör repetitiva uppgifter mycket mer överskådliga. Och man kan stoppa in vad som helst innanför klamrarna som avgränsar loopen. Men om man behöver loopa över något annat än en sekvens nummer räcker inte forvalues till. Då får man använda sig av foreach, men det är en annan guide.</p>
 
 </div>
 </div>
