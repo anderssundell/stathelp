@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Guide till hur man slår ihop olika datamängder med kommandot merge. Hur man lägger till variabler från olika källor.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, datamängder, merge, slå ihop, kombinera">   
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="How to do combine datasets in Stata with the merge command. One-to-one merge, many-to-one merge, one-to-many merge.">
+<meta name="keywords" content="statistics, stata, statistical analysis, datasets, merge, merging, one-to-one merge, many-to-one merge, one-to-many merge.">
+    
+            <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -13,9 +15,10 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-132683642-1');
-</script>    
-    
-<title>Statistikhjälpen: Slå ihop datamängder med merge</title>
+</script>
+
+
+<title>Combine datasets with the merge command</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13102,7 +13105,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13129,31 +13132,31 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Sl&#229;-ihop-datam&#228;ngder-med-merge">Sl&#229; ihop datam&#228;ngder med <code>merge</code><a class="anchor-link" href="#Sl&#229;-ihop-datam&#228;ngder-med-merge">&#182;</a></h1>
+<h1 id="Combine-datasets-with-merge">Combine datasets with <code>merge</code><a class="anchor-link" href="#Combine-datasets-with-merge">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
-<p>Ofta när man gör statistiska analyser behöver man kombinera olika datamängder. Man kanske hämtar information om den oberoende variabeln från en källa, och vill samköra den med en beroende variabel från en annan källa. Vi har alltså samma analysenheter i de båda datamängderna, men vill kombinera variablerna. Då ska vi använda kommandot <code>merge</code>.</p>
-<p>Ett annat scenario är deär man har olika datamängder med samma variabler, fast med olika analysenheter. Då ska man istället använda kommandot <code>append</code> - det är egentligen som att klistra in fler observationer längst ner i datamängden. Men eftersom <code>merge</code> är lite klurigare ska vi fokusera på det här.</p>
-<h2 id="Olika-typer-av-sammanslagningar">Olika typer av sammanslagningar<a class="anchor-link" href="#Olika-typer-av-sammanslagningar">&#182;</a></h2><p>Med <code>merge</code>-kommandot kan vi göra tre (eller egentligen två) olika typer av sammanslagningar. Enklast är <code>1:1</code>. Då har vi samma analysenheter i båda datamängderna. Tex samma individer, eller samma länder, och vill lägga till ny information om dem. Vi behöver en matchningsvariabel som visar landets eller personens identitet så att vi kan matcha ihop dem.</p>
-<p>Men vi kan också matcha <code>m:1</code>. Det betyder att vi har många analysenheter i datamängden som är öppen i Stata, och vill matcha på data från ett färre antal enheter på en högre nivå. Till exempel kanske vi har data på personer i Europa, och nu vill vi lägga till variabler på landsnivå. Vi kanske har gjort en enkätundersökning, och nu vill vi se hur svaren påverkas av om man bor i ett EU-land eller inte. Alla personer i Sverige kommer då få samma värde - vi bor i ett EU-land. Alla personer i Norge får också samma värde - de bor inte i ett EU-land. I vår individdatamängd kan vi då alltså ha tusentals personer, och kombinera det med en datamängd med et trettiotal observationer (en för varje land).</p>
-<p>Nästan samma sak är att matcha <code>1:m</code>. Det är precis samma grej, men vi börjar då med att land-datamängden i Stata, och lägger till individdatan.</p>
-<h2 id="Kombinera-tv&#229;-m&#228;ngder-med-samma-typ-av-analysenheter---merge-1:1">Kombinera tv&#229; m&#228;ngder med samma typ av analysenheter - merge 1:1<a class="anchor-link" href="#Kombinera-tv&#229;-m&#228;ngder-med-samma-typ-av-analysenheter---merge-1:1">&#182;</a></h2><p>Vi börjar med den enklaste varianten - när vi har samma typ av analysenheter i de båda datamängderna, och vill lägga till fler variabler. Säg att vi vill kombinera information om graden av demokrati i ett land, med graden av korruption i landet. Vi kan hämta information om demokratin från <a href="https://freedomhouse.org/report-types/freedom-world">Freedom House</a>. Datan finns i Excelformat, men det är bara att klippa ut de relevanta bitarna och lägga in i ett Stata-dataset. Sen hämtar vi information om korruption från <a href="https://www.transparency.org/cpi2018">Transparency International</a>, och gör på samma sätt där.</p>
-<p>Vi har nu två dataset, <code>fh2017.dta</code> och <code>cpi2018.dta</code>. Nedan laddar vi in <code>fh2017.dta</code> och kollar på de fem första raderna i datamängden.</p>
+<p><em>By Anders Sundell.</em> <a href="../sv/merge_sv.html">Swedish version</a></p>
+<p>Many statistical analyses requires the that we comvbine several datasets. We might get information about the independent variable from one source, and want to analyze the effects of it on a dependent variable from another source. We thus have the same observations in both datasets, but want to combine the variables. We do this with the command <code>merge</code>.</p>
+<p>Another scenario is when we have different datasets with the same variables, but with different units of analysis. In those cases, we use the command <code>append</code>, which really is the same as pasting more observations to the dataset. But since <code>merge</code> is a bit trickier we will focus on that command in this guide.</p>
+<h2 id="Different-ways-of-merging-datasets">Different ways of merging datasets<a class="anchor-link" href="#Different-ways-of-merging-datasets">&#182;</a></h2><p>With the <code>merge</code> command we can do three (or really, two) different types of merges. Easiest is the <code>1:1</code> merge. It means that we have the same observations in both datasets. For instance the same individuals, or the same countries; we just want to add more information about them. We then need a matching variable, a key, that shows the country's or the person's identity, so we can match the information in the two datasets.</p>
+<p>But we can also match <code>m:1</code>. It means that we have many observations in the dataset that is active in Stata, and want to add on data from a smaller number of observations, at a higher level. For instance, we might have data on persons in Europe, and want to add country-level information. Imagine that we have conducted a survey, and now want to see whether the answers are affected by whether the country of residence is an EU member or not. All persons in Sweden will have the same value - Sweden is a part of the EU. All persons in Norway will also have the same value - Norway is not a member of the EU. In our individual level dataset we can have thousands of observations, and still combine it with about 30 country-level observations (one for each country).</p>
+<p>The third type of merge is <code>1:m</code>. It is the exact same thing, but instead of starting with the individual level dataset, we start with the country level dataset, and add the individual level data.</p>
+<h2 id="Combine-two-datasets-with-the-same-type-of-observations---merge-1:1">Combine two datasets with the same type of observations - <code>merge 1:1</code><a class="anchor-link" href="#Combine-two-datasets-with-the-same-type-of-observations---merge-1:1">&#182;</a></h2><p>We start with the simplest type: when we have the same type of observations in both datasets, and want to add mode variables. Let's say we want to combine information about the level of democracy in a country with the level of corrption in the country. We can get information about democracy from <a href="https://freedomhouse.org/report-types/freedom-world">Freedom House</a>. The data is in Excel format, but we can just cut the relevant parts and paste into a Stata dataset. Then we get information about corruption from <a href="https://www.transparency.org/cpi2018">Transparency International</a>, and treat it the same way.</p>
+<p>We now have two datasets, <code>fh2017.dta</code> and <code>cpi2018.dta</code>. Below we load <code>fh2017.dta</code> and look at the first five rows in the dataset, with the help of the command <code>list</code>.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/Users/anderssundell/Dropbox/Jupyter/stathelp/data&quot;</span><span class="k"></span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/Users/xsunde/Dropbox/Jupyter/stathelp/data&quot;</span><span class="k"></span>
 <span class="k">use</span> <span class="s">&quot;fh2017.dta&quot;</span>,<span class="k"> clear</span>
 <span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">5</span>
 </pre></div>
@@ -13173,7 +13176,7 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-/Users/anderssundell/Dropbox/Jupyter/stathelp/data
+/Users/xsunde/Dropbox/Jupyter/stathelp/data
 
 
 
@@ -13197,14 +13200,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Vi har alltså fyra variabler: landsnamnet <code>country</code>, graden av politiska rättigheter från 1-7 <code>fh_pr</code>, graden av medborgerliga rättigheter <code>fh_cl</code> och en sammanfattande beskrivning <code>fh_status</code>. Nu gör vi samma sak med korruptionsdatan.</p>
+<p>We have four variables: the country name <code>country</code>, the level of political rights on a scale from 1 to 7 <code>fh_pr</code>, the level of civil liberties <code>fh_cl</code> and a summarizing classification <code>fh_status</code>. Now let's look at the corruption data.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;cpi2018.dta&quot;</span>,<span class="k"> clear</span>
@@ -13248,22 +13251,22 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Här har vi bara två variabler: landsnamnet <code>country</code> och graden av korruption <code>cpi2018</code> (där låga värden betyder mer korruption). Nu ska vi slå ihop de två datamängderna.</p>
-<h2 id="Steg-f&#246;r-steg">Steg f&#246;r steg<a class="anchor-link" href="#Steg-f&#246;r-steg">&#182;</a></h2><ol>
-<li>Se till att det finns en variabel i båda mängderna som det går att matcha på. I det här fallet är det <code>country</code>. Dvs, graden av demokrati i Afghanistan ska matchas ihop med graden av korruption i Afghanistan. Har man ingen sådan identifikationsvariabel går inte sammanslagningen att göra. Generellt sett är det dock att föredra om ID-variabeln är ett nummer, och inte en textvariabel. Det minskar risken för stavningsfel osv. Man kan också matcha på flera variabler - en vanlig tillämpning är att man matchar på både land och år. Dvs Sverige 2008 ska matchas ihop med Sverige 2008, osv.</li>
-<li>Se till att matchningsvariabeln heter samma sak i båda datamängderna.</li>
-<li>Öppna det ena datasetet. Nu har vi korruptionsdatan inladdad.</li>
-<li>Ange koden för att slå ihop datamängderna, matchade på den relevanta variabeln.</li>
-<li>Se hur det gick och åtgärda felaktigheter.</li>
+<p>Here we only have two variables: the country name <code>country</code> and the level of corruption <code>cpi2018</code> (where low values indicate more corruption). We will now merge the two datasets.</p>
+<h2 id="Step-by-step">Step by step<a class="anchor-link" href="#Step-by-step">&#182;</a></h2><ol>
+<li>Make sure that there is an ID variable in both datasets that we can match on. In this case it is the country name <code>country</code>. We want to match the level of democracy in Afghanistan with the level of corruption in Afghanistan. If we don't have a ID variable of this type it is impossible to do the merge. Generally, it is preferable if the ID is a number, and not a string (text) variable. It reduces the risk that the merge is hindered by spelling errors and so on. We can also match on serveral variables. For instance, when working with this type of data we often want to match on both country and year. Sweden 2008 should be matched to Sweden 2008, and so on.</li>
+<li>Make sure that the ID variable has the same name in both datasets.</li>
+<li>Open one of the datasets. In this case we have loaded the corruption data.</li>
+<li>Enter the code to merge the datasets, matched on the ID variable.</li>
+<li>Check the results and deal with errors.</li>
 </ol>
-<p>Vi använder kommandot <code>merge</code>. Strukturen är att man skriver <code>merge</code>, sedan vilken typ av matchning man vill göra, sedan vad matchningsvariabeln är, och sedan vilken datamängd man vill matcha ihop den öppna datan med. Vi vill matcha <code>1:1</code>, och göra det med demokratidatan. Det ser ut såhär:</p>
+<p>We use the command <code>merge</code>. The principle is that we write <code>merge</code>, then what type of merge we want to do, then what the ID variable is, and then which dataset we want to match the active data with. In this case, we want a <code>1:1</code> merge, with the democracy data. It looks like this:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">merge</span> <span class="m">1</span>:<span class="m">1</span> country using <span class="s">&quot;fh2017.dta&quot;</span>
@@ -13303,17 +13306,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Nu är sammanslagningen klar. Men det finns felaktigheter att åtgärda. Tabellen visar att 168 observationer matchades framgångsrikt. Men vi kan också se att det var 50 enheter som inte kunde matchas: 12 från "master"-datamängden, dvs den vi hade inladdad först (dvs korruptionsdatan). Det var också 38 länder i "using"-datan, dvs demokratidatan, som inte kunda matchas ihop.</p>
-<p>Ibland är det här inget större problem, tex om man matchar ihop data om EU-länder med data för hela världen. Då kommer det såklart inte gå att matcha ihop afrikanska länder med EU-datan.</p>
-<p>Men här har vi möjliga problem, eftersom det finns länder i båda datamängderna som inte hittade någon match. Ofta beror det på att det är fel i identifikationsvariabeln.</p>
-<h2 id="Identifiera-missmatchade-observationer">Identifiera missmatchade observationer<a class="anchor-link" href="#Identifiera-missmatchade-observationer">&#182;</a></h2><p>Som tur är hjälper Stata oss att lätt identifiera de felaktiga observationerna, eftersom det har skapats en ny variabel som heter <code>_merge</code>. Den visar resultatet av matchningen. Observationer med koden 1 fanns bara i den ursprungliga datan - observationer med värdet 2 fanns bara i den nya datan. Observationer med värdet 3 matchades ihop bra. Vi kan lista alla observationer som inte matchades, dvs alla som inte hade värdet 3:</p>
+<p>The merge is now complete. But we have errors to correct. The summary shows that 168 observations were successfully matched. But we can also see that there were 50 observations that could not be matched: 12 from the "master" dataset, that is, the one we had active (the corruption data). We also have 38 observations in the "using" dataset, the democracy data, that could not find a match.</p>
+<p>This does not necessarily have to be a problem, for instance if we match data on EU countries with data from all of the world. We will then of course not be able to match African countries with the EU data.</p>
+<p>But here we might have some problems, since there are countries in both datasets that could not find a match. Often this is caused by errors in the ID variable.</p>
+<h2 id="Identifying-mis-matched-observations">Identifying mis-matched observations<a class="anchor-link" href="#Identifying-mis-matched-observations">&#182;</a></h2><p>Luckily, Stata allows us to easily identify the problematic observations. The <code>merge</code> command creates a new variable called <code>_merge</code>. It shows the result of the matching. Observations with the code 1 were only found in the original data. Observations with the code 2 were only found in the new data. Observations with the code 3 were successfully matched. We can list all observations that were not matches, that is, all observations that did not have the value 3 on the <code>_merge</code> variable:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">list</span> country _merge<span class="k"> if</span> _merge<span class="o">!=</span><span class="m">3</span>
@@ -13408,16 +13411,16 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Nästa steg är att se efter om det finns några länder som dyker upp i båda listorna. Ett slående exempel är USA. Vi ser att landet i ena datamängden heter "United States of America" och i andra "United States". På samma sät ser vi att Sydkorea heter "Korea, South" i ena datan och "South Korea" i den andra. När så är fallet kan Stata inte matcha ihop observationerna.</p>
-<p>Vi måste därför rätta till datan så att identifikationsvariablerna stämmer överens. Vi går då in i datan och ändrar på variabeln - tex kan vi i demokratidatan byta från "United States" till "United States of America" och "Korea, South" till "South Korea". När vi sedan kör om vår dofil bör antalet omatchade länder ha minskat.</p>
-<h2 id="_merge-variabeln"><code>_merge</code>-variabeln<a class="anchor-link" href="#_merge-variabeln">&#182;</a></h2><p>När vi är nöjda med matchningen kan vi ta bort data vi inte behöver. Till exempel den omatchade datan, eller observationer som inte fanns med i vår ursprungliga datamängd. Om vi till exempel vill ta bort observationer som bara fanns i demokratidatan skriver vi:</p>
+<p>The next step is to see if there are any countries that appear twice, in both the "master only" and "using only" categories. One such country is the United States, called "United States of America" in one dataset and "United States" in the other. We can also see that South Korea is called "Korea, South" in one dataset and "Sotuh Korea" in the other. Stata does not understand that these are the same countries. It would also be unable to match if there were differences in capitalization.</p>
+<p>We must therefore manually correct the data so that the ID variables match. We need to go back to the data and change the variable in one of the datasets. We can for instance change "United States" to "United States of America" and "Korea, South" to "South Korea" in the democracy data. If we then rerun our do-file with the merge command, the number of unmatched observations should have decreased.</p>
+<h2 id="The-_merge-variable">The <code>_merge</code> variable<a class="anchor-link" href="#The-_merge-variable">&#182;</a></h2><p>When we are happy with the results of our merging we can remove the data we don't need. For instance the unmatched data, or observations that were not included in our original data. If we want to remove observations that only were included in the democracy data (the "using" dataset) we can write:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">drop if</span> _merge<span class="o">==</span><span class="m">2</span>
@@ -13449,14 +13452,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Sedan kan vi droppa <code>_merge</code>-variabeln. Det är ett måste om vi vill lägga till mer data - Stata protesterar om det redan finns en sådan. Därför skriver vi:</p>
+<p>THen we can drop the <code>_merge</code> variable itself. This is necessary if we want to add more data - Stata will not go through with the merge if there already exists a <code>_merge</code> variable in the dataset. We therefore write:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">drop</span> _merge
@@ -13470,21 +13473,21 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Kombinera-datam&#228;ngder-med-analysenheter-p&#229;-olika-niv&#229;er---m:1">Kombinera datam&#228;ngder med analysenheter p&#229; olika niv&#229;er - m:1<a class="anchor-link" href="#Kombinera-datam&#228;ngder-med-analysenheter-p&#229;-olika-niv&#229;er---m:1">&#182;</a></h2>
+<h2 id="Combine-datasets-with-different-types-of-observations---merge-m:1">Combine datasets with different types of observations - <code>merge m:1</code><a class="anchor-link" href="#Combine-datasets-with-different-types-of-observations---merge-m:1">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Nu kan vi istället tänka att vi har en datamängd med individer, som tex visar varje persons kön och dennes nöjdhet med demokratin. Jag har här hittat på lite data. Vi laddar in den och kollar på de 10 första personerna (det är bara 15 i hela datamängden):</p>
+<p>Now let's say that we have a dataset of individuals, where the data shows each persons gender and his or her satisfaction with democracy. I made this data up. Let's load it and look at the 10 first persons (there are only 15 in the entire dataset):</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;satisfactiontest.dta&quot;</span>,<span class="k"> clear</span>
@@ -13534,14 +13537,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Vi har alltså personer från Afghanistan och Albanien, som är olika nöjda med demokratin, och där vissa är kvinnor, och andra inte är det. Nu provar vi att matcha på demokratidatan med hjälp av <code>merge m:1</code>. Men det är fortfarande <code>country</code> som är matchningsvariabeln.</p>
+<p>We have here persons from Afghanistan and Albania, who have different levels of satisfaction with democracy. Some of them are women, and some are not. Now let's merge this dataset with the democracy data, with the help of <code>merge m:1</code>. The ID variable that we match on is still <code>country</code>.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">merge m</span>:<span class="m">1</span> country using <span class="s">&quot;fh2017.dta&quot;</span>
@@ -13581,15 +13584,15 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>15 observationer matchades, som det var tänkt. 203 observationer matchades visserligen inte, men alla de återfanns i demokratidatan. Vi hade ju bara personer från 3 länder, så alla andra länder blir omatchade.</p>
-<p>Nu tittar vi igen på de första 10 personerna:</p>
+<p>15 observations were matched, as planned. 203 observations were not matched, but they were all from the democracy data. We only had persons from three countries, so all other countries are unmatched.</p>
+<p>Now let's look at the first 10 persons again:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">10</span>
@@ -13636,17 +13639,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Notera nu att alla variablerna från demokratidatan - <code>fh_pr</code>, <code>fh_cl</code>och <code>fh_status</code> har samma värde för alla personer från ett visst land. Dvs, alla personer från Afghanistan har samma värde på variabeln <code>fh_pr</code>, eftersom graden av politiska rättigheter är densamma för alla invånare i Afghanistan. Variabeln varierar bara på landsnivå.</p>
-<p>Om vi hade börjat med att ha landsdatan inladdat i stata hade vi fått skriva <code>merge 1:m using "satisfactiontest.dta"</code> istället, men slutresultatet hade blivit detsamma.</p>
-<h2 id="Att-t&#228;nka-p&#229;">Att t&#228;nka p&#229;<a class="anchor-link" href="#Att-t&#228;nka-p&#229;">&#182;</a></h2><ol>
-<li>Det måste finnas en matchningsvariabel som heter samma sak i båda datamängderna.</li>
-<li>Matchningsvariablerna ska vara av samma typ. Om du själv klistrar in data från Excel till exempel, håll koll på att båda variablerna är numeriska om det är sifferkoder, eller att båda är textvariabler om det är namn. Man kan bland annat se det genom att öppna data editor och se vilken färg siffrorna har. Om de är svarta är det nummer. Om de är röda är de text.</li>
-<li>För att man ska kunna lägga till variabler måste det vara samma observationer i båda datamängderna. Man kan till exempel inte kombinera data från olika enkätundersökningar med olika personer.</li>
-<li>Ta bort onödiga observationer. Om du till exempel har ett huvuddataset och lägger till en variabel, ta bort alla onödiga observationer som följer med den nya variabeln. De kommer bara ställa till det i andra matchningar längre fram.</li>
-<li>Kom ihåg att ta bort <code>_merge</code>-variabeln när du är färdig med matchningen, så att det går lätt att matcha på igen.</li>
-<li>Var noggrann. Oftast när det blir fel med matchning är det på grund av att man skrivit in fel adress till datana och liknande.</li>
+<p>Note that all the variables from the democracy data - <code>fh_pr</code>, <code>fh_cl</code> and <code>fh_status</code> have the same value for all persons from each country. All persons from Afghanistan have the same value on the variable <code>fh_pr</code>, since the level of political rights is the same for everybody in Afghanistan. The variable only varies between countries, not within.</p>
+<p>If we instead had started with the country level data loaded in Stata, we would have had to write <code>merge 1:m using "satisfactiontest.dta"</code> instead, but the end result would have been the same.</p>
+<h2 id="Remember">Remember<a class="anchor-link" href="#Remember">&#182;</a></h2><ol>
+<li>There must be a matching variable, an ID variable, that has the same name in both datasets.</li>
+<li>The matching variables need to be of the same type. If you for instance have pasted data from Excel, make sure to check that both variables are numeric (if you have number codes), or that both variables are string variables (if they are names). You can see that by opening the data editor and looking at the colors of the numbers. If they are black they are numeric; if they are red they are text.</li>
+<li>If we want to add variables, the observations need to be the same in both datasets. We can for instance not combine survey data from different surveys, with different respondents.</li>
+<li>Remove unnecessary observations. If you have a main dataset and add a variable, remove any unnecessary observations that come with the new variable. They will only complicate future merges.</li>
+<li>Remember to drop the <code>_merge</code> variable when you are done matching, so that you can easily add more data later on.</li>
+<li>Be extra careful and double-check each step! When merges are unsuccessful, it is often because of some petty error, like wrong filenames or wrong address to the files and so on.</li>
 </ol>
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p><code>Merge</code>-kommandot passar alltså bra när vi ska lägga till fler variabler. Vill vi lägga till observationer, som har information på samma variabler, ska vi istället använda <code>append</code>. Det skulle till exempel kunna vara att kombinera enkätundersökningar med identiska frågor som gjordes 2018 och 2019. Vi kan då med <code>append</code> lägga de olika enkätsvaren i en och samma datamängd.</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>The <code>merge</code> command is suitable when we want to add more variables. If we want to add observations, with information on the same variables, we need to use the <code>append</code> command. One such case might be when we want to combine surveys with identical questions, but carried out in 2018 and 2019. <code>append</code> then lets us combine the survey responses in one dataset.</p>
 
 </div>
 </div>
