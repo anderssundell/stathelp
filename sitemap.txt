@@ -27,6 +27,7 @@ http://www.stathelp.se/sv/collapse_sv.html
 http://www.stathelp.se/sv/wordlist_sv.html
 http://www.stathelp.se/sv/macros_sv.html
 http://www.stathelp.se/sv/forvalues_sv.html
+http://www.stathelp.se/sv/spmap_sweden_sv.html
 http://www.stathelp.se/en/barcharts_en.html
 http://www.stathelp.se/en/correlation_en.html
 http://www.stathelp.se/en/descriptive_crosstab_en.html
