@@ -27,22 +27,12 @@ a.navlink:hover
     font-size: 16px;
 }
 
-.menu-explainer {
-    margin: 10px;
-    font-size: 12px;
-    text-align: left;
-    font-style: italic;
-    color: #555555;
-}
-
 a.menulink:visited,
 a.menulink:link
 {
     text-decoration: none;
     font-weight: normal;
-    color: #000000;
-    font-size: 15px;
-    font-style: normal;
+    color: #333333;
 }
 
 a.unfinishedlink:visited,
@@ -58,7 +48,7 @@ a.menulink:hover
 {
     text-decoration: underline;
     font-weight: normal;
-    color: #000000;
+    color: #333333;
 }
 
 
@@ -119,12 +109,17 @@ a.menulink:hover
 
 .menu-overall {
     margin: 10px;
-    background-color: #f5f5f5;
+    background-color: #f2f2f2;
     font-size: 16px;
     text-align: left;
 }
 
-
+.menu-explainer {
+    margin: 10px;
+    font-size: 12px;
+    text-align: left;
+    font-style: italic;
+}
 
 .column {
     display: inline-block;
@@ -278,12 +273,3 @@ ul li {
        list-style:circle;
        color:black;
      }
-
-hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #cccccc;
-    margin: 5;
-    padding: 0;
-}
