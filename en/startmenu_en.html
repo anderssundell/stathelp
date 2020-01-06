@@ -35,20 +35,18 @@
     </div>
     <br>
     <div class="menu-subheader">
-Here you can find simple guides to different techniques for statistical analysis. The focus is on running and interpreting the analyses, not the theory and assumptions behind that underpin the analyses. In the guides the code and output from the statistics software is shown, together with explanations in text. All code is supposed to be reproducible, so if you want to you can download the data that is linked in the guides, and follow along in the instructions. The site is run by <a class="menulink" href="https://gu.se/english/about_the_university/staff/?languageId=100001&userId=xsunde" target="outlink">Anders Sundell</a>.
+Here you can find simple guides to different techniques for statistical analysis with the software Stata. The focus is on running and interpreting the analyses, not the theory and assumptions behind that underpin the analyses. In the guides the code and output from the statistics software is shown, together with explanations in text. All code is supposed to be reproducible, so if you want to you can download the data that is linked in the guides, and follow along in the instructions.<br>
+        The site is run by <a href="https://gu.se/english/about_the_university/staff/?languageId=100001&userId=xsunde" target="outlink">Anders Sundell</a>.
         <br>
         <br>
-        Click the links below to read the guides.
-        <br>
-        <br>
+
+        <div class = updatestext>
         Updates:<br>
         2019-12-13: Guide to <a href="spmap_world_en.html">making maps of the world with spmap.</a><br>
         2019-12-13: Guide to <a href="createdata_en.html">creating datasets and importing data.</a><br>
         2019-12-12: Guide to <a href="merge_en.html">combining datasets with merge.</a><br>
         2019-12-12: Guide to <a href="descriptive_crosstab_en.html">crosstabs.</a><br>
-        <br>
-        <br>
-        <br>
+        </div>
         <br>
     </div>    
 
@@ -64,9 +62,10 @@ Here you can find simple guides to different techniques for statistical analysis
     <div class="menu-overall">
       
         <h6>General</h6>
-        <ul>
-            <li><a class="menulink" href="wordlist_en.html">Dictionary with short descriptions of common terms</a>
-          </ul>
+<div class="menu-explainer">
+<div class = "scircleb"></div> <a class="menulink" href="wordlist_en.html">Glossary with short descriptions of common terms</a><br>
+Glossary of words that you may encounter when doing statistical analysis or work with data.    
+        </div>
           <br>
     </div>
     </div>
@@ -78,10 +77,9 @@ Here you can find simple guides to different techniques for statistical analysis
     <div class="menu-overall">
       
         <h6>Excercises</h6>
-        <ul>
-            <li><a class="unfinishedlink" href="">Practice </a>
-            <li><a class="unfinishedlink" href="">Practice - solution</a>         
-          </ul>
+<div class="menu-explainer">
+    
+        </div>
           <br>
     </div>
     </div>
@@ -105,31 +103,56 @@ Here you can find simple guides to different techniques for statistical analysis
       <div class="menu-overall">
       
       <h4>Regression analysis</h4>
-        <ul>
-            <li><a class="menulink" href="regression1_en.html">Regression analysis</a>
-            <li><a class="menulink" href="regression_controls_en.html">Regression analysis with control variables</a>
-            <li><a class="menulink" href="dummy_en.html">Regression analysis with dummy variables</a> 
-            <li><a class="menulink" href="regression_logarithm_en.html">Regression analysis with logarithmic variables</a>
-            <li><a class="menulink" href="regression_interaction_en.html">Regression analysis with interaction effects - two values</a>                
-                <li><a class="menulink" href="esttab_en.html">Tables for presenting results from regression analyses</a>
-          </ul>
-          <br>
+<div class="menu-explainer">
+A common tool for statistical analysis. Used to investigate relationships between two or more variables.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="regression1_en.html">Introduction</a><br>
+Begin here. The basic principles, with two variables.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="regression_controls_en.html">Control variables</a><br>
+Add control variables to account for alternative explanations.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="dummy_en.html">Dummy variables</a><br>
+Use dummy variables to include categorical variables in the analysis.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="regression_logarithm_en.html">Logarithmic variables</a><br>
+Run and interpret analyses with logarithmic variables, for instance to account for diminishing effects.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="regression_interaction_en.html">Interaction effects - two values</a><br>
+Effects that vary between over two groups in the sample.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="esttab_en.html">Tables for presenting results from regression analyses</a><br>
+Create nice tables for presenting regression results with the command esttab.
+          </div>    
       </div>
     </div>
+      <br>
     
   <div class="row">
     <div class="menu-overall">
       
         <h4>Data management</h4>
-        <ul>
-            <li><a class="menulink" href="intro_en.html">Getting started with Stata</a>
-            <li><a class="menulink" href="createdata_en.html">Create datasets and import data</a>
-            <li><a class="menulink" href="recodings_en.html">Recode variables</a>
-            <li><a class="menulink" href="ifstatements_en.html">If qualifiers and conditions</a>
-            <li><a class="menulink" href="merge_en.html">Combining datasets with merge</a>
-            <li><a class="menulink" href="logarithm_en.html">Logarithms</a>                
-          </ul>
-          <br>
+<div class="menu-explainer">
+Different operations required to prepare the data for analysis.<hr>
+<div class = "scircley"></div> <a class="menulink" href="intro_en.html">Getting started with Stata</a><br>
+The different parts of the program, setting a project folder, loading data, do-files, etc.<hr> 
+    
+<div class = "scircley"></div> <a class="menulink" href="createdata_en.html">Create datasets and import data</a><br>
+Import data or create a dataset from scratch.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="recodings_en.html">Recode variables</a><br>
+Change or remove certain values from variables to prepare them for analysis, using the commands recode, generate and replace.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="ifstatements_en.html">If qualifiers and conditions</a><br>
+Use conditions to run analyses and other commands on selected groups of observations.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="merge_en.html">Combining datasets</a><br>
+Add data from other sources with the command merge.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="logarithm_en.html">Logarithms</a><br>
+Use the logarithmic transformation on variables to account for skewness, for instance arising from exponential growth.
+    
+        </div>
       </div>
       </div>
 </div>
@@ -141,26 +164,36 @@ Here you can find simple guides to different techniques for statistical analysis
       <div class="menu-overall">
       
       <h4>Graphs</h4>
-        <ul>
-            <li><a class="menulink" href="barcharts_en.html">Bar charts</a>
-            <li><a class="menulink" href="graphs_scatterplot_en.html">Scatterplots</a>
-            <li><a class="menulink" href="spmap_world_en.html">Maps of the world and regions with spmap</a>                
-           
-          </ul>
-          <br>
+<div class="menu-explainer">
+Various techniques for visualizing data and relationships.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="barcharts_en.html">Bar charts</a><br>
+Averages for different groups shown with bars.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="graphs_scatterplot_en.html">Scatterplots</a><br>
+Show relationships between two variables with points.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="spmap_world_en.html">Maps of the world and regions with spmap</a><br>
+Maps that show countries' values on different variables with colors.
+    
+</div>    
       </div>
     </div>
+<br>
     
   <div class="row">
     <div class="menu-overall">
       
         <h4>Descriptive statistics and simpler analyses</h4>
-        <ul>
-            <li><a class="menulink" href="correlation_en.html">Correlation</a>
-            <li><a class="menulink" href="descriptive_crosstab_en.html">Crosstabs</a>          
-          </ul>
-          <br>
-        
+<div class="menu-explainer">
+Get an overview of the data before proceeding to more advanced analysis.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="correlation_en.html">Correlation</a><br>
+Simple and very common measure to show the strength and direction of association between two variables.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="descriptive_crosstab_en.html">Crosstabs</a><br>
+Relationships between two categorical variables shown with percentages.
+        </div>
       </div>
       </div>
 </div>

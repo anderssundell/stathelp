@@ -32,7 +32,11 @@ a.navlink:hover
     font-size: 12px;
     text-align: left;
     font-style: italic;
-    color: #555555;
+    color: #777777;
+}
+
+.updatestext {
+    font-size: 12px; 
 }
 
 a.menulink:visited,
@@ -41,7 +45,7 @@ a.menulink:link
     text-decoration: none;
     font-weight: normal;
     color: #000000;
-    font-size: 15px;
+    font-size: 14px;
     font-style: normal;
 }
 
@@ -119,7 +123,7 @@ a.menulink:hover
 
 .menu-overall {
     margin: 10px;
-    background-color: #f5f5f5;
+    background-color: #f8f8f8;
     font-size: 16px;
     text-align: left;
 }
@@ -164,6 +168,8 @@ h4 {
     text-align: center;
     font-weight: bold;
     color: #333333;
+    padding-top: 6px;
+    padding-bottom: 6px;    
 }
 
 h6 {
@@ -174,6 +180,8 @@ h6 {
     text-align: center;
     font-weight: bold;
     color: #333333;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .statarow {
@@ -264,6 +272,25 @@ display:inline-block;
       border-radius: 50%
     }
 
+.scircley {
+      width: 6px;
+      height: 6px;
+      background: #ffd84f;
+      display:inline-block;
+      margin-bottom: 3px;
+      margin-right: 3px;
+      border-radius: 50%
+    }
+
+.scircleb {
+      width: 6px;
+      height: 6px;
+      background: #4feaff;
+      display:inline-block;
+      margin-bottom: 3px;
+      margin-right: 3px;
+      border-radius: 50%
+    }
 
 .circlew {
         width: 12px;
@@ -284,6 +311,7 @@ hr {
     height: 1px;
     border: 0;
     border-top: 1px solid #cccccc;
-    margin: 5;
+    margin-top: 6px;
+    margin-bottom: 6px;    
     padding: 0;
 }
