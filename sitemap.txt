@@ -31,6 +31,7 @@ http://www.stathelp.se/sv/foreach_sv.html
 http://www.stathelp.se/sv/spmap_sweden_sv.html
 http://www.stathelp.se/sv/ttest_sv.html
 http://www.stathelp.se/sv/regression_logistic_sv.html
+http://www.stathelp.se/sv/coefplot_sv.html
 http://www.stathelp.se/en/barcharts_en.html
 http://www.stathelp.se/en/correlation_en.html
 http://www.stathelp.se/en/descriptive_crosstab_en.html
