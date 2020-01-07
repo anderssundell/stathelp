@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-    
+
      <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="How to make maps of the world and different regions using QoG data and the spmap command in Stata.">
 <meta name="keywords" content="statistics, stata, statistical analysis, QoG, quality of government, spmap, world map, make maps, map of europe">
@@ -13146,6 +13146,7 @@ div#notebook {
 <a href="../data/GIS/coord_lambert_europe.dta">Europe - Lambert</a><br>
 <a href="../data/GIS/coord_mercator_na.dta">North America - Mercator</a><br>
 <a href="../data/GIS/coord_lambert_na.dta">North America - Lambert</a><br>
+<a href="../data/GIS/coord_mercator_na.dta">North America - Mercator</a><br>
 <a href="../data/GIS/coord_mercator_sa.dta">South America - Mercator</a><br>
 <a href="../data/GIS/coord_mercator_afr.dta">Africa - Mercator</a><br>
 <a href="../data/GIS/coord_mercator_asia.dta">Asia - Mercator</a></p>
@@ -13405,6 +13406,84 @@ title(<span class="s">&quot;Polity index&quot;</span>)
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Cleaner, but one can also get the impression that Iran in the top right is surrounded by water, which it is in fact not. A matter of taste! Also notice that the intervals changed; by default, <code>spmap</code> places the same number of countries in each category. Since we have now excluded the European countries, countries can go in the top category with lower democracy scores. The data is the same in both maps, only the divisions are different.</p>
+<h2 id="Making-maps-with-V-dem-data">Making maps with V-dem data<a class="anchor-link" href="#Making-maps-with-V-dem-data">&#182;</a></h2><p>The ID file also contains variables that allow for matching with the <a href="https://www.v-dem.net/en/data/data-version-9/">V-dem</a> data. To do that, open up the V-dem data, which is a time-series cross sectional dataset. Then delete all but the most recent year using <code>keep if year==2018</code>.</p>
+<p>After doing so, you are ready to merge with the ID file, <strong>this time using the variable "country_id"</strong>, which is tailored to match specifically with the V-dem data.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;../V-Dem-CY-Core-v9.dta&quot;</span>,<span class="k"> clear</span>
+<span class="k">keep if</span> year<span class="o">==</span><span class="m">2018</span><span class="k"></span>
+<span class="k">merge</span> <span class="m">1</span>:m country_id using <span class="s">&quot;idfile.dta&quot;</span>, nogenerate
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(V-Dem-CY-Core)
+
+(26,655 observations deleted)
+
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                            61
+        from master                         3  
+        from using                         58  
+
+    matched                               183  
+    -----------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can make a map in the same way we did above. Here is a map that shows V-Dem's "Liberal democracy index" (v2x_libdem).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>spmap v2x_libdem using <span class="s">&quot;coord_mercator_world.dta&quot;</span>, id(na_id_world) fcolor(RdYlGn) <span class="cs">///</span>
+osize(vvthin vvthin vvthin vvthin) ndsize(vvthin) title(<span class="s">&quot;V-Dem Liberal democracy index&quot;</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="../images/map6_vdem.png" width=600></p>
 
 </div>
 </div>
@@ -13412,12 +13491,26 @@ title(<span class="s">&quot;Polity index&quot;</span>)
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>The coordinate files linked above work with the QoG ccode variable, which is present in both the cross-sectional data (used here) and in the time series data. However, borders change over time, so one needs different shape files to show the situation further back in time.</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>The coordinate files linked above work with the QoG ccode variable, which is present in both the cross-sectional data (used here) and in the time series data. However, borders change over time, so one needs different shape files to show the situation further back in time. The same applies when using the V-Dem data.</p>
 <p>The QoG data can also act as a key if you want to add data from other sources; it for instance includes World Bank country codes. Use <code>merge</code> to add more data.</p>
+<p>A word of caution: When you try to plot a variable for which there is no data, <code>spmap</code> will draw the borders but label it as "no data", which is reasonable. However, if you use if qualifiers, for instance to select one year in a time series cross sectional dataset, <code>spmap</code> will not draw borders of exluded countries. If countries suddenly disappear from your maps, check whether you are using if qualifiers that exclude them somehow.</p>
 <p>Also make sure to check out <code>help spmap</code> to see all the available options for customizing the map. There is a lot to do with legends, colors, backgrounds and so on.</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
     </div>
   </div>

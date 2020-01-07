@@ -4,7 +4,7 @@
     
  <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Hur man använder kommandot spmap för att göra en karta över länder. Vi går igenom hur man slår ihop olika datamängder och ritar ut olika variabler, samt ställer in kartan. Det finns också regionala kartor att ladda ned.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, kartor, spmap, shapefil, cloropleth, koroplet">   
+<meta name="keywords" content="statistik, statistisk analys, Stata, QoG, V-Dem, variabler, data, kartor, spmap, shapefil, cloropleth, koroplet">   
         <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
@@ -13102,7 +13102,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13163,7 +13163,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/users/anderssundell/Dropbox/Jupyter/stathelp/data/GIS/&quot;</span><span class="k"></span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/users/xsunde/Dropbox/Jupyter/stathelp/data/GIS/&quot;</span><span class="k"></span>
 <span class="k">use</span> <span class="s">&quot;qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
 </pre></div>
 
@@ -13182,7 +13182,7 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-/Users/anderssundell/Dropbox/Jupyter/stathelp/data/GIS
+/Users/xsunde/Dropbox/Jupyter/stathelp/data/GIS
 
 (Quality of Government Basic dataset 2018 - Cross-Section)
 </pre>
@@ -13405,6 +13405,84 @@ title(<span class="s">&quot;Polity index&quot;</span>)
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Snyggt och prydligt, men man kan också få intrycket att Iran uppe till höger är omgivet av vatten på tre sidor, vilket alltså inte stämmer. Men det är en smaksak vad som känns mest pedagogiskt!</p>
 <p>Notera också att uppdelningen av länder har förändrats. Som default försöker Stata placera ungefär lika många länder i varje kategori. Eftersom vi nu har tagit bort alla andra länder så kan man nu hamna i toppkategorin med betydligt lägre poäng på demokrativariabeln. Datan är densamma, men kategorierna har ändrats.</p>
+<h2 id="Kartor-med-data-fr&#229;n-V-Dem">Kartor med data fr&#229;n V-Dem<a class="anchor-link" href="#Kartor-med-data-fr&#229;n-V-Dem">&#182;</a></h2><p>ID-filen innehåller också variabler som låter oss använda data från <a href="https://www.v-dem.net/en/data/data-version-9/">V-dem</a>. För att göra så laddar vi ned och öppnar V-dem-datan, som är time-series cross-section-data. Här har vi alltså information om länder, över tid. För att kunna matcha ihop det med ID-filen tar vi bort alla år utom det senaste, 2018, med <code>keep if year==2018</code>.</p>
+<p>När vi gjort det är vi redo att slå ihop datan med ID-filen. <strong>Den här gången använder vi variabeln "country_id"</strong>, som är konstruerad för att matcha just med V-dem-datan.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;../V-Dem-CY-Core-v9.dta&quot;</span>,<span class="k"> clear</span>
+<span class="k">keep if</span> year<span class="o">==</span><span class="m">2018</span><span class="k"></span>
+<span class="k">merge</span> <span class="m">1</span>:m country_id using <span class="s">&quot;idfile.dta&quot;</span>, nogenerate
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(V-Dem-CY-Core)
+
+(26,655 observations deleted)
+
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                            61
+        from master                         3  
+        from using                         58  
+
+    matched                               183  
+    -----------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can make a map in the same way we did above. Here is a map that shows V-Dem's "Liberal democracy index" (v2x_libdem).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>spmap v2x_libdem using <span class="s">&quot;coord_mercator_world.dta&quot;</span>, id(na_id_world) fcolor(RdYlGn) <span class="cs">///</span>
+osize(vvthin vvthin vvthin vvthin) ndsize(vvthin) title(<span class="s">&quot;V-Dem Liberal democracy index&quot;</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="../images/map6_vdem.png" width=600></p>
 
 </div>
 </div>
@@ -13412,12 +13490,26 @@ title(<span class="s">&quot;Polity index&quot;</span>)
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Koordinatfilerna som länkas ovan funkar alltså med QoG-variabeln "ccode". Den finns både med i cross-section och tidsserie-datan. Tyvärr ändras dock landsgränserna över tid, så man behöver olika koordinatfiler för olika tidpunkter. Några sådana historiska koordinatfiler har jag inte förberett.</p>
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Koordinatfilerna som länkas ovan funkar alltså med QoG-variabeln "ccode". Den finns både med i cross-section och tidsserie-datan. Tyvärr ändras dock landsgränserna över tid, så man behöver olika koordinatfiler för olika tidpunkter. Några sådana historiska koordinatfiler har jag inte förberett. Samma sak gäller för V-dem-datan.</p>
 <p>Om du vill plotta annan data än QoG-datan kan de här filerna ändå vara användbara, eftersom QoG-datan också har andra ID-nummer, som kan användas för att lägga till mer data. Till exempel så innehåller datan koder som Världsbanken använder. Använd kommandot <a href="merge_sv.html">merge</a> för att lägga till mer data.</p>
+<p>Ett varningens ord: När du försöker plotta data som saknas så ritar <code>spmap</code> ändå ut gränserna, men färglägger det som "no data". Så vill vi generellt att det ska vara. Men om du av någon anledning använder if-satser för att välja ut observationer - till exempel för att rita ut ett visst år från V-dem-datan - så kommer <code>spmap</code> att inte rita ut gränserna för de länder som inte uppfyller villkoret. Om det plötsligt försvinner länder från din karta kan det därför vara en bra idé att se efter om det är någon if-sats som utesluter landet.</p>
 <p>Kom också ihåg att kolla in <code>help spmap</code> för att se alla olika options för att ställa in kartan. Det finns mycket att göra med förklaring, färger, bakgrund och så vidare!</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
     </div>
   </div>
