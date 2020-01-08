@@ -51,3 +51,4 @@ http://www.stathelp.se/en/wordlist_en.html
 http://www.stathelp.se/en/merge_en.html
 http://www.stathelp.se/en/createdata_en.html
 http://www.stathelp.se/en/histogram_en.html
+http://www.stathelp.se/en/linecharts_en.html
