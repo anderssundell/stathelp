@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-    
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Glossary of common statistical terms, with informal descriptions of each word.">
-<meta name="keywords" content="statistics, stata, statistical analysis, regression analysis, regression, descriptive statistics, graphs, scatterplots, interaction effects, dummy variables, logarithmitic transformation, histogram, bar chart, distributions, normal distribution, variance, covariance, correlation">
 
-<title>Dictionary</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="How to make a histogram that shows a variable's distribution in Stata.">
+<meta name="keywords" content="statistics, stata, statistical analysis, histogram, graph, variable, distribution">
+
+<title>Histogram</title>
     
-                <!-- Global site tag (gtag.js) - Google Analytics -->
+                    <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -13130,9 +13130,174 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Dictionary-with-short-explanations">Dictionary with short explanations<a class="anchor-link" href="#Dictionary-with-short-explanations">&#182;</a></h1>
-    <p><a href="../sv/wordlist_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
-<p>Here is a small dictionary of common terms in statistical analysis, with short explanations.</p>
+<h1 id="Histogram">Histogram<a class="anchor-link" href="#Histogram">&#182;</a></h1><p><a href="../sv/histogram_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
+<p>Before we start doing serious analysis on our data it is important to get to know it better. One effective yet simple way to do so, at least for scale variables with a lot of values, are <em>histograms</em>. In this guide we will discuss what they are, how to use them, and some good settings to make them more pedagogical.</p>
+<p>In this example we will use the <a href="https://qog.pol.gu.se/data/datadownloads/qogbasicdata" target=_blank>QoG basic dataset</a>. Load it into Stata directly from the web, or save it on your computer and open it from there.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta&quot;</span>,<span class="k"> clear</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(Quality of Government Basic dataset 2018 - Cross-Section)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="A-simple-histogram">A simple histogram<a class="anchor-link" href="#A-simple-histogram">&#182;</a></h2><p>What is a histogram? It shows the distribution of a variable, by dividing the variable into groups, and then creating bars whose height correspond to the number of observations in the group. It lets us see where on the scale most observations are located, whether the distribution is normal or skewed, whether there are outliers, and more.</p>
+<p>We will look closer at the variable "gle_rgdpc", which shows the GDP per capita for each country in the QoG dataset.</p>
+<p>The command is extremely simple. We just write <code>histogram</code> followed by the variable:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">histogram</span> gle_rgdpc
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=13, start=285.95001, width=7339.3091)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1907.91&quot; x2=&quot;3859.02&quot; y2=&quot;1907.91&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1326.64&quot; x2=&quot;3859.02&quot; y2=&quot;1326.64&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;745.37&quot; x2=&quot;3859.02&quot; y2=&quot;745.37&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;164.22&quot; x2=&quot;3859.02&quot; y2=&quot;164.22&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;572.72&quot; y=&quot;447.37&quot; width=&quot;237.23&quot; height=&quot;2041.82&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;577.03&quot; y=&quot;451.69&quot; width=&quot;228.59&quot; height=&quot;2033.18&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;809.94&quot; y=&quot;1664.24&quot; width=&quot;237.23&quot; height=&quot;824.94&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;814.26&quot; y=&quot;1668.56&quot; width=&quot;228.59&quot; height=&quot;816.30&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1047.17&quot; y=&quot;2117.92&quot; width=&quot;237.23&quot; height=&quot;371.26&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1051.49&quot; y=&quot;2122.24&quot; width=&quot;228.59&quot; height=&quot;362.62&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1284.40&quot; y=&quot;2283.01&quot; width=&quot;237.23&quot; height=&quot;206.17&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1288.72&quot; y=&quot;2287.33&quot; width=&quot;228.59&quot; height=&quot;197.53&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1521.63&quot; y=&quot;2241.68&quot; width=&quot;237.23&quot; height=&quot;247.51&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1525.95&quot; y=&quot;2246.00&quot; width=&quot;228.59&quot; height=&quot;238.87&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1758.86&quot; y=&quot;2386.10&quot; width=&quot;237.23&quot; height=&quot;103.09&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1763.18&quot; y=&quot;2390.42&quot; width=&quot;228.59&quot; height=&quot;94.45&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1996.09&quot; y=&quot;2427.31&quot; width=&quot;237.23&quot; height=&quot;61.88&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2000.41&quot; y=&quot;2431.63&quot; width=&quot;228.59&quot; height=&quot;53.24&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2233.32&quot; y=&quot;2447.98&quot; width=&quot;237.23&quot; height=&quot;41.21&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2237.64&quot; y=&quot;2452.30&quot; width=&quot;228.59&quot; height=&quot;32.57&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3419.46&quot; y=&quot;2427.31&quot; width=&quot;237.23&quot; height=&quot;61.88&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3423.78&quot; y=&quot;2431.63&quot; width=&quot;228.59&quot; height=&quot;53.24&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1907.91&quot; x2=&quot;350.83&quot; y2=&quot;1907.91&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1907.91&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1907.91)&quot; text-anchor=&quot;middle&quot;&gt;2.0e-05&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1326.64&quot; x2=&quot;350.83&quot; y2=&quot;1326.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1326.64&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1326.64)&quot; text-anchor=&quot;middle&quot;&gt;4.0e-05&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;745.37&quot; x2=&quot;350.83&quot; y2=&quot;745.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;745.37&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,745.37)&quot; text-anchor=&quot;middle&quot;&gt;6.0e-05&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;164.22&quot; x2=&quot;350.83&quot; y2=&quot;164.22&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;164.22&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,164.22)&quot; text-anchor=&quot;middle&quot;&gt;8.0e-05&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Density&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;563.56&quot; y1=&quot;2489.19&quot; x2=&quot;563.56&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;563.56&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1209.90&quot; y1=&quot;2489.19&quot; x2=&quot;1209.90&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1209.90&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1856.37&quot; y1=&quot;2489.19&quot; x2=&quot;1856.37&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1856.37&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2502.84&quot; y1=&quot;2489.19&quot; x2=&quot;2502.84&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2502.84&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3149.31&quot; y1=&quot;2489.19&quot; x2=&quot;3149.31&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3149.31&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;Real GDP per Capita (2005)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The x-axis shows GDP per capita in US dollars. The height of the bars represent the number of countries in eachc interval. The distribution is evidently skewed - there are many poor countries, and a few extremely rich.</p>
 
 </div>
 </div>
@@ -13140,325 +13305,711 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th><strong>WORD LIST</strong></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>GENERAL TERMS</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Unit of analysis</em></td>
-<td>The units we compare. For instance countries, individuals, years, stocks, municipalities, and so on.</td>
-</tr>
-<tr>
-<td><em>Variable</em></td>
-<td>Characteristic of the units of analysis, that varies. For instnace height, age or party affiliation among individuals, or population, degree of democracy or climate among countries.</td>
-</tr>
-<tr>
-<td><em>Variable value</em></td>
-<td>The actual value a unit of analysis has on a specific variable.</td>
-</tr>
-<tr>
-<td><em>Causality</em></td>
-<td>Cause and effect. In a causal relationship one variable affects the other.</td>
-</tr>
-<tr>
-<td><em>Measure of central tendency</em></td>
-<td>A value that states the tendency in a dataset.</td>
-</tr>
-<tr>
-<td><em>Distribution</em></td>
-<td>How the units of analysis are distributed over the possible values. Can have any look.</td>
-</tr>
-<tr>
-<td><em>Normal distribution</em></td>
-<td>One specific shape of distribution, where most values are found in the middle, with fewer out on the edges.</td>
-</tr>
-<tr>
-<td><em>Spread</em></td>
-<td>How the values are distributed around the central tendency.</td>
-</tr>
-<tr>
-<td><em>Correlation</em></td>
-<td>Degree of relatedness between two variables.</td>
-</tr>
-<tr>
-<td><em>Covariance</em></td>
-<td>Degree of relatedness between to variables, but expressed in the scale that the variables are measured in, which means that it is harder to compare than correlations.</td>
-</tr>
-<tr>
-<td><strong>SAMPLING AND INFERENCE</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Population</em></td>
-<td>The group we want to draw conclusions about, for instance voters in Sweden.</td>
-</tr>
-<tr>
-<td><em>Sample</em></td>
-<td> The part of the population (which can be chosen in different ways) that we actually study.</td>
-</tr>
-<tr>
-<td><em>Random sampling</em></td>
-<td>When we draw units of analysis from the population at random. In normal circumstances the sampling method that gives us the best opportunities for inference.</td>
-</tr>
-<tr>
-<td><em>Quota sampling</em></td>
-<td>When we compose our sample to fill certain quotas, that match the characteristics of the population.</td>
-</tr>
-<tr>
-<td><em>Sampling through self-selection</em></td>
-<td>When the units of analysis are free to sign up for being part of the sample. Gives very bad opportunities for inference, as the ones who do so in general are unrepresentative.</td>
-</tr>
-<tr>
-<td><em>Inference</em></td>
-<td>To generalize conclusions about the sample to the larger population.</td>
-</tr>
-<tr>
-<td><em>Central limit theorem</em></td>
-<td>Theorem that states that when we draw repeated random samples from a population, the mean in the samples will form a normal distribution based on the true mean in the population. Forms the basis of significance calculations.</td>
-</tr>
-<tr>
-<td><em>Confidence interval</em></td>
-<td> Interval of values that expresses the degree of uncertainty. For instance about what the true mean is in a population, or what the true relationship between two variables is.</td>
-</tr>
-<tr>
-<td><strong>VARIABLE TYPES</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Nominal scale</em></td>
-<td>Categorization without ordering. The variable "fruit" cna have the values "orange", "pear" or "apple", but cannot be ordered.</td>
-</tr>
-<tr>
-<td><em>Ordinal scale</em></td>
-<td>Categorization + ordering, but without equidistance. There are different distances between the steps of the scale. Survey questions are usually of this type.</td>
-</tr>
-<tr>
-<td><em>Interval scale</em></td>
-<td>Categorization + ordering + equidistance. For instance height, measured in centimeres. Each step up on the scale is equally long.</td>
-</tr>
-<tr>
-<td><strong>MEASURES OF CENTRAL TENDENCY</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Mode</em></td>
-<td>The most common value. Appropriate for nominal scales.</td>
-</tr>
-<tr>
-<td><em>Median</em></td>
-<td>The value you get if you arrange all the values in order, and take the value in the middle (or between the two in the middle). Appropriate for ordinal scales, but can also be used for interval scales.</td>
-</tr>
-<tr>
-<td><em>Mean</em></td>
-<td>The value you get if you sum all values, and divide by the number of units. Can only be (properly) used on interval scales. <br> Formula: $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$</td>
-</tr>
-<tr>
-<td><strong>MEASURES OF DEVIATION</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Variance</em></td>
-<td><br> A measure of the deviation from the mean, that is used in many other calculations. <br> Formula: $V = \frac{\sum_{i=1}^n (x_i - \bar{x})^2)}{n-1}$ <br> The formula means that you takes each observation's devation from the mean, square it, sum all the squared deviations, divide by n-1, and then take the square root of the resulting number.</td>
-</tr>
-<tr>
-<td><em>Standard deviation</em></td>
-<td>A measure of the typlical deviation from the mean. Calculated as the roow of the variance. <br> Formel: $s = \sqrt{V}$</td>
-</tr>
-<tr>
-<td><strong>THEORETICAL NAMES FOR VARIABLES</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Dependent variable</em></td>
-<td>The variable we want to explain. Sometimes called outcome variable.</td>
-</tr>
-<tr>
-<td><em>Independent variable</em></td>
-<td>The variable we think explains the dependent variable. Sometimes called determinant or predictor.</td>
-</tr>
-<tr>
-<td><em>Control variable</em></td>
-<td>Additional variable that is brought into the analysis, generally to rule out spuriosity.</td>
-</tr>
-<tr>
-<td><em>Antecedent variable</em></td>
-<td>Variable that comes before the independent variable in the causal chain.</td>
-</tr>
-<tr>
-<td><em>Intervening variable / mediating variable</em></td>
-<td>Variable that is located after the independent variable but before the dependent variable in the causal chain. Should <em>not</em> be included as a control if the aim is to rule out spuriosity.</td>
-</tr>
-<tr>
-<td><em>Interaction variable</em></td>
-<td>Variable that moderates the effect of the independent variabler. Sometimes called moderating variable.</td>
-</tr>
-<tr>
-<td><em>Dummy variable</em></td>
-<td>Variable that shows whether a unit of analysis has a specific characteristic (1) or not (0).</td>
-</tr>
-<tr>
-<td><strong>TYPES OF RELATIONSHIPS</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Null relationship</em></td>
-<td>Lack of correlation between two variables.</td>
-</tr>
-<tr>
-<td><em>Positive relationship</em></td>
-<td>Relationship where more of one variable is associated with more of the other, and where less of one variable is associated with less of the other.</td>
-</tr>
-<tr>
-<td><em>Negative relationship</em></td>
-<td>Relationship where more of one variable is associated with less of the other, and where less of one variable is associated with more of the other.</td>
-</tr>
-<tr>
-<td><em>Causal relationship</em></td>
-<td>Relationship where one variable has caused the other.</td>
-</tr>
-<tr>
-<td><em>Spurious relationship</em></td>
-<td>Relationship between two variables where a third variable has caused both the independent and dependent variable.</td>
-</tr>
-<tr>
-<td><em>Suppressed relationship</em></td>
-<td>Actual relationship between two variables, but one that is hidden by a third variable that is associated with less values on one variable and higher values on the other, or vice versa.</td>
-</tr>
-<tr>
-<td><em>Nonlinear relationship</em></td>
-<td>Relationship whose strength depends on where we are on the scale. For instance the relationship between ice cream eating and happiness - eating one icecream has a positive effect on happiness; eating another increases happiness a little bit; eating a third or fourth probably decreases happiness.</td>
-</tr>
-<tr>
-<td><strong>TYPES OF ANALYSES</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Univariate analysis</em></td>
-<td>Analysis of one variable. For instance calculation of the mean.</td>
-</tr>
-<tr>
-<td><em>Bivariate analysis</em></td>
-<td>Analysis of relationships between two variables.</td>
-</tr>
-<tr>
-<td><em>Correlation analysis</em></td>
-<td>Analysis that shows the strength and direction of a relationship between two variables. There are many different measures, but the most common is Pearson's R.</td>
-</tr>
-<tr>
-<td><em>Regression analysis</em></td>
-<td>Analysis where a line is fit to a number of points. Gives numbers on the slope of the line, the strength of the relationship, uncertainty about the estimation of the line, and more.</td>
-</tr>
-<tr>
-<td><em>Multiple regression analysis</em></td>
-<td>Regresssion analysis with more than one independent variable.</td>
-</tr>
-<tr>
-<td><em>Logistic regression analysis</em></td>
-<td>Type of regression analysis tailored to cases where the dependent variable only has the value 0 or 1.</td>
-</tr>
-<tr>
-<td><em>Factor analysis</em></td>
-<td>Analysis where one tries to find common denominator between several different variables. That is, condense the data to see if there is some latent, unobserved variable, that can explain variation in multiple variables.</td>
-</tr>
-<tr>
-<td><strong>TYPES OF DESIGNS</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Experimental design</em></td>
-<td>When we are in contorl over the independent variable, and randomize units of analysis to a treatment group and a control group. Gives us good opportunity to draw conclusions about causal effects.</td>
-</tr>
-<tr>
-<td><em>Pseudo-experimental design</em></td>
-<td>When we exploit natural variation to find cases where random assignment to some "treatment" has arisen.</td>
-</tr>
-<tr>
-<td><em>Regression discontinuity design</em></td>
-<td>A type of pseudor-experimental design when there is a sharp threshold that governs assignment to some "treatment", and when we can assume that units of analysis just above and below this threshold are similar in all other respects.</td>
-</tr>
-<tr>
-<td><em>Mathcing</em></td>
-<td>When units of analysis are matched with "statistical twins", that is, units with the same values on all relevant variables except the independent.</td>
-</tr>
-<tr>
-<td><em>Cross-sectional design</em></td>
-<td>When we compare many units of analysis at one point in time.</td>
-</tr>
-<tr>
-<td><em>Longitudinal design</em></td>
-<td>When we compare one unit with itself, over time.</td>
-</tr>
-<tr>
-<td><em>Panel design</em></td>
-<td>When we compare many units with each other, and with themselves, over time. Also called Time-Series Cross-Section.</td>
-</tr>
-<tr>
-<td><strong>TERMS IN REGRESSION ANALYSIS</strong></td>
-</tr>
-<tr>
-<td><em>Regression line</em></td>
-<td>The line that best fits the points.</td>
-</tr>
-<tr>
-<td><em>b-coefficient</em></td>
-<td>The slope of the regression line. How much the dependent variable is expected to change when we increase the independent variable with one step.</td>
-</tr>
-<tr>
-<td><em>Constant/intercept</em></td>
-<td>The expected value on the dependent variable when all the independent variables in the model have the value 0.</td>
-</tr>
-<tr>
-<td><em>$R^2$</em></td>
-<td>A measure of how much of the variation in the dependent variable that can be explained by the independent variables. Runs between 0 1. 0.5 can be interpreted as "50% of the variation in the dependent variable can be explained by the independent variables."</td>
-</tr>
-<tr>
-<td><em>Standard error</em></td>
-<td>A measure of uncertainty in the estimation of b-coefficients.</td>
-</tr>
-<tr>
-<td><em>t-value</em></td>
-<td>The b-coefficient divided by the standard error. Used to calculate the p-value.</td>
-</tr>
-<tr>
-<td><em>p-value</em></td>
-<td>The significance value. Shows how probable it is that we get a relationship between the independent and dependent variable just because of randomness in the sampling procedure, if we assume that there is no relationship in the population. A common convention is that p-values below 0.05 are counted as "statistically significant."</td>
-</tr>
-<tr>
-<td><em>n</em></td>
-<td>The number of units of analysis included in the analysis.</td>
-</tr>
-<tr>
-<td><em>Unstandardized regression coefficient</em></td>
-<td> The regular b-coefficient, which is expressed in units of the dependent variable. If for instance dependent variable is GDP per capita, the coefficient will show how much GDP per capita is expected to increase or decrease if the independent variable is increased by one.</td>
-</tr>
-<tr>
-<td><em>Standardized regression coefficient</em></td>
-<td>b-coefficient, but standardized so that the variance of both dependent and independent variable is 1. Allows for comparison between coefficients measured with different scales, which is hard with unstandardized coefficients.</td>
-</tr>
-<tr>
-<td><strong>DIAGRAMS</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><em>Histogram</em></td>
-<td>Shows the distribution of a variable.</td>
-</tr>
-<tr>
-<td><em>Scatterplot</em></td>
-<td>Shows the relationship between two variables by drawing the units of analysis as dots, placed on an X and Y axis.</td>
-</tr>
-</tbody>
-</table>
+<h2 id="Change-the-settings-for-the-y-axis">Change the settings for the y-axis<a class="anchor-link" href="#Change-the-settings-for-the-y-axis">&#182;</a></h2><p>The diagram is however far from perfect. What is actually shown on the y-axis is the "density", which is unintuitive for a lay reader. If we instead want to show the actual number of countries, we add the option <code>freq</code>.</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span>Nhistogram gle_rgdpc, freq
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=13, start=285.95001, width=7339.3091)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2024.24&quot; x2=&quot;3859.02&quot; y2=&quot;2024.24&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1559.17&quot; x2=&quot;3859.02&quot; y2=&quot;1559.17&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1094.23&quot; x2=&quot;3859.02&quot; y2=&quot;1094.23&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;629.16&quot; x2=&quot;3859.02&quot; y2=&quot;629.16&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;164.22&quot; x2=&quot;3859.02&quot; y2=&quot;164.22&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;572.72&quot; y=&quot;187.36&quot; width=&quot;237.23&quot; height=&quot;2301.82&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;577.03&quot; y=&quot;191.68&quot; width=&quot;228.59&quot; height=&quot;2293.18&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;809.94&quot; y=&quot;1559.17&quot; width=&quot;237.23&quot; height=&quot;930.01&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;814.26&quot; y=&quot;1563.49&quot; width=&quot;228.59&quot; height=&quot;921.37&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1047.17&quot; y=&quot;2070.65&quot; width=&quot;237.23&quot; height=&quot;418.54&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1051.49&quot; y=&quot;2074.97&quot; width=&quot;228.59&quot; height=&quot;409.90&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1284.40&quot; y=&quot;2256.65&quot; width=&quot;237.23&quot; height=&quot;232.53&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1288.72&quot; y=&quot;2260.97&quot; width=&quot;228.59&quot; height=&quot;223.89&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1521.63&quot; y=&quot;2210.24&quot; width=&quot;237.23&quot; height=&quot;278.94&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1525.95&quot; y=&quot;2214.56&quot; width=&quot;228.59&quot; height=&quot;270.30&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1758.86&quot; y=&quot;2372.98&quot; width=&quot;237.23&quot; height=&quot;116.20&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1763.18&quot; y=&quot;2377.30&quot; width=&quot;228.59&quot; height=&quot;107.57&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1996.09&quot; y=&quot;2419.51&quot; width=&quot;237.23&quot; height=&quot;69.67&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2000.41&quot; y=&quot;2423.83&quot; width=&quot;228.59&quot; height=&quot;61.03&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2233.32&quot; y=&quot;2442.65&quot; width=&quot;237.23&quot; height=&quot;46.53&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2237.64&quot; y=&quot;2446.97&quot; width=&quot;228.59&quot; height=&quot;37.89&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3419.46&quot; y=&quot;2419.51&quot; width=&quot;237.23&quot; height=&quot;69.67&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3423.78&quot; y=&quot;2423.83&quot; width=&quot;228.59&quot; height=&quot;61.03&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2024.24&quot; x2=&quot;350.83&quot; y2=&quot;2024.24&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2024.24&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2024.24)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1559.17&quot; x2=&quot;350.83&quot; y2=&quot;1559.17&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1559.17&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1559.17)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1094.23&quot; x2=&quot;350.83&quot; y2=&quot;1094.23&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1094.23&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1094.23)&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;629.16&quot; x2=&quot;350.83&quot; y2=&quot;629.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;629.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,629.16)&quot; text-anchor=&quot;middle&quot;&gt;80&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;164.22&quot; x2=&quot;350.83&quot; y2=&quot;164.22&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;164.22&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,164.22)&quot; text-anchor=&quot;middle&quot;&gt;100&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Frequency&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;563.56&quot; y1=&quot;2489.19&quot; x2=&quot;563.56&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;563.56&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1209.90&quot; y1=&quot;2489.19&quot; x2=&quot;1209.90&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1209.90&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1856.37&quot; y1=&quot;2489.19&quot; x2=&quot;1856.37&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1856.37&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2502.84&quot; y1=&quot;2489.19&quot; x2=&quot;2502.84&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2502.84&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3149.31&quot; y1=&quot;2489.19&quot; x2=&quot;3149.31&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3149.31&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;Real GDP per Capita (2005)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can see that there are almost a hundred countries in the lowest graph. This is a pretty pedagogical display when we are dealing with countries, and where most people know that there are around 200. But in many other instances we dont have the same grasp about the number of observations, wor the actual number may be of little interest. For instance in a survey: the number of respondents that have answered a specific thing is generally not relevant, as it mostly depends on how many that were asked the question. The proportion or percentage is much more interesting.</p>
+<p>We an obtain the percentage by hanging the option <code>freq</code> to <code>percent</code>. The new graph shows that more than half of all countries are found in the lowest bar.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">histogram</span> gle_rgdpc, percent
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=13, start=285.95001, width=7339.3091)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2038.35&quot; x2=&quot;3859.02&quot; y2=&quot;2038.35&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1587.39&quot; x2=&quot;3859.02&quot; y2=&quot;1587.39&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1136.43&quot; x2=&quot;3859.02&quot; y2=&quot;1136.43&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;685.47&quot; x2=&quot;3859.02&quot; y2=&quot;685.47&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;234.64&quot; x2=&quot;3859.02&quot; y2=&quot;234.64&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;572.72&quot; y=&quot;164.22&quot; width=&quot;237.23&quot; height=&quot;2324.96&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;577.03&quot; y=&quot;168.54&quot; width=&quot;228.59&quot; height=&quot;2316.32&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;809.94&quot; y=&quot;1549.77&quot; width=&quot;237.23&quot; height=&quot;939.42&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;814.26&quot; y=&quot;1554.09&quot; width=&quot;228.59&quot; height=&quot;930.78&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1047.17&quot; y=&quot;2066.44&quot; width=&quot;237.23&quot; height=&quot;422.74&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1051.49&quot; y=&quot;2070.76&quot; width=&quot;228.59&quot; height=&quot;414.10&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1284.40&quot; y=&quot;2254.30&quot; width=&quot;237.23&quot; height=&quot;234.88&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1288.72&quot; y=&quot;2258.62&quot; width=&quot;228.59&quot; height=&quot;226.25&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1521.63&quot; y=&quot;2207.40&quot; width=&quot;237.23&quot; height=&quot;281.79&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1525.95&quot; y=&quot;2211.72&quot; width=&quot;228.59&quot; height=&quot;273.15&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1758.86&quot; y=&quot;2371.74&quot; width=&quot;237.23&quot; height=&quot;117.44&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1763.18&quot; y=&quot;2376.06&quot; width=&quot;228.59&quot; height=&quot;108.80&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1996.09&quot; y=&quot;2418.77&quot; width=&quot;237.23&quot; height=&quot;70.42&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2000.41&quot; y=&quot;2423.09&quot; width=&quot;228.59&quot; height=&quot;61.78&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2233.32&quot; y=&quot;2442.28&quot; width=&quot;237.23&quot; height=&quot;46.90&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2237.64&quot; y=&quot;2446.60&quot; width=&quot;228.59&quot; height=&quot;38.26&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3419.46&quot; y=&quot;2418.77&quot; width=&quot;237.23&quot; height=&quot;70.42&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3423.78&quot; y=&quot;2423.09&quot; width=&quot;228.59&quot; height=&quot;61.78&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2038.35&quot; x2=&quot;350.83&quot; y2=&quot;2038.35&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2038.35&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2038.35)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1587.39&quot; x2=&quot;350.83&quot; y2=&quot;1587.39&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1587.39&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1587.39)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1136.43&quot; x2=&quot;350.83&quot; y2=&quot;1136.43&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1136.43&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1136.43)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;685.47&quot; x2=&quot;350.83&quot; y2=&quot;685.47&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;685.47&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,685.47)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;234.64&quot; x2=&quot;350.83&quot; y2=&quot;234.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;234.64&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,234.64)&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Percent&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;563.56&quot; y1=&quot;2489.19&quot; x2=&quot;563.56&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;563.56&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1209.90&quot; y1=&quot;2489.19&quot; x2=&quot;1209.90&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1209.90&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1856.37&quot; y1=&quot;2489.19&quot; x2=&quot;1856.37&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1856.37&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2502.84&quot; y1=&quot;2489.19&quot; x2=&quot;2502.84&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2502.84&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3149.31&quot; y1=&quot;2489.19&quot; x2=&quot;3149.31&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3149.31&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;Real GDP per Capita (2005)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Change-the-width-of-the-bars">Change the width of the bars<a class="anchor-link" href="#Change-the-width-of-the-bars">&#182;</a></h2><p>But it is still not that easy to determine how poor the countries are. In the details just above the diagram we can see that the first bar starts on the lowest value in the dataset, 285,95, and that each bar is 7339 dollars wide. Not very pedagogical. Good enough to get a quick overview, but when we present results for others we should strive to make it as readable as possible.</p>
+<p>We can therefore change the graph so the bars begin at zero, and then follow a nice and even interval, like 5000 dollars. We do that by adding two options. The order of the options does not matter.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">histogram</span> gle_rgdpc, percent start(<span class="m">0</span>) width(<span class="m">5000</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=20, start=0, width=5000)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1963.97&quot; x2=&quot;3859.02&quot; y2=&quot;1963.97&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1438.89&quot; x2=&quot;3859.02&quot; y2=&quot;1438.89&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;913.67&quot; x2=&quot;3859.02&quot; y2=&quot;913.67&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;388.46&quot; x2=&quot;3859.02&quot; y2=&quot;388.46&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;535.59&quot; y=&quot;164.22&quot; width=&quot;163.10&quot; height=&quot;2324.96&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;539.91&quot; y=&quot;168.54&quot; width=&quot;154.46&quot; height=&quot;2316.32&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;698.69&quot; y=&quot;1641.22&quot; width=&quot;162.98&quot; height=&quot;847.96&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;703.01&quot; y=&quot;1645.54&quot; width=&quot;154.34&quot; height=&quot;839.32&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;861.67&quot; y=&quot;1860.02&quot; width=&quot;162.98&quot; height=&quot;629.16&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;865.99&quot; y=&quot;1864.34&quot; width=&quot;154.34&quot; height=&quot;620.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1024.65&quot; y=&quot;2133.64&quot; width=&quot;162.98&quot; height=&quot;355.54&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1028.97&quot; y=&quot;2137.96&quot; width=&quot;154.34&quot; height=&quot;346.91&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1187.63&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1191.95&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1350.61&quot; y=&quot;2297.74&quot; width=&quot;163.10&quot; height=&quot;191.45&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1354.93&quot; y=&quot;2302.06&quot; width=&quot;154.46&quot; height=&quot;182.81&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1513.71&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1518.03&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1676.69&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1681.01&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1839.67&quot; y=&quot;2379.79&quot; width=&quot;162.98&quot; height=&quot;109.40&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1843.99&quot; y=&quot;2384.11&quot; width=&quot;154.34&quot; height=&quot;100.76&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2002.65&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2006.97&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2165.62&quot; y=&quot;2434.49&quot; width=&quot;163.10&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2169.94&quot; y=&quot;2438.81&quot; width=&quot;154.46&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2328.73&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2333.05&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3469.70&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3474.02&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3632.68&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3637.00&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1963.97&quot; x2=&quot;350.83&quot; y2=&quot;1963.97&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1963.97&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1963.97)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1438.89&quot; x2=&quot;350.83&quot; y2=&quot;1438.89&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1438.89&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1438.89)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;913.67&quot; x2=&quot;350.83&quot; y2=&quot;913.67&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;913.67&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,913.67)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;388.46&quot; x2=&quot;350.83&quot; y2=&quot;388.46&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;388.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,388.46)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Percent&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;535.59&quot; y1=&quot;2489.19&quot; x2=&quot;535.59&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;535.59&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1187.63&quot; y1=&quot;2489.19&quot; x2=&quot;1187.63&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1187.63&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1839.67&quot; y1=&quot;2489.19&quot; x2=&quot;1839.67&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1839.67&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2491.71&quot; y1=&quot;2489.19&quot; x2=&quot;2491.71&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2491.71&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3143.74&quot; y1=&quot;2489.19&quot; x2=&quot;3143.74&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3143.74&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;Real GDP per Capita (2005)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now have slightly more bars, and they are also a little bit smaller. But it is much easier to talk about the results. For instance, slightly more than 40 percent of countries have a GDP per capita between 0 and 5000 dollars.</p>
+<p>If we want to make it even clearer, we can add labels that show exactly how high the bars are, with the option <code>addlabels</code>. It might also be good to know when writing about the results. But in this case I think it looks a little bit crowded.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">histogram</span> gle_rgdpc, percent start(<span class="m">0</span>) width(<span class="m">5000</span>) addlabels
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=20, start=0, width=5000)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1963.97&quot; x2=&quot;3859.02&quot; y2=&quot;1963.97&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1438.89&quot; x2=&quot;3859.02&quot; y2=&quot;1438.89&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;913.67&quot; x2=&quot;3859.02&quot; y2=&quot;913.67&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;388.46&quot; x2=&quot;3859.02&quot; y2=&quot;388.46&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;535.59&quot; y=&quot;164.22&quot; width=&quot;163.10&quot; height=&quot;2324.96&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;539.91&quot; y=&quot;168.54&quot; width=&quot;154.46&quot; height=&quot;2316.32&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;698.69&quot; y=&quot;1641.22&quot; width=&quot;162.98&quot; height=&quot;847.96&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;703.01&quot; y=&quot;1645.54&quot; width=&quot;154.34&quot; height=&quot;839.32&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;861.67&quot; y=&quot;1860.02&quot; width=&quot;162.98&quot; height=&quot;629.16&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;865.99&quot; y=&quot;1864.34&quot; width=&quot;154.34&quot; height=&quot;620.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1024.65&quot; y=&quot;2133.64&quot; width=&quot;162.98&quot; height=&quot;355.54&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1028.97&quot; y=&quot;2137.96&quot; width=&quot;154.34&quot; height=&quot;346.91&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1187.63&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1191.95&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1350.61&quot; y=&quot;2297.74&quot; width=&quot;163.10&quot; height=&quot;191.45&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1354.93&quot; y=&quot;2302.06&quot; width=&quot;154.46&quot; height=&quot;182.81&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1513.71&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1518.03&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1676.69&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1681.01&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1839.67&quot; y=&quot;2379.79&quot; width=&quot;162.98&quot; height=&quot;109.40&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;1843.99&quot; y=&quot;2384.11&quot; width=&quot;154.34&quot; height=&quot;100.76&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2002.65&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2006.97&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2165.62&quot; y=&quot;2434.49&quot; width=&quot;163.10&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2169.94&quot; y=&quot;2438.81&quot; width=&quot;154.46&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2328.73&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;2333.05&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3469.70&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3474.02&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3632.68&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+	&lt;rect x=&quot;3637.00&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+	&lt;text x=&quot;617.14&quot; y=&quot;116.20&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;44.27&lt;/text&gt;
+	&lt;text x=&quot;780.12&quot; y=&quot;1593.21&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;16.15&lt;/text&gt;
+	&lt;text x=&quot;943.10&quot; y=&quot;1812.00&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;11.98&lt;/text&gt;
+	&lt;text x=&quot;1106.20&quot; y=&quot;2085.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;6.771&lt;/text&gt;
+	&lt;text x=&quot;1269.18&quot; y=&quot;2167.67&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5.208&lt;/text&gt;
+	&lt;text x=&quot;1432.16&quot; y=&quot;2249.72&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;3.646&lt;/text&gt;
+	&lt;text x=&quot;1595.14&quot; y=&quot;2167.67&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5.208&lt;/text&gt;
+	&lt;text x=&quot;1758.12&quot; y=&quot;2386.47&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1.042&lt;/text&gt;
+	&lt;text x=&quot;1921.22&quot; y=&quot;2331.77&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;2.083&lt;/text&gt;
+	&lt;text x=&quot;2084.20&quot; y=&quot;2413.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;.5208&lt;/text&gt;
+	&lt;text x=&quot;2247.18&quot; y=&quot;2386.47&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1.042&lt;/text&gt;
+	&lt;text x=&quot;2410.16&quot; y=&quot;2413.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;.5208&lt;/text&gt;
+	&lt;text x=&quot;3551.25&quot; y=&quot;2386.47&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1.042&lt;/text&gt;
+	&lt;text x=&quot;3714.23&quot; y=&quot;2413.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:79.94px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;.5208&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1963.97&quot; x2=&quot;350.83&quot; y2=&quot;1963.97&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1963.97&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1963.97)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1438.89&quot; x2=&quot;350.83&quot; y2=&quot;1438.89&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1438.89&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1438.89)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;913.67&quot; x2=&quot;350.83&quot; y2=&quot;913.67&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;913.67&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,913.67)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;388.46&quot; x2=&quot;350.83&quot; y2=&quot;388.46&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;388.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,388.46)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Percent&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;535.59&quot; y1=&quot;2489.19&quot; x2=&quot;535.59&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;535.59&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1187.63&quot; y1=&quot;2489.19&quot; x2=&quot;1187.63&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1187.63&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1839.67&quot; y1=&quot;2489.19&quot; x2=&quot;1839.67&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1839.67&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2491.71&quot; y1=&quot;2489.19&quot; x2=&quot;2491.71&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2491.71&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3143.74&quot; y1=&quot;2489.19&quot; x2=&quot;3143.74&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3143.74&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;Real GDP per Capita (2005)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Change-the-looks">Change the looks<a class="anchor-link" href="#Change-the-looks">&#182;</a></h2><p>Like all graphs in Stata we can finetune different parts of the graph's looks, which of course mostly is a matter of taste. I myself think that graphs look better in print or PDF's if they have a white background. One simple way to change many different aspects of the diagram is to use the option <code>sheme()</code>, which sets a visual theme. There are several to choose from, and you can get a list of them by running the command <code>help schemes</code>.</p>
+<p>I like the theme <code>s1mono</code>, which is pretty minimal, especially in combination with <code>plotregion(lwidth(none))</code> which removes the border around the graph.</p>
+<p>But to liven the graph up it is nice to give them some color. For instance <code>fcolor(pink)</code>. Try it out!</p>
+<p>Finally, it is useful to know the options <code>ytitle("")</code> and <code>xtitle("")</code> which lets us change the titles on the y-axis and x-axis.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">histogram</span> gle_rgdpc, percent start(<span class="m">0</span>) width(<span class="m">5000</span>) scheme(s1mono) plotregion(lwidth(none)) fcolor(pink) ytitle(<span class="s">&quot;Percent&quot;</span>) xtitle(<span class="s">&quot;GDP per capita (USD)&quot;</span>)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(bin=20, start=0, width=5000)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#FFFFFF;stroke:none&quot;/&gt;
+	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+	&lt;rect x=&quot;535.59&quot; y=&quot;164.22&quot; width=&quot;163.10&quot; height=&quot;2324.96&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;539.91&quot; y=&quot;168.54&quot; width=&quot;154.46&quot; height=&quot;2316.32&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;698.69&quot; y=&quot;1641.22&quot; width=&quot;162.98&quot; height=&quot;847.96&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;703.01&quot; y=&quot;1645.54&quot; width=&quot;154.34&quot; height=&quot;839.32&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;861.67&quot; y=&quot;1860.02&quot; width=&quot;162.98&quot; height=&quot;629.16&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;865.99&quot; y=&quot;1864.34&quot; width=&quot;154.34&quot; height=&quot;620.52&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1024.65&quot; y=&quot;2133.64&quot; width=&quot;162.98&quot; height=&quot;355.54&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1028.97&quot; y=&quot;2137.96&quot; width=&quot;154.34&quot; height=&quot;346.91&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1187.63&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1191.95&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1350.61&quot; y=&quot;2297.74&quot; width=&quot;163.10&quot; height=&quot;191.45&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1354.93&quot; y=&quot;2302.06&quot; width=&quot;154.46&quot; height=&quot;182.81&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1513.71&quot; y=&quot;2215.69&quot; width=&quot;162.98&quot; height=&quot;273.50&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1518.03&quot; y=&quot;2220.01&quot; width=&quot;154.34&quot; height=&quot;264.86&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1676.69&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1681.01&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;1839.67&quot; y=&quot;2379.79&quot; width=&quot;162.98&quot; height=&quot;109.40&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;1843.99&quot; y=&quot;2384.11&quot; width=&quot;154.34&quot; height=&quot;100.76&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2002.65&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;2006.97&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2165.62&quot; y=&quot;2434.49&quot; width=&quot;163.10&quot; height=&quot;54.70&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;2169.94&quot; y=&quot;2438.81&quot; width=&quot;154.46&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;2328.73&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;2333.05&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3469.70&quot; y=&quot;2434.49&quot; width=&quot;162.98&quot; height=&quot;54.70&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;3474.02&quot; y=&quot;2438.81&quot; width=&quot;154.34&quot; height=&quot;46.06&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;rect x=&quot;3632.68&quot; y=&quot;2461.84&quot; width=&quot;162.98&quot; height=&quot;27.35&quot; style=&quot;fill:#FF0080&quot;/&gt;
+	&lt;rect x=&quot;3637.00&quot; y=&quot;2466.16&quot; width=&quot;154.34&quot; height=&quot;18.71&quot; style=&quot;fill:none;stroke:#000000;stroke-width:8.64&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1963.97&quot; x2=&quot;350.83&quot; y2=&quot;1963.97&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1963.97&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1963.97)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;1438.89&quot; x2=&quot;350.83&quot; y2=&quot;1438.89&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;1438.89&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1438.89)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;913.67&quot; x2=&quot;350.83&quot; y2=&quot;913.67&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;913.67&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,913.67)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;388.46&quot; x2=&quot;350.83&quot; y2=&quot;388.46&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;300.72&quot; y=&quot;388.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,388.46)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
+	&lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Percent&lt;/text&gt;
+	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;line x1=&quot;535.59&quot; y1=&quot;2489.19&quot; x2=&quot;535.59&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;535.59&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+	&lt;line x1=&quot;1187.63&quot; y1=&quot;2489.19&quot; x2=&quot;1187.63&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1187.63&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
+	&lt;line x1=&quot;1839.67&quot; y1=&quot;2489.19&quot; x2=&quot;1839.67&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;1839.67&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
+	&lt;line x1=&quot;2491.71&quot; y1=&quot;2489.19&quot; x2=&quot;2491.71&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;2491.71&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60000&lt;/text&gt;
+	&lt;line x1=&quot;3143.74&quot; y1=&quot;2489.19&quot; x2=&quot;3143.74&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3143.74&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;80000&lt;/text&gt;
+	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;100000&lt;/text&gt;
+	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;GDP per capita (USD)&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Export-the-graph">Export the graph<a class="anchor-link" href="#Export-the-graph">&#182;</a></h2><p>To be able to include the graph in some report or on the web we need to export it. We do that by using the <code>graph export</code> command immediately after the graph command. We just write the name and path to the file we want to export to. If we have set project folder with <code>cd</code> (described in the <a href="intro_en.html">Intro guide</a> we don't need to write anything other than the name of the graph file; it will be saved in the project folder.</p>
+<p>By specifying the file ending, for instance .pdf, .png or .jpg we decide the type of file. Finally, we also add the option <code>replace</code>, which means that our new graph should replace any other file of the same name that already exists. This is practical when we do successive iterations of the graph.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">graph</span> export <span class="s">&quot;gdphistogram.pdf&quot;</span>,<span class="k"> replace</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(file gdphistogram.pdf written in PDF format)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     </div>
   </div>
