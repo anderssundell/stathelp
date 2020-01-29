@@ -54,3 +54,5 @@ http://www.stathelp.se/en/createdata_en.html
 http://www.stathelp.se/en/histogram_en.html
 http://www.stathelp.se/en/linecharts_en.html
 http://www.stathelp.se/en/coefplot_en.html
+http://www.stathelp.se/en/descriptive_summarize_en.html
+http://www.stathelp.se/en/descriptive_averages_en.html
