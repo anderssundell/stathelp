@@ -1,0 +1,19 @@
+ body {
+    background-color: #ffaaaa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.42857143;
+    color: #000;
+    margin: 0;
+    padding-left: 200px;
+}
+
+.p {
+    background-color: #ffaaaa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.42857143;
+    color: #ffaaaa;
+    margin: 0;
+    padding-left: 200px;
+}

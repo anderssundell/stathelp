@@ -10,25 +10,25 @@ func.dicegood <- function(){
 }
 
 func.dicebad <- function(){
-  dicepair_2 <- sample(1:9, 2, replace=TRUE)
+  dicepair_2 <- sample(1:12, 2, replace=TRUE)
   
   if (dicepair_2[1] <= 4) {
     dicebad.1 <- dicepair_2[1]
-  } else if (dicepair_2[1] == 4 | dicepair_2[1]==5) {
+  } else if (dicepair_2[1] == 4 | dicepair_2[1]==5 | dicepair_2[1]==6) {
     dicebad.1 <- 4
-  } else if (dicepair_2[1] == 6 | dicepair_2[1]==7) {
+  } else if (dicepair_2[1] == 7 | dicepair_2[1]==8 | dicepair_2[1]==9) {
     dicebad.1 <- 5
-  } else if (dicepair_2[1] == 8 | dicepair_2[1]==9) {
+  } else if (dicepair_2[1] == 10 | dicepair_2[1]==11 | dicepair_2[1]==12) {
     dicebad.1 <- 6
   }
   
   if (dicepair_2[2] <= 4) {
     dicebad.2 <- dicepair_2[2]
-  } else if (dicepair_2[2] == 4 | dicepair_2[2]==5) {
+  } else if (dicepair_2[2] == 4 | dicepair_2[2]==5 | dicepair_2[2]==6) {
     dicebad.2 <- 4
-  } else if (dicepair_2[2] == 6 | dicepair_2[2]==7) {
+  } else if (dicepair_2[2] == 7 | dicepair_2[2]==8 | dicepair_2[2]==9) {
     dicebad.2 <- 5
-  } else if (dicepair_2[2] == 8 | dicepair_2[2]==9) {
+  } else if (dicepair_2[2] == 10 | dicepair_2[2]==11 | dicepair_2[2]==12) {
     dicebad.2 <- 6
   }
   
@@ -109,23 +109,67 @@ dp6 <- ggplot(diceset.6, aes(x = x, y = y)) +
 dicedata <- data.frame(nr=as.integer(), good=as.integer(), bad=as.integer())
 nr_rolls <- 0
 
-pvaldata <- data.frame(nr=as.integer(), meandiff=as.double(), pval=as.double())
+pvaldata <- data.frame(nr=as.integer(), meandiff=as.double(), pval=as.double(), m_good=as.double(), m_bad=as.double())
 
 ### END GLOBAL STUFF
+
+
 
 ###################### UI 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
   
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "shinystyle.css")
+  ),
+  
   # App title ----
-  p("Nu ska vi lära oss lite om signifikans"),
-  # Sidebar layout with input and output definitions ----
+  h2("Vad är signifikans?"),
+  h3("Det kortare svaret"),
+  p("Det korta svaret är att signifikans är ett mått på hur osannolikt det är att vi ska se en skillnad
+    mellan två saker, om det inte finns någon skillnad i verkligheten, bara på grund av slump.
+    Till exempel kan det handla om skillnader i attityder mellan unga och gamla i en urvalsundersökning, eller skillnaden mellan
+    experiment- och kontrollgrupp i ett experiment."),
 
+  p("Om vi får ett resultat som till exempel visar att äldre är mer politiskt intresserade än
+    de unga i en enkätundersökning så är nästa fråga om denna skillnad också återfinns i populationen,
+    alltså den större grupp ur vilket vi gjort vårt urval av enkätdeltagare. Till exempel svenska
+    folket."),
+  
+  p("Om signifikansvärdet är 0.723 betyder det att slumpen 723 gånger av 1000 kommer orsaka en så stor
+    skillnad som vi uppmätt. Det råkar ibland bli lite för många äldre som är politiskt intresserade.
+    Om så är fallet bör vi inte tillmäta skillnaden mellan unga och äldre någon stor vikt - den
+    beror ju ändå bara på slumpen."),
+
+  p("Men om signifikansvärdet är lågt, till exempel 0.002, betyder det att slumpen bara orsakar en
+    så stor skillnad som vi sett i vårt urval 2 gånger av 1000. Då är det nog mer sannolikt att det
+    faktiskt finns en skillnad mellan unga och gamla där ute, i verkligheten."),
+
+  p("När är vi tillräckligt säkra på att det inte är slumpen? Det finns ingen magisk gräns.
+    Men konventionen är att man utgår från ett signifikansvärde på 0.050, alltså 50 fall av 1000,
+    eller 5%. Om signifikansvärdet är under 0.050 brukar vi alltså säga att skillnaden är
+    statistiskt signifikant."),
+  
+    h3("Det längre svaret"),
+  p("Vi ska här gå igenom ett exempel
+    som handlar om att undersöka om ett par tärningar är viktade.
+    
+    För att undersöka detta har vi ett par tärningar som vi är säkra på är okej. Vi kommer
+    kasta dem, och kasta det osäkra paret samtidifgt, och se vad summan blir i respektive par.
+    Om vi gör det tillräckligt många gånger kommer vi se om medelvärdet blir detsamma (ca 7)
+    för båda paren, eller om det blir något annat med de okända tärningarna. Tryck på knappen
+    för att kasta tärningarna!"),
+  
   # Input: Dice roll button
       actionButton("roll", "Kasta tärningarna"),
+  splitLayout(cellWidths = c("14%", "20%", "6%", "5%", "14%", "20%", "6%"), p(), p("Säkra tärningar"), p(), p(), p(), p("Osäkra tärningar"), p()),
+  splitLayout(cellWidths = c("10%", "10%", "10%", "10%", "5%", "10%", "10%", "10%", "10%"), p(), plotOutput("dice1", height=diceheight), plotOutput("dice2", height=diceheight), p(), p(), p(), plotOutput("dice3", height=diceheight), plotOutput("dice4", height=diceheight), p()),
   
-  p("När du trycker på knappen kommer magiska saker att hända."),
-  
+  p("Vad blev resultatet? Var summan högre i något av paren? Även om det blev så kan vi inte från
+    ett enskilt kast avgöra om det var slumpen eller någon systematik som orsakade resultatet.
+    Slumpen spelar för stor roll. Vi måste göra det många gånger. Diagrammen nedan visar fördelningen
+    av resultaten från tärningskasten från de båda tärningsparen. Ju högre staplar på ett tal,
+    desto fler kast som fått det resultatet."),
   
       # Output: Histogram ----
   
@@ -135,13 +179,16 @@ ui <- fluidPage(
 #    fluidRow(
 #      column(3, plotOutput("histgood"), plotOutput("blank2"), plotOutput("histbad"))
 
-splitLayout(cellWidths = c("10%", "10%", "10%", "10%", "5%", "10%", "10%", "10%", "10%"), p(), plotOutput("dice1", height=diceheight), plotOutput("dice2", height=diceheight), p(), p(), p(), plotOutput("dice3", height=diceheight), plotOutput("dice4", height=diceheight), p()),
+
 splitLayout(cellWidths = c("40%", "5%", "40%"), plotOutput("histgood", height="200px"), p(), plotOutput("histbad", height="200px")),
 
 p("Antal kast:", textOutput("rolls", inline= TRUE)),
 p("Medelvärdesskillnad:", textOutput("meandiff", inline= TRUE)),
 p("Signifikansvärde:", textOutput("pval", inline= TRUE)),
-p("Och här ser vi en intressant graf:"),
+p("Och här ser vi en intressant graf som visar medelvärdesskillnaden:"),
+plotOutput("meandiffplot", height="200px", width="600px"),
+
+p("Och här ser vi en intressant graf som visar p-värdet:"),
 plotOutput("pvalplot", height="200px", width="600px")
 )
 
@@ -234,7 +281,7 @@ server <- function(input, output, session) {
     result_pval <- t.test(dicedata$good, dicedata$bad)$p.value
     }
     
-    pvalsum <- c(nr_rolls, mean_bad - mean_good, result_pval)
+    pvalsum <- c(nr_rolls, mean_bad - mean_good, result_pval, mean_good, mean_bad)
     pvaldata[nrow(pvaldata)+1,] <<- pvalsum
     
     
@@ -243,7 +290,7 @@ server <- function(input, output, session) {
       theme_minimal() +
       scale_x_continuous(limits=c(1.5, 12.5), breaks=c(0.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) +
       scale_y_continuous(breaks=c(0, 2, 4, 6, 8, 10)) +
-      ggtitle(paste("Mean value:", mean_good)) +
+      ggtitle(paste("Mean value:", format(round(mean_good, 1), nsmall=1))) +
       expand_limits(y = c(0, 10))
     
     plotbad <- ggplot(dicedata) +
@@ -251,14 +298,24 @@ server <- function(input, output, session) {
       theme_minimal() +
       scale_x_continuous(limits=c(1.5, 12.5), breaks=c(0.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) +
       scale_y_continuous(breaks=c(0, 2, 4, 6, 8, 10)) +
-      ggtitle(paste("Mean value:", mean_bad)) +
+      ggtitle(paste("Mean value:", format(round(mean_bad, 1), nsmall=1))) +
       expand_limits(y = c(0, 10))
   
+    plotmeandiff <- ggplot(pvaldata) +
+      geom_point(aes(x=nr, y = m_good), col = "green") +
+      geom_point(aes(x=nr, y = m_bad), col = "red") +
+      geom_line(aes(x=nr, y = m_good), col = "green") +
+      geom_line(aes(x=nr, y = m_bad), col = "red") +
+      theme_minimal() +
+      expand_limits(x = c(1, 50), y = c(2, 12)) +
+      scale_y_continuous(breaks=c(2, 4, 6, 8, 10, 12))
+    
     plotpval <- ggplot(pvaldata) +
+      geom_point(aes(x=nr, y = pval)) +
       geom_line(aes(x=nr, y = pval)) +
       theme_minimal() +
       expand_limits(x = c(1, 50), y = c(0, 1)) +
-      scale_y_continuous(breaks=c(0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)) +
+      scale_y_continuous(breaks=c(0, 0.05, 0.2, 0.4, 0.6, 0.8, 1)) +
       geom_hline(yintercept = 0.05, linetype = "dashed", color = "red")
     
     output$dice1 <- renderPlot({
@@ -281,14 +338,18 @@ server <- function(input, output, session) {
     output$histbad <- renderPlot({
       plotbad
     })
-    
+   
+    output$meandiffplot <- renderPlot({
+      plotmeandiff
+    })
+     
     output$pvalplot <- renderPlot({
       plotpval
     })
 
     output$rolls <- renderText(nr_rolls)
-    output$meandiff <- renderText(mean_bad - mean_good)
-    output$pval <- renderText(result_pval)
+    output$meandiff <- renderText(format(round(mean_bad - mean_good, 1), nsmall=1))
+    output$pval <- renderText(format(round(result_pval, 2), nsmall=2))
     
   })    
 }
