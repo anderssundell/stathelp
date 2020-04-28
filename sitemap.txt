@@ -35,6 +35,7 @@ https://www.stathelp.se/sv/coefplot_sv.html
 https://www.stathelp.se/sv/regression_quadratic_sv.html
 https://www.stathelp.se/sv/surveydata_sv.html
 https://www.stathelp.se/sv/predictvalues_sv.html
+https://www.stathelp.se/sv/timesseries_sv.html
 https://www.stathelp.se/sv/randomization_sv.html
 https://www.stathelp.se/en/barcharts_en.html
 https://www.stathelp.se/en/correlation_en.html
