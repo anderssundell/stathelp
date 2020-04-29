@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <meta name="description" content="Hur man ställer in data för tidsserieanalys i Stata, med bland annat laggade och ledande variabler.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, tidsserier, lagg, laggade variabler, laggande variabler, deltavariabler, förändring">   
+
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="How to set up data for time series analysis, with lagged, leading and delta variables.">
+<meta name="keywords" content="statistics, stata, statistical analysis, time series, tsset, lags, leads, delta, lagged variables">
+
+<title>Time series</title>
     
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+                <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -17,7 +19,6 @@
 </script>
     
     
-<title>Tidsserier</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13131,17 +13132,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Tidsserier">Tidsserier<a class="anchor-link" href="#Tidsserier">&#182;</a></h1><p><a href="../en/timeseries_en.html">English version</a> | <a href="../index.html" target="_PARENT">Startsida</a></p>
-<p>I det här inlägget ska jag gå igenom grundläggande kommandon för att jobba med tidsseriedata. Med det avses data där en och samma sak mäts om och om igen, över tid.</p>
-<p>Man kan analysera sådan data genom att bara lägga in den som vanligt och använda helt vanliga kommandon. Men det går att göra mer. Med speciella tidsseriekommandon kan vi undersöka förändring, och hur olika tidpunkter förhåller sig till varandra.</p>
-<p>Datan vi ska analysera är börskurser, närmare bestämt dagliga slutkurser för Dow Jones Index i USA, från april 2019 till april 2020. <a href="../data/stocks.dta">Datan kan laddas ned här.</a> I koden nedan laddar vi in datan och tittar på de 10 första raderna:</p>
+<h1 id="Time-series">Time series<a class="anchor-link" href="#Time-series">&#182;</a></h1><p><a href="../sv/timeseries_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
+<p>In this guide we will cover basic time series commands. Time series are data where one observation is measured repeatedly over time.</p>
+<p>Such data can be analyzed by just entering it into Stata as usual, using regular commands. But we can do more. With the special time series commands we can examine change, and how observations at different times relate to each other.</p>
+<p>The data we will use in this post is on stocks: the daily closing value of the american Dow Jones Index, from April 2019 to APril 2020. <a href="../data/stocks.dta">Download the data here.</a> The code below loads the data and shows the first ten rows:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;../data/stocks.dta&quot;</span>,<span class="k"> clear</span>
@@ -13191,17 +13192,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Ange-tidsserien-med-tsset">Ange tidsserien med <code>tsset</code><a class="anchor-link" href="#Ange-tidsserien-med-tsset">&#182;</a></h2><p>När man jobbar med tidsserier behöver vi en variabel som visar tiden, det vill säga i vilken ordning observationerna kommer.</p>
-<p>I datan finns det tre variabler: date, dowjones_close och dowjones_volume. Datumvariabeln är vår tidsvariabel. Den är formaterad enligt Statas princip för datumvariabler. Stata fattar alltså att 20:e april är en dag efter 19:e april och en vecka efter 13:e april, till exempel. Hur man ställer in variablerna på det sättet kommer jag gå igenom i ett annat inlägg.</p>
-<p>Man måste dock inte ha en sådan variabel. Man kan också ha en variabel som bara anger ett nummer i en sekvens, alltså 1, 2, 3, och så vidare. Är datan mätt varje dag blir det såklart mest intuitivt att använda datumvariabeln som tidsvariabel.</p>
-<p><strong>Vi ska nu berätta för Stata vilken variabel som är vår tidsvariabel.</strong> Det gör vi med kommandot <code>tsset</code>. Man skriver bara <code>tsset</code> följt av variabeln som anger tiden, i vårt fall variabeln date.</p>
+<h2 id="Set-the-time-series-with-tsset">Set the time series with <code>tsset</code><a class="anchor-link" href="#Set-the-time-series-with-tsset">&#182;</a></h2><p>When working with time series we need a variable that shows the time, that is, in which order the observations are, and the intervals between them.</p>
+<p>The data has three variables: date, dowjones_close and dowjones_volume. The date variable is our time variable. It is formatted according to Stata's principle for date variables, which means that Stata understands that "April 20" is one day after "April 19" and a week after "April 13", for example. How to format the variables in this way will be covered in a separate post.</p>
+<p>We do not need to have a time variable in the date format. We can also have a variable that simply shows a number in a sequence, like 1, 2, 3 and so on. But if the data is measured once a day it is of course makes most sense to have a time variable that shows the date.</p>
+<p>We will now tell Stata which variable that shows the time. We do that with the command <code>tsset</code>. We simply write <code>tsset</code> followed by the variable that shows the time - in our case the variable "date".</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">tsset</span> date
@@ -13234,8 +13235,8 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Stata beskriver att variabeln går från 29 april 2019 till 28 april 2020, fast att det är vissa hål. På helgerna har till exempel börserna stängt, och de finns därförinte med i datan.</p>
-<p>Raden "delta" visar hur stort "ett steg" är: en dag. Vanligtvis behöver man inte ange det, men om vi till exempel bara skulle ha en observation per vecka hade vi kunnat skriva <code>tsset date, delta(7)</code> för att visa att varje "steg" är en vecka. Men det behövs alltså inte här.</p>
+<p>The output says that thet the variable runs from April 29 2019 to April 28 2020, but with some gaps. Most importantly, the stock exchange is closed during weekends, and they are therefore not included in the data.</p>
+<p>The row "delta" shows how big "one step" is: a day. Normally this is determined automatically, but if we for instance only had one observation per week we could write <code>tsset date, delta(7)</code> to show that each "step" is one week. But we do not need to that here.</p>
 
 </div>
 </div>
@@ -13243,14 +13244,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Rita-upp-en-linjegraf">Rita upp en linjegraf<a class="anchor-link" href="#Rita-upp-en-linjegraf">&#182;</a></h2><p>Nu kan vi rita upp datan i ett linjediagram, för att se hur den utvecklats över tid. Eftersom vi angett vad tidsvariabeln är kan vi använda kommandot <code>tsline</code>. Vi skriver då bara <code>tsline</code> och vilken variabel det är vi vill rita ut, till exempel stängningskursen för Dow Jones:</p>
+<h2 id="Draw-a-line-graph">Draw a line graph<a class="anchor-link" href="#Draw-a-line-graph">&#182;</a></h2><p>Now we can draw the data in a line chart, to see how the index has developed over time. Since we have set the time variable we can use the special command <code>tsline</code>. We then write <code>tsline</code> and the name of the variable we want the plot, for instance the closing value:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">tsline</span> dowjones_close
@@ -13320,7 +13321,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Coronapandemin i Mars 2020 gör ett tydligt avtryck! Resultatet blir exakt samma som om vi gjort det med det vanliga twowaykommandot, alltså <code>twoway (line dowjones_close date)</code> men det här är lite snabbare.</p>
+<p>The March 2020 Corona pandemix makes a clear impression! The result is exactly the same as if we had used the regular twoway command, tht is <code>twoway (line dowjones_close date)</code> but this is slightly faster.</p>
 
 </div>
 </div>
@@ -13328,23 +13329,16 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Skapa-olika-typer-av-tidsvariabler-(laggade,-ledande,-delta)">Skapa olika typer av tidsvariabler (laggade, ledande, delta)<a class="anchor-link" href="#Skapa-olika-typer-av-tidsvariabler-(laggade,-ledande,-delta)">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Nu kommer vi till fördelarna med att ställa in tidsserien, nämligen inbyggda kommandon för att skapa olika variabler som har att göra med just tiden.</p>
-<h3 id="Laggade-variabler">Laggade variabler<a class="anchor-link" href="#Laggade-variabler">&#182;</a></h3><p>Först har vi de laggade variablerna. De visar vad en variabel hade för värde vid en tidigare tidpunkt. Hur förhåller sig till exempel Dow Jones-indexet till sig själv, en dag eller en vecka tidigare? Vi kan lätt ta reda på det genom att använda prefixet <code>l.</code> framför en variabel. Skriver vi <code>l.dowjones_close</code> avses värdet på Dow Jones en dag tidigare. Skriver vi <code>l7.dowjones_close</code> får vi värdet sju dagar tidigare, och så vidare.</p>
-<p>Vi kan till exempel ta fram en korrelationsmatris som visar hur dagens värde korrelerar med värdet för en vecka sedan, och för två veckor sedan:</p>
+<h2 id="Create-various-time-variables-(lags,-leads,-delta)">Create various time variables (lags, leads, delta)<a class="anchor-link" href="#Create-various-time-variables-(lags,-leads,-delta)">&#182;</a></h2><p>Here is the real advantage of time setting the data, the operators to create different variables that deal explicitly with time.</p>
+<h3 id="Lagged-variables">Lagged variables<a class="anchor-link" href="#Lagged-variables">&#182;</a></h3><p>First we have the lagged variables. They show the value of a variable at previous points in time. They are useful (among other things) to determine what the relationship of the Dow Jones Index is to past values of itself. We can create them by using the prefix <code>l'.</code> in front of variables. If we write <code>l.dowjones_close</code> we get the value of the Dow Jones Index the previous day. If we write <code>l7.dowjones_close</code> we get the value seven days earlier, and so on. Any number can be inserted after the <code>l</code>.</p>
+<p>As an example, we can create a correlation matrix that shows how each day's value correlates with the value the day before, a week prior, and two weeks prior:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">corr</span> dowjones_close<span class="k"> l</span><span class="m">.</span>dowjones_close l7<span class="m">.</span>dowjones_close l14<span class="m">.</span>dowjones_close
@@ -13386,15 +13380,15 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Korrelationen mellan dagens börskurs och gårdagens är alltså väldigt stark: 0.98. Sambandet med kursen en vecka sedan är något svagare, och med två veckor tidigare ännu svagare (vilket inte är konstigt, mer har ju hunnit förändras).</p>
-<p>Vi kan också använda dessa kommandon när vi gör grafer. Vi förskjuter då linjen till höger. I grafen nedan visar den blåa linjen dagens värde, och den röda linjen vad börskursen var två veckor tidigare.</p>
+<p>The correlation between each day's index and the previous day's is very strong: 0.98. The correlation with the value a week earlier is lower (but still strong, 0.88) and even lower two weeks prior (0.74). Which is hardly surprising given that more can change in two weeks than in one.</p>
+<p>We can also use these commands when drawing graphs. We will then shift the line to the right. In the graph below the blue line shows each day's closing value, and the red line what the same variable was, two weeks earlier.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">tsline</span> dowjones_close l14<span class="m">.</span>dowjones_close
@@ -13470,17 +13464,17 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Ledande-variabler">Ledande variabler<a class="anchor-link" href="#Ledande-variabler">&#182;</a></h3><p>Ledande variabler är precis samma som de laggade, fast för framtiden. De visar alltså vad värdet kommer vara längre fram. Prefixet vi använder för dem är <code>f.</code>. <code>f1.dowjones_close</code> visar vilket värde Dow Jones har dagen efter det aktuella datumet, och <code>f14.dowjones_close</code> visar värdet två veckor senare.</p>
+<h3 id="Leading-variables">Leading variables<a class="anchor-link" href="#Leading-variables">&#182;</a></h3><p>Leading variables are just the same as the lagged variables, but for the future. They show what the variable is, further ahead in time. The prefix we use here is <code>f.</code>. <code>f.dowjones_close</code> shows what the closing value of Dow Jones is the day after the current date, and <code>f14.dowjones_close</code> shows the value two weeks later.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">corr</span> dowjones_close f1<span class="m">.</span>dowjones_close f14<span class="m">.</span>dowjones_close
+<div class=" highlight hl-stata"><pre><span></span><span class="k">corr</span> dowjones_close f<span class="m">.</span>dowjones_close f7<span class="m">.</span>dowjones_close f14<span class="m">.</span>dowjones_close
 </pre></div>
 
     </div>
@@ -13497,15 +13491,16 @@ dowjones_c~e |
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>(obs=181)
+<pre>(obs=175)
 
-             |                 F.     F14.
-             | dowjo~se dowjo~se dowjo~se
--------------+---------------------------
+             |                 F.      F7.     F14.
+             | dowjo~se dowjo~se dowjo~se dowjo~se
+-------------+------------------------------------
 dowjones_c~e |
          --. |   1.0000
-         F1. |   0.9741   1.0000
-        F14. |   0.7330   0.7619   1.0000
+         F1. |   0.9735   1.0000
+         F7. |   0.8792   0.8905   1.0000
+        F14. |   0.7306   0.7602   0.8848   1.0000
 
 </pre>
 </div>
@@ -13518,15 +13513,15 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Deltavariabler-(f&#246;r&#228;ndringsvariabler)">Deltavariabler (f&#246;r&#228;ndringsvariabler)<a class="anchor-link" href="#Deltavariabler-(f&#246;r&#228;ndringsvariabler)">&#182;</a></h3><p>Delta står i de här sammanhangen för förändring. Med prefixed <code>d.</code> får vi fram hur variabeln har förändrats sedan föregående tidsenhet - i det här fallet sedan dagen innan. Här får man dock tänka på att det är en dags förändring (eftersom vi ställde in att en dag är ett steg). Så måndagarna jämförs med söndagarna, då börsen är stängd, och inte fredagarna. Eftersom det inte finns något värde på söndag försvinner också måndagarna när vi kollar på förändring på det här sättet.</p>
-<p>Nedan kollar vi på hur Dow Jones Index förändrats från dag till dag, över tid:</p>
+<h3 id="Delta-variables-(change-variables)">Delta variables (change variables)<a class="anchor-link" href="#Delta-variables-(change-variables)">&#182;</a></h3><p>Delta in this context signifies change. With the prefix <code>d.</code> we can see how the value has changed since the previous period - in this case the day before. It is here important to remember that we are talking about a change of one day (since we said earlier that one step is one day). Mondays are therefore compared with Sundays (when the exchange is closed), not Fridays. Since there are no values on Sundays the Mondays are also excluded when looking at change this way.</p>
+<p>Below we can see how the Dow Jones Index has change from day to day, over time:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">tsline d</span><span class="m">.</span>dowjones_close
@@ -13600,15 +13595,15 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Det går upp och ned, med extrema svängningar under Coronapandemin.</p>
-<p>Vi kan också lagga förändringsvariabler. Om vi till exempel skriver <code>l.d.dowjones_close</code> får vi gårdagens förändring, alltså förändring mellan i förrgår och igår. I grafen nedan jämför vi förändringen från igår till idag (alltså i relation till det aktuella datumet) med förändringen från i förrgår till igår. Här har jag gjort en scatterplot med en utritad regressionslinje:</p>
+<p>Up and down, with extreme fluctuations during the Corona pandemic.</p>
+<p>We can also lag change variables. If we for instance write <code>l.d.dowjones_close</code> we get the change from two days ago to one day ago. The graph below compares the change from "yesterday" to "today" (in relation to each observation in the data) with the change from the day before yesterday to yesterday. Below is a scatterplot with a fitted regression line:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter<span class="k"> d</span><span class="m">.</span>dowjones_close<span class="k"> l</span><span class="m">.</span>d<span class="m">.</span>dowjones_close) (lfit<span class="k"> d</span><span class="m">.</span>dowjones_close<span class="k"> l</span><span class="m">.</span>d<span class="m">.</span>dowjones_close)
@@ -13970,8 +13965,8 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Sambandet är inte jättestarkt, men regressionslinjen lutar nedåt. Det betyder att dagar med stora ökningar (dvs långt till höger i grafen) tenderar att följas av dagar med minskningar. Alltså en återgång till medelvärdet. På samma sätt brukar stora minskningar i genomsnitt följas av ökningar.</p>
-<p>Punkten längst upp till vänster är till exempel 13 mars 2020. Mellan 11 och 12 mars sjönk Dow Jones med över 2000 punkter. Men mellan 12 och 13 mars ökade det istället med 2000 punkter, och hämtade igen nedgången!</p>
+<p>The relationship is not very strong, but the regression line slopes downwards. It means that days with big increases (those that are far to the right) tend to be followed by days of decreases. A regression to the mean. In the same way, big decreases are generally followed by increases.</p>
+<p>The dot in the upper left corner is for instance March 13 2020. Between March 11 and 12 the Dow Jones Index dropped more than 2000 points. But between March 12 and 13 the index instead went up with 2000 points, and recouped the losses!</p>
 
 </div>
 </div>
@@ -13979,14 +13974,14 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Spara-variablerna">Spara variablerna<a class="anchor-link" href="#Spara-variablerna">&#182;</a></h2><p>När man använder de här olika prefixen skapas tillfälliga variabler. De går att använda i analyserna, men syns inte i datamängden. Om man vill spara variablerna går det också bra. Då använder vi <code>generate</code>-kommandot, och gör på samma sätt. Till exempel skapar vi i koden nedan variabler som visar värdet på Dow Jones dagen innan det aktuella datumet, samt förändringen från dagen innan.</p>
+<h2 id="Save-the-variables">Save the variables<a class="anchor-link" href="#Save-the-variables">&#182;</a></h2><p>Stata creates temporary variables when we use these operators. They can be used in the analyses, but are not visible in the dataset. If we want to save the variables we can do so. We then use the <code>generate</code>-command. For instance, in the code below we create two variables, that show the value of the Dow Jones Index the day before the current date, as well as the change from the day before.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">gen</span> l_dowjones_close =<span class="k"> l</span><span class="m">.</span>dowjones_close<span class="k"></span>
@@ -14022,14 +14017,14 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>De nya variablerna kan man kalla vad man vill. Personligen gillar jag att använda samma bokstäver som i Statas egna kommandon, fast med understreck istället för punkter. Om vi nu tittar på datan igen ser vi att de nya variablerna dykt upp:</p>
+<p>The new variables can of course be named anything you like. Personally I like to use the same notation as in the time series operators, but with underscores instead of period marks. If we now look at the data again we can see that we have two new variables:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">10</span>
@@ -14076,7 +14071,7 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Vi ser också att det matchar: Den 30:e april är värdet på l_dowjones_close 26554.39, samma som värdet på dowjones_close dagen innan.</p>
+<p>The data match: April 30 th value of l_dowjones_close is 26554.39, the same as the value of dowjones_close the day before.</p>
 
 </div>
 </div>
@@ -14084,8 +14079,8 @@ dowjones_c~e |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Det här var en mycket grundläggande introduktion till hur man ställer in datan för tidsserieanalys. Att analysera datan med regressionsanalyser och liknande kräver lite speciella hänsyn, som vi får gå igenom i ett annat inlägg.</p>
-<p>Vi hade här också bara en tidsserie. Ofta har man data över tid, på flera enheter. Det kallas då paneldata. Det kräver i sin tur lite andra inställningar (men prefixen <code>l.</code>, <code>f.</code> och <code>d.</code> funkar även där.</p>
+<h2 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">&#182;</a></h2><p>This was a very basic introduction to time setting data, and the basic operators. Type <code>help tsvarlist</code> for an exhaustive list of the operators you can use. To analyze the data with regression analysis and similar techniques requires some special considerations, which we will have to cover in another post.</p>
+<p>Here, we only had one time series. Often we have data over time, but on several units. We then call that data panel data, and requires a slightly different setup. The time series operators <code>l.</code>, <code>f.</code> och <code>d.</code> however still work even with panel data.</p>
 
 </div>
 </div>
