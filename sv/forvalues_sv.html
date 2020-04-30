@@ -13081,7 +13081,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13129,8 +13129,14 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                           <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/forvalues_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13142,7 +13148,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>Loopar är ett kraftfullt sätt att effektivisera vår kod, och automatisera uppgifter som kräver en massa upprepning. Till exempel koda om en mängd variabler på samma sätt, göra om en och samma analys på en massa undergrupper, göra om en och samma analys för en mängd variabler, och så vidare.</p>
 <p>Det finns två huvudkommandon för loopar i Stata: <code>forvalues</code> och <code>foreach</code>. Här går vi igenom <code>forvalues</code>, som används när man loopar över tal i en sekvens. Med <code>foreach</code> kan vi istället loopa över både tal och textsträngar.</p>
 <h2 id="En-enkel-loop">En enkel loop<a class="anchor-link" href="#En-enkel-loop">&#182;</a></h2><p>Principen med loopar är att vi berättar för Stata hur många gånger vi vill köra vår loop, och vad som ska ändras varje gång (det vore ju meningslöst att göra exakt samma sak gång på gång). Sen berättar vi vad som ska hända varje "runda", och så körs loopen så många gånger som vi specifierat.</p>

@@ -13077,7 +13077,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13125,8 +13125,14 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                           <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/foreach_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13138,7 +13144,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>I en annan guide gick vi igenom hur man gör loopar med kommandot <code>forvalues</code>. Med det kan vi köra en serie kommandon och byta ut ett värde som räknas upp eller ner kontinuerligt.</p>
 <p>I den här guiden ska vi prata om ett besläktat kommando: <code>foreach</code>. Det är nästan exakt samma sak, men med det kan vi loopa över en lista godtyckliga värden, inklusive textsträngar.</p>
 <p>Det är bland annat användbart för att loopa över olika variabler, eller för att till exempel göra en serie analyser eller grafer för ett flertal länder, eller vad det nu kan vara.</p>

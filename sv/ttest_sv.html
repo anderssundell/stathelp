@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,13 +13124,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/ttest_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="t-test">t-test<a class="anchor-link" href="#t-test">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<h1 id="t-test">t-test<a class="anchor-link" href="#t-test">&#182;</a></h1>
 <p>Ett väldigt vanligt test för att undersöka hur en grupp skiljer sig mot en annan grupp, eller ett referensvärde, är <em>t-testet</em>. Vi kan med testet undersöka om skillnaden är statistiskt signifikant, det vill säga, väldigt osannolik om nollhypotesen skulle vara korrekt.</p>
 <p>Ett typiskt exempel är när man undersöker om två olika urval har olika värden på någon variabel som man är intresserad av. Till exempel när vi jämför olika grupper i en urvalsundersökning. Är det troligt att skillnaderna vi kan se i vårt urval också återfinns i den population som vi dragit urvalet ur?</p>
 <p>Vi kan också använda testet för att jämföra behandlings- och kontrollgrupp i ett experiment. För att svara på om behandlingen gett effekt ser vi om skillnaden är tillräckligt stor för att det ska vara osannolikt att det är slumpen som orsakar den skillnad vi ser i grupperna.</p>

@@ -13074,7 +13074,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13122,8 +13122,14 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                           <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/dummy_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13135,7 +13141,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>Regressionsanalys kräver att de oberoende variablerna är på intervallskalenivå, dvs att alla skalsteg är lika långa. Eftersom analysen går ut på att dra en rak linje över de olika värdena på den oberoende variabeln blir det konstigt om det inte finns någon konsekvens i de olika skalstegen, eller om de inte är rangordnade.</p>
 <p>Variabler som till exempel inte lämpar sig för att lägga in som oberoende variabler i en regressionsanalys är partitillhörighet, födelseort eller personlighetstyp.</p>
 <p>Men det finns en lösning: "dummyvariabler". En variabel som bara har två värden har lika långt mellan alla skalsteg (det enda) och kan därför användas i en regressionsanalys. Genom att dela upp kategoriska variabler i flera sådana dummyvariabler, där varje variabel motsvarar ett värde på den ursprungliga variabeln, kan de olika kategorierna analyseras med regressionsanalys.</p>

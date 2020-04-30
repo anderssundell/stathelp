@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,13 +13124,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/regression_interaction_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Regressionsanalys-med-interaktionseffekter">Regressionsanalys med interaktionseffekter<a class="anchor-link" href="#Regressionsanalys-med-interaktionseffekter">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<h1 id="Regressionsanalys-med-interaktionseffekter">Regressionsanalys med interaktionseffekter<a class="anchor-link" href="#Regressionsanalys-med-interaktionseffekter">&#182;</a></h1>
 <p>Med regressionsanalys kan man undersöka samband mellan variabler, med eller utan kontroll för andra variabler. I verkligheten är det dock ofta så att samband ser olika ut i olika grupper, eller under olika omständigheter. Effekten av att bli förälder på arbetsinkomst är till exempel mycket olika för kvinnor och män; kvinnor ser en mycket större nedgång i inkomster.</p>
 <p>Hur ska man ta hänsyn till detta i sina analyser? Ett sätt kan vara att göra två separata analyser, där man jämför kvinnor som fått barn med kvinnor som inte fått barn, och motsvarande för män. Men det går faktiskt att baka ihop det i en regressionsanalys. Vi kan då se hur effekten skiljer sig åt, och också om skillnaden i effekt är statistiskt signifikant. På så sätt kan vi se om det är värt att komplicera modellen ytterligare genom att införa dessa separata effekter. Vi håller också effekten av alla kontrollvariabler konstant. Gör man separata analyser kommer de också kunna få olika effekter i varje analys, och det är vi kanske inte intresserade av.</p>
 <p><strong>Detta kallas för en interaktionsanalys. Det kan också kallas för en moderationsanalys, moderering, eller på engelska att man undersöker conditional effects. Poängen är oavsett att man låter effekten av en variabel variera över värdena på en annan variabel.</strong> Schematiskt brukar det representeras av ett diagram med en "pil på pilen" - dvs den tredje variabeln påverkar <em>effekten</em> av den oberoende variabeln, snarare än värdet på någon av de andra variablerna.</p>

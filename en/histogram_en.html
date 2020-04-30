@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,13 +13124,20 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+           <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/histogram_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Histogram">Histogram<a class="anchor-link" href="#Histogram">&#182;</a></h1><p><a href="../sv/histogram_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
+<h1 id="Histogram">Histogram<a class="anchor-link" href="#Histogram">&#182;</a></h1>
 <p>Before we start doing serious analysis on our data it is important to get to know it better. One effective yet simple way to do so, at least for scale variables with a lot of values, are <em>histograms</em>. In this guide we will discuss what they are, how to use them, and some good settings to make them more pedagogical.</p>
 <p>In this example we will use the <a href="https://qog.pol.gu.se/data/datadownloads/qogbasicdata" target=_blank>QoG basic dataset</a>. Load it into Stata directly from the web, or save it on your computer and open it from there.</p>
 

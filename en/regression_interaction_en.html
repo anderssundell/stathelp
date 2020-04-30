@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,14 +13124,21 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+               <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/regression_interaction_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Regression-analysis-with-interaction-effects">Regression analysis with interaction effects<a class="anchor-link" href="#Regression-analysis-with-interaction-effects">&#182;</a></h1>
-    <p><a href="../sv/regression_interaction_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
 <p>Regression analysis is used to investigate relationships between variables, with or without control for other vairables. However, in the real world, we often find that relationships are different in different sub-groups of the population, or during different circumstances. The effect of becoming a parent is for instance different among women and men; women see a much larger drop in incomes.</p>
 <p>How to account for this in our analyses? One way is to run two separate analyses, one for each group we are interested in (in this case women and men). We then get the effect of becoming a parent among men, and among women.</p>
 <p>But we can also do this in one single regression analysis. We then get a sense of how much the effect differs between groups, and also whether the <em>difference</em> in effect is statistically significant. We can then decide whether it is worth the effort to complicate our theoretical model by introducing these separate effects. We can then also hold the effects of all control variables constant. If we run two separate analyses, the control variables would also get different effects in the two models, and that might not be part of our theory.</p>

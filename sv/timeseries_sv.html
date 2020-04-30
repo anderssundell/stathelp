@@ -13077,7 +13077,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13125,13 +13125,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/timeseries_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Tidsserier">Tidsserier<a class="anchor-link" href="#Tidsserier">&#182;</a></h1><p><a href="../en/timeseries_en.html">English version</a> | <a href="../index.html" target="_PARENT">Startsida</a></p>
+<h1 id="Tidsserier">Tidsserier<a class="anchor-link" href="#Tidsserier">&#182;</a></h1>
 <p>I det här inlägget ska jag gå igenom grundläggande kommandon för att jobba med tidsseriedata. Med det avses data där en och samma sak mäts om och om igen, över tid.</p>
 <p>Man kan analysera sådan data genom att bara lägga in den som vanligt och använda helt vanliga kommandon. Men det går att göra mer. Med speciella tidsseriekommandon kan vi undersöka förändring, och hur olika tidpunkter förhåller sig till varandra.</p>
 <p>Datan vi ska analysera är börskurser, närmare bestämt dagliga slutkurser för Dow Jones Index i USA, från april 2019 till april 2020. <a href="../data/stocks.dta">Datan kan laddas ned här.</a> I koden nedan laddar vi in datan och tittar på de 10 första raderna:</p>

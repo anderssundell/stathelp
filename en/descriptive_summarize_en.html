@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,13 +13124,20 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+             <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/descriptive_summarize_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div> 
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Simple-descriptive-statistics">Simple descriptive statistics<a class="anchor-link" href="#Simple-descriptive-statistics">&#182;</a></h1><p><a href="../sv/descriptive_summarize_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
+<h1 id="Simple-descriptive-statistics">Simple descriptive statistics<a class="anchor-link" href="#Simple-descriptive-statistics">&#182;</a></h1>
 <p>The first thing one should do when working with a dataset is to get acquainted with the relevant variables. How many observations do we have information about? What is the distribution of the values? What are the measures of central tendency, such as the mean or the median? What are the minimum and maximums?</p>
 <p>We need this information both to improve and to interepret our analyses, and they also make it easier to put the results in context when writing about them. The empirical sections of theses or scientific papers often (at least in the social sciences) begin with some simpler descriptive statistics.</p>
 <p>There are many commands in Stata for producing such statistics. We will here discuss some of the simplest and most useful.</p>

@@ -13071,7 +13071,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13119,13 +13119,20 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+               <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/ttest_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="t-test">t-test<a class="anchor-link" href="#t-test">&#182;</a></h1><p><a href="../sv/ttest_sv.html">Svensk version</a> | <a href="../index_en.html", target="_PARENT">Front page</a></p>
+<h1 id="t-test">t-test<a class="anchor-link" href="#t-test">&#182;</a></h1>
 <p>A common test for investigation how one group differs from another, or from a reference value, is the <em>t-test</em>. We can use the to find out if the difference is statistically significant, that is, if such a difference is very unlikely to obtain, had the null hypothesis been true.</p>
 <p>A typical case is when we want to determine whether two samples have different values on some variable of interest. For instance two groups in a survey sample. Is it likely that the differences we observe in our sample also are present in the population from which we drew the sample?</p>
 <p>We can also use the test to compare treatment and control groups in an experiment. To determine whether the treatment had an effect, we check whether the difference is so large that it is improbable that it was chance that gave rise to the difference, using the t-test.</p>

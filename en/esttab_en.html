@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,21 +13123,26 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+             <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/esttab_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div> 
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Tables-for-presenting-results-from-regression-analyses">Tables for presenting results from regression analyses<a class="anchor-link" href="#Tables-for-presenting-results-from-regression-analyses">&#182;</a></h1>
-<p><a href="../sv/esttab_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
     </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>By Anders Sundell</em></p>
 <p>When you have conducted a statistical analysis it is important to present the results in a clear and pedagogical way. Most of the time, this means a combination of text, tables and graphics. The aim is to present enough information that the reader can grasp the most important conclusions, and see how they were reached, without burdening the reader with too much information. This is especially relevant for numbers that are not interpreted or commented upon in the text.</p>
 <p>The normal output Stata produces after a regression analysis is not suitable for publication. You can pick out the most important numbers and do your own table in Word, for instance, but there are easier ways, with special commands in Stata.</p>
 <p>One such command is <code>esttab</code>. In this guide we will discuss how to use it to produce a simple but nice regression table. But first we need to install <code>esttab</code>, since it is not preinstalled with Stata. We do this by writing the following (and we only need to do this once):</p>

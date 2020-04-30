@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
 
-<head><meta charset="utf-8" />
-<meta name="description" content="Guider till statistisk analys på svenska och engelska. Regressionsanalys, beskrivande analys, grafer, diagram, datahantering, variabler med mera. Framförallt i programmet Stata.">
-<meta name="keywords" content="statistik, stata, statistisk analys, regressionsanalys, regression, korrelation, hjälp, statistikhjälpen, stathelp, hjälp med statistik, statistics help">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">    
-    
-    <title>Statistikhjälpen | Statistics help</title>
-    
-    
-    <link rel="stylesheet" type="text/css" href="ownstyle.css">
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -20,25 +10,298 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-132683642-1');
-</script>    
+</script>
+
     
+    
+    <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <meta name="description" content="Guider till statistisk analys på svenska och engelska. Regressionsanalys, beskrivande analys, grafer, diagram, datahantering, variabler med mera. Framförallt i programmet Stata.">
+<meta name="keywords" content="statistik, stata, statistisk analys, regressionsanalys, regression, korrelation, hjälp, statistikhjälpen, stathelp, hjälp med statistik, statistics help, datahantering">   
+    
+    
+    
+<link rel="stylesheet" type="text/css" href="ownstyle.css">
 </head>
 <body>
 
-<div class="headerrow">
-<div class="headercolumnleft">
-    <a class="navlink" href="index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="index.html">SV</a>/<a class="navlink" href="index_en.html">EN</a>
-    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
-    </div>
-    </div>    
-    
-    
-<div class="body-container">
+<br>
+    <div class="menu-header">
+        Välkommen till Statistikhjälpen!
+        <br>
+        <div class = "lcircley"></div> <div class = "lcircleb"></div> <div class = "lcirclep"></div>
+    </div><br>
+    <div class="menu-subheader">
+        Här hittar du enkla guider till olika tekniker för statistisk analys med statistikprogrammet Stata. Fokus är på själva genomförandet och tolkningen, inte på teorin och antagandena bakom. I guiderna visas koden till statistikprogrammet, output från programmet, tillsammans med förklaringar i text. All kod ska vara reproducerbar, så om du vill kan du ladda ned datan som länkas i inläggen och följa med i instruktionerna. Sidan drivs av <a href="https://www.gu.se/omuniversitetet/personal/?userId=xsunde" target="outlink">Anders Sundell</a>.
+        <br>
+        <br>
+        <b><font color="red">Hjälp mig hjälpa dig!</font></b><br>
+        <a href="https://forms.gle/AwfUpZ8ABgiMthdm8" target="surveylink">Svara gärna på denna mycket korta (7 frågor) enkät om hur sajten kan bli bättre.</a><br>
+        Det är till stor hjälp! Undersökningen är givetvis anonym.
+        <br>
+        <br>
+        
+        
+        <div class = updatestext>
+            <b>Uppdateringar</b><br>
+        2020-04-28: <a href="timeseries_sv.html">Ställa in data för att jobba med tidsserier.</a><br>
+            2020-02-24: <a href="randomization_sv.html">Verktyg för att randomisera deltagare i ett experiment (både för Stata och Excel).</a><br>            
+        2020-02-20: Guide till <a href="predictvalues_sv.html">hur man använder regressionsekvationen för att göra gissningar eller förutsägelser.</a><br>
 
-<div class="iframe-container">
-<iframe src="sv/startmenu_sv.html" style="border:none;" name="mainframe" title="Statistikhjälp - regressionsanalys, Stata, koda om variabler, diagram, grafer"></iframe>
+        </div>
+        <br>
+    </div>    
+
+     
+<div class="menu-container">
+
+
+    <div class="designrow">ALLMÄNT</div>    
+    
+<!-- Första kolumnen med menyboxar -->
+  <div class="column">
+    <div class="row">
+    <div class="menu-overall">
+      
+        <h6>Övergripande</h6>
+        <div class="menu-explainer">
+Inlägg som inte nödvändigtvis är knutna till ett specifikt statistikprogram.<hr>
+            
+<div class = "scircleb"></div> <a class="menulink" href="sv/wordlist_sv.html">Ordlista med förklaringar av vanliga begrepp</a><br>
+Ordlista med enkla förklaringar av begrepp som kan vara bra att känna till när man jobbar med statistisk analys.<hr>
+            
+<div class = "scircleb"></div> <a class="menulink" href="sv/randomization_sv.html">Randomisera deltagare till experimentgrupp och kontrollgrupp</a><br>
+Nedladdningsbara verktyg både för Stata och Excel som hjälper dig slumpa in deltagare till en experimentgrupp och kontrollgrupp. Också en förklaring av hur Stata-filen fungerar.<hr>           
+
     </div>
+    </div>
+    </div>
+    </div>
+
+<!-- Andra kolumnen med menyboxar -->
+  <div class="column">
+    <div class="row">
+    <div class="menu-overall">
+      
+        <h6>Övningsuppgifter</h6>
+        <div class="menu-explainer">
+        Uppgifter för att öva på analyser eller andra kommandon.<hr>
+            
+<div class = "scircleb"></div> <a class="menulink" href="sv/excercise1_sv.html">Övningsuppgifter för Stata 1</a> <a class="menulink" href="sv/excercise1_sv_facit.html">| Facit</a><br>
+Enkla frågor om datahantering, beskrivande statistik och kort om regressionsanalys.
+
     
     </div>
+    </div>
+    </div>
+    </div>
+    
+</div>
+    
+    <br>
+    <br>
+    
+<div class="menu-container">
+
+    <div class="statarow"> STATA </div>
+    
+<!-- Första kolumnen med menyboxar -->
+  <div class="column">
+      <div class="row">
+      <div class="menu-overall">
+      
+      <h4>Regressionsanalys</h4>
+<div class="menu-explainer">
+Ett av de vanligaste verktygen för statistisk analys. Används för att undersöka samband mellan minst två variabler.<br>
+<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/regression1_sv.html">Introduktion</a><br>
+Börja här. Grundprinciperna, med två variabler.<hr>
+  
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_controls_sv.html">Kontrollvariabler</a><br>
+Lägg till kontrollvariabler för att utesluta alternativa förklaringar.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/predictvalues_sv.html">Predicera värden med hjälp av regressionsekvationen</a><br>
+Använd den så kallade regressionsekvationen för att predicera värden, alltså göra gissningar eller förutsägelser, utifrån en regressionsanalys.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/dummy_sv.html">Dummyvariabler</a><br>
+Använd dummyvariabler för att kunna få med kategoriska variabler i analysen.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_quadratic_sv.html">Kurvlinjära (kvadratiska) effekter</a><br>
+För att undersöka ickelinjära samband, till exempel när det finns en avtagande eller tilltagande effekt, eller när något först är positivt och sedan negativt, eller vice versa.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_interaction_sv.html">Interaktioner - två värden</a><br>
+Effekter som varierar mellan två olika grupper.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_interaction2_sv.html">Interaktioner - kontinuerliga variabler</a><br>
+Effekter som varierar i enlighet med en tredje variabels värde.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_logarithm_sv.html">Logaritmiska variabler</a><br>
+Analyser med logaritmiska variabler, till exempel för att modellera avtagande effekter.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/regression_logistic_sv.html">Logistisk regressionsanalys</a><br>
+För beroende variabler som bara har två värden, noll eller ett.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/esttab_sv.html">Tabeller för resultat av regressionsanalys</a><br>
+Gör enkelt snygga och pedagogiska tabeller med kommandot esttab.
+</div>
+      </div>
+    </div>
+<br>
+    
+  <div class="row">
+    <div class="menu-overall">
+      
+        <h4>Datahantering</h4>
+<div class="menu-explainer">
+Allt man behöver göra för att förbereda sina analyser.
+    <hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/intro_sv.html">Komma igång med Stata</a><br>
+Programmets olika delar, ange projektmapp, spara do-filer, m.m.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/createdata_sv.html">Skapa en datamängd</a><br>
+Importera data eller skapa en datamängd från scratch.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/recodings_sv.html">Koda om variabler</a><br>
+Byt ut eller ta bort enskilda värden med kommandona generate, replace och recode.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/surveydata_sv.html">Jobba med enkätdata</a><br>
+Vi går igenom fem vanliga problem när man jobbar med enkätdata, till exempel felvända skalor och missing-koder.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/ifstatements_sv.html">If-satser och villkor</a><br>
+Använd villkor för att köra analyser eller andra kommandon på specifika undergrupper.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/logarithm_sv.html">Logaritmera variabler</a><br>
+Logaritmisk transformering för att hantera variabler med skeva fördelningar.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/merge_sv.html">Slå ihop datamängder</a><br>
+Kombinera data från olika källor med kommandot merge.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/collapse_sv.html">Aggregera datamängder</a><br>
+Aggregera datamängder så att de visar sammanfattande värden med kommandot collapse.
+    
+</div>
+      </div>
+      </div>
+      
+      <br>
+      
+  <div class="row">
+    <div class="menu-overall">
+      
+        <h4>Tidsserier och paneldata</h4>
+<div class="menu-explainer">
+Jobba med tid i Stata, antingen för en enhet (tidsserier) eller många (paneldata).
+    <hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/timeseries_sv.html">Ställa in data för tidsserier</a><br>
+Ange tidsvariabler, laggade, ledande och delta-variabler, plotta data över tid.
+
+    
+</div>
+      </div>
+      </div>      
+      
+</div>
+    
+
+
+    <div class="column">
+  <div class="row">
+      <div class="menu-overall">
+      
+      <h4>Grafer med mera</h4>
+<div class="menu-explainer">
+Olika tekniker för att visa datan och samband grafiskt.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/graphs_scatterplot_sv.html">Scatterplots</a><br>
+Spridningsdiagram som visar sambandet mellan två variabler som en punktsvärm.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/histogram_sv.html">Histogram</a><br>
+Visar en variabels fördelning med staplar.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/barcharts_sv.html">Stapeldiagram</a><br>
+Visar värden i olika grupper med staplar.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/linecharts_sv.html">Linjediagram</a><br>
+Bra för att exempelvis visa hur variabler utvecklats över tid.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/spmap_sweden_sv.html">Karta över Sveriges kommuner</a><br>
+Visa en variabels värde i olika kommuner som färger på en karta med kommandot spmap.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/spmap_world_sv.html">Karta över världens länder</a><br>
+Visa en variabels värde i världens länder eller i olika världsdelar som färger på en karta med kommandot spmap.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/coefplot_sv.html">Visualisera regressionskoefficienter</a><br>
+Använd kommandot coefplot för att visa resultat från regressionsanalyser grafiskt. Vi går också igenom hur man standardiserar sina variabler för att göra koefficienterna mer jämförbara.
+    
+    
+      </div>
+    </div>
+      <br>
+
+    
+  <div class="row">
+    <div class="menu-overall">
+      
+        <h4>Beskrivande statistik och enklare analyser</h4>
+<div class="menu-explainer">
+Ofta bra för att få en överblick över datan innan man går vidare till mer avancerade analyser.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/descriptive_summarize_sv.html">Enkel beskrivande statistik</a><br>
+Enkla kommandon för att visa bland annat medelvärden och göra frekvenstabeller.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/descriptive_crosstab_sv.html">Korstabeller</a><br>
+Enkla tabeller som visar sambandet mellan variabler genom att räkna procent.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="sv/descriptive_averages_sv.html">Medelvärden i grupper</a><br>
+Räkna ut medelvärden i olika grupper.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/ttest_sv.html">t-test</a><br>
+Signifikanstesta medelvärdesskillnader mellan olika grupper, eller mot ett referensvärde.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/correlation_sv.html">Korrelation</a><br>
+En av de enklaste sambandsanalyserna.
+        </div>
+    </div>
+    </div>
+                <br>
+        
+        <div class="row">
+    <div class="menu-overall">
+      
+        <h4>Avancerat</h4>
+        <div class="menu-explainer">
+Mer avancerade funktioner för att underlätta och effektivisera arbetet med data och analyser.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="sv/macros_sv.html">Macron</a><br>
+Jobba med Statas system för tillfälliga variabler och object, macron.<hr>
+            
+<div class = "scircley"></div> <a class="menulink" href="sv/forvalues_sv.html">Loopar med forvalues</a><br>
+Kör en serie kommandon gång på gång, automatiskt, över en serie värden.<hr>
+            
+<div class = "scircley"></div> <a class="menulink" href="sv/foreach_sv.html">Loopar med foreach</a><br>    
+Kör en serie kommandon gång på gång, automatiskt, över en lista med olika värden.
+        </div>
+    </div>
+    </div>
+      <br>
+        
+        
+      </div>
+    </div>
+        
+<br>
+<br>
+<br>
+      
+
+
+    
+
+
+
+    
 </body>
 </html>

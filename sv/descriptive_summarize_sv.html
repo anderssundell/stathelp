@@ -13079,7 +13079,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13127,13 +13127,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                           <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/descriptive_summarize_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Enkel-beskrivande-statistik">Enkel beskrivande statistik<a class="anchor-link" href="#Enkel-beskrivande-statistik">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<h1 id="Enkel-beskrivande-statistik">Enkel beskrivande statistik<a class="anchor-link" href="#Enkel-beskrivande-statistik">&#182;</a></h1>
 <p>Det första man bör göra när man börjar jobba med en datamängd är att bekanta sig med de relevanta variablerna. Hur många analysenheter har vi information om? Vad är spridningen i värden? Vad är centralmåtten, som medelvärde och median? Vad är min och max?</p>
 <p>Dels behöver man informationen för att göra bättre analyser, men eftersom informationen också behövs för att tolka resultaten på rätt sätt är det också bra att presentera dem när man skriver om resultaten. Ofta inleds de empiriska delarna i uppsatser med någon enklare beskrivande statistik. För detta finns det många olika kommandon att använda. Jag kommer här gå igenom några av de enklaste och mest användbara.</p>
 <p>För att ha något att jobba med kommer vi i det här exemplet att använda oss av <a href="https://qog.pol.gu.se/data/datadownloads/qogbasicdata" target=_blank>QoG basic-datamängden</a>. Här har jag skrivit in sökvägen till datamängden direkt på internet, men man kan givetvis ladda ned den till sin dator och öppna den därifrån istället - det är vanligtvis att rekommendera.</p>

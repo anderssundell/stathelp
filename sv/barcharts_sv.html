@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,8 +13123,15 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                   <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/barcharts_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13136,7 +13143,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>Scatterplots är bra för att visa samband mellan två kontinuerlinga variabler, med värden jämt utspridda på en skala. Men om man till exempel jobbar med enkätdata finns det ofta ett begränsat antal svarsalternativ, vilket gör att respondenterna återfinns inom några få kombinationer. Det gör scatterplots olämpliga.</p>
 <p>Ett alternativ för att visualisera datan är då att använda sig av stapeldiagram. Ett av Statas kommandon för dem låter oss snabbt summera variabler och visa dem på ett överskådligt sett. I det här exemplet ska vi titta närmare på sambandet mellan utbildning och inkomst i USA, med hjälp av den amerikanska General Social Survey. Den går att ladda ned här <a href="https://gss.norc.org/get-the-data/stata">https://gss.norc.org/get-the-data/stata</a> och vi kommer använda 2018-upplagan.</p>
 

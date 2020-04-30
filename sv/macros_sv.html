@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,8 +13123,14 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/macros_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13136,7 +13142,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell.</em></p>
 <p>De viktigaste byggstenarna när vi gör analyser i Stata är variabler. De är delar av datamatrisen, där varje analysenhet har ett eget värde.</p>
 <p>Men i vissa fall kan det vara intressant att använda sig av något som i Stata kallas "macron". Det är tillfälliga objekt, antingen tal eller textsträngar, som kan användas för att effektivisera vår kod.</p>
 <p>Macron är som en sorts "stand-ins" för något annat, ett namn som representerar något annat, så att vi kan referera till namnet istället för själva grejen. Beskrivet så kanske det verkar onödigt, men i större skala är det ibland effektivt. När vi använder oss av loopar är de essentiella.</p>

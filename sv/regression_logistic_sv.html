@@ -13074,7 +13074,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13122,13 +13122,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/regression_logistic_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Logistisk-regressionsanalys">Logistisk regressionsanalys<a class="anchor-link" href="#Logistisk-regressionsanalys">&#182;</a></h1><p><em>av Anders Sundell</em></p>
+<h1 id="Logistisk-regressionsanalys">Logistisk regressionsanalys<a class="anchor-link" href="#Logistisk-regressionsanalys">&#182;</a></h1>
 <p>Regressionsanalys handlar enkelt uttryckt om att passa en linje till en mängd punkter. Ett antagande är då att den beroende variabeln är en skala, med många olika värden, med jämnt avstånd dem emellan.</p>
 <p>Men hur fungerar det om den beroende variabeln bara kan ha värdet 0 eller 1? Till exempel om en person röstat på ett visst parti (1) eller inte (0). Vi kan då få en del konstiga resultat, som att vi gissar att en person ska ha röstat 1,2 på partiet, eller -0,3.</p>
 <p>En speciell form av regressionsanalys kan då vara behjälplig: <strong>logistisk regressionsanalys.</strong> Den är anpassad för beroende variabler som bara har värdet 0 och 1. Funktionen som används beräknar då för varje observation en sannolikhet att ha värdet 1, och den sannolikheten är aldrig mindre än 0 eller mer än 1. Metoden används ofta för att klassificera observationer som antingen nollor eller ettor.</p>

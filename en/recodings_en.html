@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,14 +13124,21 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+               <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/recodings_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Recode-variables">Recode variables<a class="anchor-link" href="#Recode-variables">&#182;</a></h1>
-    <p><a href="../sv/recodings_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
 <p>Often when we do data analysis the dataset was created by someone else. It is then likely that the variables are not perfectly suited to our aims. We might be interested in a certain number of categories, want to make certain comparisons, or use other categorizations than those in the already existing variables. We then need to <em>recode</em> the variables. It generally means that we create new variables, that build on the old ones.</p>
 <p>There are several commands in Stata that help us accomplish this. In this guide we will look at three of the most useful: <code>recode</code>, <code>generate</code> and <code>replace</code>.</p>
 <p>We will use the <a href="https://qog.pol.gu.se/data/datadownloads/qogbasicdata" target=_blank>QoG basic dataset</a>. Here I have entered the web adress to the data directly in the browser, but you can of course download it to your computer and open it from there instead - it is generally better.</p>

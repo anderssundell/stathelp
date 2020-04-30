@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,8 +13123,15 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                           <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/collapse_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13136,7 +13143,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>När vi har datamängder med många obserationer från samma enhet kan vi ibland vara intresserade av att uttala oss om mängden som helhet. Vi kanske har individer i kommuner, och vill säga något om snitten i kommunerna. Eller så har vi många observationer av ett land över tid, och vill jämföra länderna som helhet, eller åren. Eller så har vi elever i klasser och vill säga något om klasserna.</p>
 <p>I de fallen kan det vara lämpligt att använda sig av kommandot <code>collapse</code>. Det låter oss "koka ner" en datamängd, och få ut sammanfattande statistik för enheter som vi väljer.</p>
 <p>Vi kan få ut en mängd olika uppgifter. Här är ett urval:</p>

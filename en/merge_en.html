@@ -13078,7 +13078,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13126,8 +13126,15 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+               <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/merge_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13139,7 +13146,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><a href="../sv/merge_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
 <p>Many statistical analyses requires the that we comvbine several datasets. We might get information about the independent variable from one source, and want to analyze the effects of it on a dependent variable from another source. We thus have the same observations in both datasets, but want to combine the variables. We do this with the command <code>merge</code>.</p>
 <p>Another scenario is when we have different datasets with the same variables, but with different units of analysis. In those cases, we use the command <code>append</code>, which really is the same as pasting more observations to the dataset. But since <code>merge</code> is a bit trickier we will focus on that command in this guide.</p>
 <h2 id="Different-ways-of-merging-datasets">Different ways of merging datasets<a class="anchor-link" href="#Different-ways-of-merging-datasets">&#182;</a></h2><p>With the <code>merge</code> command we can do three (or really, two) different types of merges. Easiest is the <code>1:1</code> merge. It means that we have the same observations in both datasets. For instance the same individuals, or the same countries; we just want to add more information about them. We then need a matching variable, a key, that shows the country's or the person's identity, so we can match the information in the two datasets.</p>

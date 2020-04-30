@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,21 +13124,26 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+             <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/dummy_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div> 
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Regression-analysis-with-dummy-variables">Regression analysis with dummy variables<a class="anchor-link" href="#Regression-analysis-with-dummy-variables">&#182;</a></h1>
-<p><a href="../sv/dummy_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
     </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>By Anders Sundell</em></p>
 <p>Regression analysis requires that the independent variables are interval scales, that is, that the distances between the steps of the scale are equally long. Since the analysis basically consists of drawing a straight line over the different values of the independent variable, the interpretation will be very strange if there is no consistency over the steps. Even more so if there is no ordering of the values.</p>
 <p>Variables that (untransformed) are not suitable as independent variables are for instance party affiliation, place of birth or personality type. These are categories, with no clear ordering.</p>
 <p>But there is a solution: <em>dummy variables</em>. A variable that only has two values has equal distance between all the steps of the scale (since there is only one distance), and it can therefore be used in regression analysis. By dividing up categorical variables in multiple such dummy variables, where each variable represents one variable on the original variable, we can analyze the categorical variable in a regression analysis.</p>

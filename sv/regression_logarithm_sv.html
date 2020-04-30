@@ -13074,7 +13074,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13122,13 +13122,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/regression_logarithm_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Regressionsanalys-med-logaritmerade-variabler">Regressionsanalys med logaritmerade variabler<a class="anchor-link" href="#Regressionsanalys-med-logaritmerade-variabler">&#182;</a></h1><p><em>Av Anders Sundell</em></p>
+<h1 id="Regressionsanalys-med-logaritmerade-variabler">Regressionsanalys med logaritmerade variabler<a class="anchor-link" href="#Regressionsanalys-med-logaritmerade-variabler">&#182;</a></h1>
 <p><a href="logarithm_sv.html">I en annan guide</a> gick vi igenom hur man skapar logaritmerade variabler, och vad de innebär. Här ska vi istället fokusera på hur man använder dem i regressionsanalyser, och vad man behöver tänka på när man ska tolka koefficienterna.</p>
 <p>Vi ska använda oss av samma data som i det förra exemplet, det vill säga QoG Basic (version 2018). I koden nedan laddas datan in, och så skapar vi en variabel som är logaritmen av BNP per capita, <code>gle_rgdpc</code>.</p>
 

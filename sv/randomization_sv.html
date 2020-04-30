@@ -13077,7 +13077,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13125,13 +13125,19 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/randomization_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Randomisera-deltagare-till-experiment-(med-do-fil)">Randomisera deltagare till experiment (med do-fil)<a class="anchor-link" href="#Randomisera-deltagare-till-experiment-(med-do-fil)">&#182;</a></h1><p>English version | <a href="../index.html" target="_PARENT">Startsida</a></p>
+<h1 id="Randomisera-deltagare-till-experiment-(med-do-fil)">Randomisera deltagare till experiment (med do-fil)<a class="anchor-link" href="#Randomisera-deltagare-till-experiment-(med-do-fil)">&#182;</a></h1>
 <p>För att uttala oss om kausalitet skulle vi helst vilja jämföra varje observation med en kontrafaktisk version av sig själv, som är identisk i alla avseenden, men med ett annat värde på den oberoende variabeln. I medicinsk forskning kan man komma ganska nära det idealet, med klonade möss (till exempel). Då gör man något med en mus, och jämför det med en identisk mus som man inte gör någonting med. Det blir ungefär som att jämföra musen med sig själv, och ger goda möjligheter att dra slutsatser om orsak och verkan.</p>
 <p>Men i många fall kan vi inte göra det. Vi kan då istället jämföra grupper, som är identiska på aggregerad nivå. Det vill säga, individerna i grupperna skiljer sig, men grupperna som helhet är lika. Sedan gör man något med den ena gruppen (experimentgruppen) och inte med den andra (kontrollgruppen).</p>
 <p><strong>Det bästa sättet att skapa dessa två grupper är genom randomisering, det vill säga att vi slumpar in individer till grupperna.</strong> Om det inte finns någon systematik i vem som hamnar var så kommer inte heller grupperna att skilja sig åt på något systematiskt sätt, givet att det är tillräckligt många i varje grupp.</p>

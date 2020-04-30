@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,8 +13123,15 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/coefplot_sv.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13136,7 +13143,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>Tabeller kan visa mycket information, men den kan vara svår att ta till sig, intuitivt. Helst vill vi presentera resultat så enkelt så möjligt, så att läsaren inte ska behöva anstränga sig för att förstå vad det är vi försöker kommunicera.</p>
 <p>Med regressionsanalys kan det bli särskilt påtagligt. Ofta blir det att man bara ögnar igenom tabeller för att leta efter signifikansstjärnor vid koefficienter. Det är olyckligt eftersom det egentligen inte går någon magisk gräns vid de konventionella signifikansnivåerna, som p&lt;0,05. Dessutom skiljer man på det viset inte mellan koefficienter som skattats precist kring noll (vilket alltså betyder att vi kan vara säkra på att effekten faktiskt är noll) och koefficienter som skattats med väldigt stor osäkerhet (och som dåp kan vara noll eller någonting helt annat).</p>
 <p>Allt fler väljer därför att visa regressionskoefficienter grafiskt, med konfidensintervall. Graferna gör det lättare att jämföra koefficienter, visar vad som är signifikant (konfidensintervallen överlappar inte noll) och visar samtidigt graden av osäkerhet (konfidensintervallens bredd).</p>

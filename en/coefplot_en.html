@@ -13081,7 +13081,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13129,9 +13129,16 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+        <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/coefplot_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>      
+    
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
-
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13142,7 +13149,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><a href="../sv/coefplot_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
 <p>Tables can show a lot of information, but that information might be hard to grasp intuitively. Preferably, we want to present results as simply as possible, so that our readers don't have to put in effort to understand what we are trying to communicate.</p>
 <p>This is especially true for regression analysis. If they become too packed with coefficients many people will simply scan them for significance stars, which is unfortunate. A onsequence is that we don't pay attention to coefficients that are estimated precisely around zero, and coefficients estimated at some large value, with big uncerstainty - both will be insignificant.</p>
 <p>More and more are therefore electing to show regression coefficients graphically, with confidence intervals. The graphs make comparisons easy, they show what is significant (the confidence intervals do not cover zero) and the degree of uncertainty (the width of the intervals).</p>

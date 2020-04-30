@@ -13078,7 +13078,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13126,13 +13126,20 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+               <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/timeseries_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>       
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Time-series">Time series<a class="anchor-link" href="#Time-series">&#182;</a></h1><p><a href="../sv/timeseries_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
+<h1 id="Time-series">Time series<a class="anchor-link" href="#Time-series">&#182;</a></h1>
 <p>In this guide we will cover basic time series commands. Time series are data where one observation is measured repeatedly over time.</p>
 <p>Such data can be analyzed by just entering it into Stata as usual, using regular commands. But we can do more. With the special time series commands we can examine change, and how observations at different times relate to each other.</p>
 <p>The data we will use in this post is on stocks: the daily closing value of the american Dow Jones Index, from April 2019 to APril 2020. <a href="../data/stocks.dta">Download the data here.</a> The code below loads the data and shows the first ten rows:</p>

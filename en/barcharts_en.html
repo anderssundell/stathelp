@@ -13076,7 +13076,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13124,21 +13124,27 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+        <!-- ENGLISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/barcharts_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>   
+    
+    
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Bar-charts">Bar charts<a class="anchor-link" href="#Bar-charts">&#182;</a></h1>
-<p><a href="../sv/barcharts_sv.html">Svensk version</a> | <a href="../index_en.html" target="_PARENT">Front page</a></p>
     </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>By Anders Sundell</em></p>
 <p>Scatterplots are good for showing relationships between continous variables, with values evenly spread across a scale. But if you for instance work with survey data, there is often a limited number of response options, which means that respondents are spread over a relatively small number of combinations. This makes scatterplots less information.</p>
 <p><strong>An alternative to visualize information is then to use bar charts.</strong> One of Stata's commands for them lets us quickly summarize variables and present the results in an easily understandable way. In this example we'll look closer at the relationship between education and income in the United States, with the aid of the american General Social Survey. It is downloadable here <a href="https://gss.norc.org/get-the-data/stata">https://gss.norc.org/get-the-data/stata</a> and we will use the 2018 edition.</p>
 

@@ -1,4 +1,4 @@
- body {
+body {
     background-color: #ffffff;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
@@ -158,7 +158,6 @@ a.menulink:hover
     text-align: center;
     padding-top: 4px;
 }
-
 
 h4 {
     margin: 0px;

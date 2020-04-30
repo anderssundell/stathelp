@@ -13075,7 +13075,7 @@ ul.typeahead-list  > li > a.pull-right {
 /* Overrides of notebook CSS for static HTML export */
 body {
   overflow: visible;
-  padding: 8px;
+  padding: 0px;
 }
 
 div#notebook {
@@ -13123,8 +13123,14 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
+                       <!-- SWEDISH MENU -->
+<div class="headerrow">
+<div class="headercolumnleft">
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/merge_en.html">EN</a>
+    <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
+    </div>
+    </div>  
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container" id="notebook-container">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13136,7 +13142,6 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Av Anders Sundell</em></p>
 <p>Ofta när man gör statistiska analyser behöver man kombinera olika datamängder. Man kanske hämtar information om den oberoende variabeln från en källa, och vill samköra den med en beroende variabel från en annan källa. Vi har alltså samma analysenheter i de båda datamängderna, men vill kombinera variablerna. Då ska vi använda kommandot <code>merge</code>.</p>
 <p>Ett annat scenario är deär man har olika datamängder med samma variabler, fast med olika analysenheter. Då ska man istället använda kommandot <code>append</code> - det är egentligen som att klistra in fler observationer längst ner i datamängden. Men eftersom <code>merge</code> är lite klurigare ska vi fokusera på det här.</p>
 <h2 id="Olika-typer-av-sammanslagningar">Olika typer av sammanslagningar<a class="anchor-link" href="#Olika-typer-av-sammanslagningar">&#182;</a></h2><p>Med <code>merge</code>-kommandot kan vi göra tre (eller egentligen två) olika typer av sammanslagningar. Enklast är <code>1:1</code>. Då har vi samma analysenheter i båda datamängderna. Tex samma individer, eller samma länder, och vill lägga till ny information om dem. Vi behöver en matchningsvariabel som visar landets eller personens identitet så att vi kan matcha ihop dem.</p>
