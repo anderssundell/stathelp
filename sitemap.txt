@@ -37,6 +37,7 @@ https://www.stathelp.se/sv/surveydata_sv.html
 https://www.stathelp.se/sv/predictvalues_sv.html
 https://www.stathelp.se/sv/timeseries_sv.html
 https://www.stathelp.se/sv/randomization_sv.html
+https://www.stathelp.se/sv/regoutput_sv.html
 https://www.stathelp.se/en/barcharts_en.html
 https://www.stathelp.se/en/correlation_en.html
 https://www.stathelp.se/en/descriptive_crosstab_en.html
