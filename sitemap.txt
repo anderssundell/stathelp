@@ -64,3 +64,4 @@ https://www.stathelp.se/en/descriptive_averages_en.html
 https://www.stathelp.se/en/ttest_en.html
 https://www.stathelp.se/en/timeseries_en.html
 https://www.stathelp.se/en/collapse_en.html
+https://www.stathelp.se/en/regoutput_en.html
