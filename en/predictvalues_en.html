@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <meta name="description" content="Hur man använder regressionsekvationen för att räkna fram predicerade värden, alltså gissningar, för enskilda observationer. Vi går också igenom vad regressionsekvationen och dess delar är.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, regressionsekvation, predicerade värden, predicerat värde, förväntat värde, gissning, prediktion">   
+
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Predicting values after regression analysis in Stata">
+<meta name="keywords" content="statistics, stata, statistical analysis, regression, regression analysis, predict values, predict, error term">
+
+<title>Predict values</title>
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
@@ -15,8 +17,7 @@
 
   gtag('config', 'UA-132683642-1');
 </script>
-    
-<title>Predicera värden från regressionsanalys</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
@@ -13102,7 +13103,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13123,90 +13124,90 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
-                       <!-- SWEDISH MENU -->
+            <!-- ENGLISH MENU -->
 <div class="headerrow">
 <div class="headercolumnleft">
-    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/predictvalues_en.html">EN</a>
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/predictvalues_sv.html">SV/</a><a class="navlink" href="">EN</a>
     <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
     </div>
-    </div>  
-  <div tabindex="-1" id="notebook" class="border-box-sizing">
-      <div class = "container" id = "notebook-container">          
+    </div>      
 
-      
+    
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Predicera-v&#228;rden-fr&#229;n-regressionsanalys-med-hj&#228;lp-av-regressionsekvationen">Predicera v&#228;rden fr&#229;n regressionsanalys med hj&#228;lp av regressionsekvationen<a class="anchor-link" href="#Predicera-v&#228;rden-fr&#229;n-regressionsanalys-med-hj&#228;lp-av-regressionsekvationen">&#182;</a></h1>
-<p>När vi gör en regressionsanalys räknar vi ut hur olika oberoende variabler hänger ihop med en beroende variabel. I den här guiden ska vi gå igenom hur man gör för att räkna ut förväntade värden, gissningar, för vad en enskild individ har för värde på den beroende variabeln.</p>
-<p>Det kan vara bra för att illustrera vad regressionsanalysen ger för resultat, eller för att jämföra våra gissningar med verkligheten.</p>
-<p>I den här guiden kommer vi att gå igenom:</p>
+<h1 id="Predict-values-from-regression-analysis-using-the-regression-equation">Predict values from regression analysis using the regression equation<a class="anchor-link" href="#Predict-values-from-regression-analysis-using-the-regression-equation">&#182;</a></h1><p>When we do <a href="regression1_en.html">regression analysis</a> we estimate how independent variables are related to a dependent variable. In this guide we will cover how to calculate expected values, guesses, for which value on the dependent variable a specific observation should have.</p>
+<p>This is useful both for illustrating the results of the regression analysis, or for comparison with reality.</p>
+<p>This guide will show:</p>
 <ol>
-<li>Vad regressionsekvationen är för något</li>
-<li>Hur vi får fram de värden vi behöver till regressionsekvationen</li>
-<li>Hur man räknar ut gissningar (predicerade värden) med hjälp av regressionsekvationen</li>
-<li>Vad feltermen (residualen) är</li>
-<li>Hur vi räknar ut gissningar för alla individer i datamängden</li>
-<li>Och hur man kan se att gissningarna vi räknar fram "för hand" är desamma som de vi räknar ut automatiskt.</li>
+<li>What the regression equation is</li>
+<li>How to get the values we need for the equation</li>
+<li>How to calculate guesses (predicted values) with the equation</li>
+<li>What the error term (residual) is</li>
+<li>How to calculate guesses for each observation of the dataset</li>
+<li>And finally how to see that the guesses calculated by hand are the same as the ones we calculate automatically.</li>
 </ol>
-<h2 id="Regressionsekvationen">Regressionsekvationen<a class="anchor-link" href="#Regressionsekvationen">&#182;</a></h2><p>För att göra en gissning behöver vi ta fram regressionsekvationen. Ekvationen visar hur vi ska räkna ut ett förväntat värde på den beroende variabeln, utifrån analysenhetens värden på de oberoende variablerna. Tabellen Stata ger oss efter regressionanalysen visar de olika parametrarna som ingår i ekvationen.</p>
-<p>Vanligtvis visas regressionsekvationen på följande sätt (här med två oberoende variabler):</p>
+<h2 id="The-regression-equation">The regression equation<a class="anchor-link" href="#The-regression-equation">&#182;</a></h2><p>In order to make a guess we need to have a regression equation. The equation shows how to calculate an expected value for the dependent variable, based on the observation's values on the independent variables. The table Stata produces after the regression analysis shows the different parameters of the equation.</p>
+<p>Normally the regression equation is shown in the following way (here with two independent variables):</p>
 <p>$y_i = \alpha+ \beta_1X_{1i} + \beta_2X_{2i} + \epsilon_i$</p>
-<p>De olika delarna symboliserar olika saker:</p>
+<p>The different part denotes the following things:</p>
 <table>
 <thead><tr>
 <th>Symbol</th>
-<th>Betydelse</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>$y_i$</td>
-<td>Värdet på den beroende variabeln för person $i$</td>
+<td>Value of the dependent variable for person $i$</td>
 </tr>
 <tr>
 <td>$\alpha$</td>
-<td>Interceptet/konstanten (visas i regressionstabellen)</td>
+<td>Intercept/constant (shown in the regression table)</td>
 </tr>
 <tr>
 <td>$\beta_{1}$</td>
-<td>Koefficienten för den första oberoende variabeln (visas i regressionstabellen)</td>
+<td>Coefficient for the first independent variable (shown in the regression table)</td>
 </tr>
 <tr>
 <td>$X_{1_i}$</td>
-<td>Värdet på den första oberoende variabeln för person $i$</td>
+<td>Value of the first independent variable for person $i$</td>
 </tr>
 <tr>
 <td>$\beta_{2}$</td>
-<td>Koefficienten för den andra oberoende variabeln (visas i regressionstabellen)</td>
+<td>Coefficient for the second independent variable (shown in the regression table)</td>
 </tr>
 <tr>
 <td>$X_{2_i}$</td>
-<td>Värdet på den andra oberoende variabeln för person $i$</td>
+<td>Value of the second independent variable for person $i$</td>
 </tr>
 <tr>
 <td>$\epsilon_i$</td>
-<td>Feltermen för person $i$, alltså skillnaden mellan det faktiska värdet på den beroende variabeln ($y_i$) och vad vi gissar.</td>
+<td>The error term for person $i$, that is, the difference between the actual value of the dependent variable ($y_i$) and our guess.</td>
 </tr>
 </tbody>
 </table>
-<p>Det här är den generella formen. <strong>Vi gör alltså en gissning på vad den beroende variabeln borde ha för värde, för varje analysenhet, till exempel person, genom att multiplicera variablernas värden med dess effekter.</strong></p>
-<p>Men i varje undersökning kan vi byta ut de olika grekiska bokstäverna mot det det faktiskt gäller. Säg till exempel att vi vill undersöka vad en person har för inkomst. Vi tror att det beror på både utbildning och kön. Vi gör då en analys med två oberoende variabler, vilken utbildning man har, och om man är man eller kvinna. Ekvationen skulle då se ut såhär:</p>
-<p>$inkomst_i = \alpha+ \beta_1utbildning_i + \beta_2kon_i + \epsilon_i$</p>
-<p>Om vi vet en persons utbildningsnivå och kön kan vi göra en gissning på inkomsten. Men då måste vi veta värdet på $\alpha$, $\beta_1$ och $\beta_2$, alltså interceptet, och koefficienterna för utbildning och kön.</p>
-<p>När vi gissar har vi inte med någon felterm - den är bara där för att få ekvationen att gå ihop. När vi gissar ser ekvationen alltså ut såhär:</p>
-<p>$gissadinkomst_i = \alpha+ \beta_1utbildning_i + \beta_2kon_i$</p>
-<h2 id="Ta-fram-uppgifterna-till-regressionsekvationen-med-regressionsanalys">Ta fram uppgifterna till regressionsekvationen med regressionsanalys<a class="anchor-link" href="#Ta-fram-uppgifterna-till-regressionsekvationen-med-regressionsanalys">&#182;</a></h2><p>Dessa uppgifter får vi när vi gör en regressionsanalys. I den amerikanska General Social Survey finns det frågor om alla tre variabler vi är intresserade av: inkomst ("realrinc"), utbildningsnivå ("degree", en femgradig skala som går från 0 ingen utbildning till 4 masterexamen) och kön ("sex", där man är 1 och kvinna 2). Nedan gör vi en regressionsanalys med inkomst som beroende variabel, och utbildning och kön som oberoende.</p>
+<p>This is the general form. <strong>We will, for each observation, make a guess as to what the value of dependent value should be, by multiplying the values on the independent variables with their respective coefficients.</strong></p>
+<p>But in each analysis we do we can switch the greek letters for actual numbers. Let's say we want to analyze the incomes of people. We hypothesize that income depend on education and gender. We then run an analysis with two independent variables: the level of education attained, and whether one is a man or woman. The equation would then look like this:</p>
+<p>$income_i = \alpha+ \beta_1education_i + \beta_2sex_i + \epsilon_i$</p>
+<p>If we know a person's level of education and gender we can make an informed guess of their income. But then we need to know which numbers to put in the place of $\alpha$, $\beta_1$ and $\beta_2$, that is, the intercept, and the coefficients for education and gender.</p>
+<p>When we guess we don't include an error term in the equation. It is only there to make the equation match the true income. When we make a guess our equation instead looks like this:</p>
+<p>$guessedincome_i = \alpha+ \beta_1education_i + \beta_2sex_i$</p>
+<h2 id="Get-the-values-to-the-equation-using-regression-analysis">Get the values to the equation using regression analysis<a class="anchor-link" href="#Get-the-values-to-the-equation-using-regression-analysis">&#182;</a></h2><p>We get the numbers when we do a regression analysis. In the american General Social Survey there questions about all variables we are interested in: income ("realrinc"), level of education ("degree", a five-degree scale that runs from 0 no education to 4 master degree) and gender ("sex", where man is 1 och woman 2). Below we run a regression analysis with income as dependent variable and education and gender as independents.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;/Users/xsunde/Dropbox/Jupyter/stathelp/data/GSS2016.dta&quot;</span>,<span class="k"> clear</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;/Users/anderssundell/Dropbox/Jupyter/stathelp/data/GSS2016.dta&quot;</span>,<span class="k"> clear</span>
 <span class="k">reg</span> realrinc degree sex
 </pre></div>
 
@@ -13252,13 +13253,13 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Vi ser här de tre uppgifter vi saknade för att komplettera vår ekvation. Koefficienten för utbildning ($\beta_1$) är 8139, vilket betyder att om man går ett steg uppåt på utbildningsskalan (till exempel från "junior college" till "bachelor") så ökar inkomsten med 8139 dollar per år.</p>
-<p>Koefficienten för variabeln "sex" ($\beta_2$) är -10650, vilket betyder att om vi ökar variabeln med ett steg (dvs går från man (1) till kvinna (2)) minskar inkomsten med 10650 dollar per år. Kvinnor tjänar alltså 10650 dollar mindre per år, i genomsnitt.</p>
-<p>Och slutligen ser vi att interceptet ($\alpha$) är 24874. Det är den förväntade inkomsten för alla som har 0 på alla de oberoende variablerna. Det innebär alltså att man har värdet 0 på variabeln kön, vilket ingen har. Men det gör inget - ekvationen fungerar lika bra ändå.</p>
-<p><strong>Nu kan vi sätta in de här uppgifterna i regressionsekvationen:</strong></p>
-<p>$inkomst_i = 24874 + 8139\times utbildning_i -10650\times kon_i + \epsilon_i$</p>
-<p>eller om vi ska gissa på någons inkomst:</p>
-<p>$gissadinkomst_i = 24874 + 8139\times utbildning_i -10650\times kon_i$</p>
+<p>Here we have everything we need to compelte our equation. The coefficient for education ($\beta_1$) is 8139, which means that if we take a step up on the education scale (for instance from "junior college" to "bachelor") our income increases with 8139 dollars per year.</p>
+<p>The coefficient for the variable "sex" ($\beta_2$) is -10650, which means that if we increase the variable with one step (go from man (1) to woman (2)) our income will decrease with 10650 dollars per year. In other words, women earn 10650 dollars less each year, on average.</p>
+<p>And finally we can see that the intercept ($\alpha$) is 24874. Is is the expected income for everyone who has the value 0 on all the independent variables. That also includes having the value 0 on the variable sex, which no person in the dataset has. But it doesn't matter - the equation works just as well anyway.</p>
+<p><strong>Now we can enter these numbers into the regression equation:</strong></p>
+<p>$income_i = 24874 + 8139\times education_i -10650\times sex_i + \epsilon_i$</p>
+<p>or, if we are making a guess on someone's income:</p>
+<p>$guessedincome_i = 24874 + 8139\times education_i -10650\times sex_i$</p>
 
 </div>
 </div>
@@ -13266,36 +13267,36 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="R&#228;kna-ut-predicerade-v&#228;rden-manuellt-med-regressionsekvationen">R&#228;kna ut predicerade v&#228;rden manuellt med regressionsekvationen<a class="anchor-link" href="#R&#228;kna-ut-predicerade-v&#228;rden-manuellt-med-regressionsekvationen">&#182;</a></h2><p>Nu kan vi stoppa in olika värden på de två oberoende variablerna och få ut olika gissningar på inkomsten. Vi använder då ekvationen för att gissa inkomster.</p>
-<p>Fall 1: Man (kon = 1) med masterexamen (utbildning = 4):<br>
+<h2 id="Calculate-predicted-values-manually-with-the-regression-equation">Calculate predicted values manually with the regression equation<a class="anchor-link" href="#Calculate-predicted-values-manually-with-the-regression-equation">&#182;</a></h2><p>Now that we know the values of the coefficients we can enter different values for the two independent variables and get different guesses for income. We thus use the equation to guess the income of various categories of people.</p>
+<p>Case 1: Man (sex = 1) with a master's degree (education = 4):<br>
 $24874 + 8139\times 4 -10650\times1 = 46780$</p>
-<p>Fall 2: Man (kon = 1) med examen från junior college (utbildning = 2):<br>
+<p>Case 2: Man (sex = 1) with degree from junior college (education = 2):<br>
 $24874 + 8139\times 2 -10650\times1 = 30502$</p>
-<p>Fall 3: Man (kon = 1) med ingen examen (utbildning = 0):<br>
+<p>Case 3: Man (sex = 1) with no degree (education = 0):<br>
 $24874 + 8139\times 0 -10650\times1 = 14224$</p>
-<p>Fall 4: Kvinna (kon = 2) med masterexamen (utbildning = 4):<br>
+<p>Case 4: Woman (sex = 2) with a master's degree (education = 4):<br>
 $24874 + 8139\times 4 -10650\times2 = 36130$</p>
-<p>Fall 5: Kvinna (kon = 2) med ingen examen (utbildning = 0):<br>
+<p>Case 5: Woman (sex = 2) with no degree (education = 0):<br>
 $24874 + 8139\times 0 -10650\times2 = 3574$</p>
-<p>I alla fallen är det några saker som är samma: interceptet (24874), koefficienten för utbildning (8139) och koefficienten för kön (-10650). Det som ändras är värdena på de olika variablerna, vilket ger olika gissningar på inkomster. Vi tror alltså att kvinnorna med lägst utbildning endast tjänar 3574 dollar per år, medan män med masterexamen tjänar hela 46780 dollar per år!</p>
-<h2 id="Feltermen---residualen">Feltermen - residualen<a class="anchor-link" href="#Feltermen---residualen">&#182;</a></h2><p>Nu är det ju inte så att alla män med masterexamen tjänar exakt 46780, och varenda kvinna utan utbildning tjänar inte exakt 3574. Där kommer feltermen, som också kan kallas residualen (det som blir över) in i bilden. Säg att vi har en kvinna utan utbildning, som i verkligheten tjänar 7000 dollar per år. Vi trodde att hon skulle tjäna 3574.</p>
-<p>För att regressionsekvationen ska gå ihop får skriva in en felterm som är skillnaden mellan vår gissning för henne (3574) och det faktiska värdet (7000). Skillnaden blir 3426. För just henne ser regressionsekvationen då ut såhär:</p>
+<p>In all cases some things remain the same: the intercept (24874), the coefficient for education (8139) and the coefficient for sex (-10650). The things that change are the values of the different variables, producing different guesses. We thus believe that women with no degree only make 3574 dollars per year, while men with a master's degree make 46780 dollars per year!</p>
+<h2 id="The-error-term---the-residual">The error term - the residual<a class="anchor-link" href="#The-error-term---the-residual">&#182;</a></h2><p>Of course, not all men with a master's degree earn exactly 46780, and every woman with no degree does not earn exactly 3574. This is where the error term, which can also be called the residual (what is left over) enters the picture. Say we have a woman with no education, that in reality earns 7000 dollars per year. We guessed that she would earn 3574.</p>
+<p>To make the regression equation add up we here need to enter an error term that is the difference between our guess for her (3574) and the actual value (7000). The difference is 3426. For this particular woman, the regression equation looks like this:</p>
 <p>$7000 = 24874 + 8139\times 0 -10650\times 2 + 3426$</p>
-<p>Om man räknar ihop det hela ser man att det stämmer - uttrycket till höger om likamedtecknet summerar till 7000. Feltermen blir alltså unik för varje individ. Men för att räkna fram själva gissningen behöver vi inte ta hänsyn till den. Däremot kan den vara intressant i andra avseenden, till exempel för så kallad regressionsdiagnostik. Men det går vi inte in på här.</p>
-<h2 id="Predicera-v&#228;rden-f&#246;r-alla-automatiskt">Predicera v&#228;rden f&#246;r alla automatiskt<a class="anchor-link" href="#Predicera-v&#228;rden-f&#246;r-alla-automatiskt">&#182;</a></h2><p>När man jobbar med enkätdata är enskilda individer sällan intressanta. Men om man jobbar med kända analysenheter, till exempel världens länder, kan det vara intressant att veta vad gissningarna är för enskilda länder.</p>
-<p>Med kommandot <code>predict</code> kan vi lätt göra detta i Stata. Vi måste då göra en regressionsanalys, och direkt efter den skriver vi kommandot <code>predict</code>, följt av namnet på den nya variabel som ska spara våra gissningar, en för varje person. Låt oss kalla den nya variabeln "gissad_inkomst". Nedan görs det, med kommandot <code>quietly</code> först, för att undvika att få ut regressionstabellen här. Vi kör också <code>predict</code> en gång till, med option <code>,r</code> för att få residualerna för varje person.</p>
+<p>It is simple to add it up - the expression to the right of the equal sign is 7000. <strong>The error term is thus different for each observation.</strong> But when we calculate our guess we do not need to worry about it. It might however be interesting in other regards, for instance when we do regression diagnostics. But we will not go into that here.</p>
+<h2 id="Predict-values-for-all-observations,-automatically">Predict values for all observations, automatically<a class="anchor-link" href="#Predict-values-for-all-observations,-automatically">&#182;</a></h2><p>Individual observations are seldom of interest when we work with survey data. But if we are dealing with known observations, such as the countries of the world, it can sometimes be interesting to know the guesses for individual countries.</p>
+<p>With the command <code>predict</code> we can easily do this in Stata. We then run a regression analysis, and immediately afterward type the command <code>predict</code>, followed by the name of the new variable that will save our guesses, one for each observation. Let's call the new variable "guessedincome". Below we do this, with the command <code>quietly</code> before the regression command. This prevents the regression table from being printed. We also run <code>predict</code> once more afterwards, using the option <code>, r</code> to also get the residuals for each observation.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-stata"><pre><span></span><span class="k">quietly reg</span> realrinc degree sex<span class="k"></span>
-<span class="k">predict</span> gissad_inkomst<span class="k"></span>
-<span class="k">predict</span> felterm, r
+<span class="k">predict</span> guessedincome<span class="k"></span>
+<span class="k">predict</span> errorterm, r
 </pre></div>
 
     </div>
@@ -13329,17 +13330,17 @@ $24874 + 8139\times 0 -10650\times2 = 3574$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Det har nu skapats två nya variabler, "gissad_inkomst" och "felterm". <strong>Låt oss nu kolla hur det ser ut för de första fem personerna i datamängden, med hjälp av kommandot <code>list</code>.</strong></p>
+<p>We have now created two new variables, "guessedincome" and "errorterm". <strong>Let us now check how this looks like for the first five persons in the dataset, using the command <code>list</code>.</strong></p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">list</span> degree sex gissad_inkomst realrinc felterm<span class="k"> in</span> <span class="m">1</span><span class="o">/</span><span class="m">5</span>
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list</span> degree sex guessedincome realrinc errorterm<span class="k"> in</span> <span class="m">1</span><span class="o">/</span><span class="m">5</span>
 </pre></div>
 
     </div>
@@ -13358,7 +13359,7 @@ $24874 + 8139\times 0 -10650\times2 = 3574$</p>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
      +--------------------------------------------------------+
-     |   degree      sex   gissad~t      realrinc     felterm |
+     |   degree      sex   guesse~e      realrinc   errorterm |
      |--------------------------------------------------------|
   1. | bachelor     male   38640.42   164382.0376    125741.6 |
   2. | high sch     male   22363.22         25740    3376.782 |
@@ -13377,22 +13378,22 @@ $24874 + 8139\times 0 -10650\times2 = 3574$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Den första personen är en man med kandidatexamen (bachelor). Han förväntas tjäna en hel del - vi gissade på 38640 dollar per år. Men I själva verket tjänar han hela 164382 dollar! Vi gissade alltså på alldeles för lite. Feltermen, felgissningen, blir alltså 125742. Det verkliga värdet ligger 125742 dollar högre än vår gissning.</p>
-<p>Den andra personen är en man med examen från high school. Vi gissade att han skulle tjäna 22363 dollar per år, men i verkligheten var det 25740. Ganska nära alltså - det verkliga värdet ligger 3374 högre.</p>
-<p>Person nummer 3 hade inget värde på inkomstvariabeln.</p>
-<p>Personer nummer 4 är en kvinna med examen från high school. Vi gissade att hon inte skulle tjäna så mycket - 11714 dollar per år. I verkligheten tjänar hon ännu mindre, 5265 dollar. Feltermen vblir alltså -6449. Det verkliga värdet låg 6449 dollar under vår gissning.</p>
-<p>Vi ser alltså att det ofta blir lite (eller mycket) fel i våra gissningar. Alla personer som har samma egenskaper kommer få samma gissning. Vill vi göra bättre gissningar får vi lägga till fler variabler i modellen.</p>
-<h2 id="J&#228;mf&#246;relse-mellan-v&#228;rden-framr&#228;knade-f&#246;r-hand-och-automatiskt-predicerade-v&#228;rden">J&#228;mf&#246;relse mellan v&#228;rden framr&#228;knade f&#246;r hand och automatiskt predicerade v&#228;rden<a class="anchor-link" href="#J&#228;mf&#246;relse-mellan-v&#228;rden-framr&#228;knade-f&#246;r-hand-och-automatiskt-predicerade-v&#228;rden">&#182;</a></h2><p><strong>Oavsett på vilket sätt man räknar fram de olika värdena ska det givetvis bli samma resultat.</strong> När vi räknade ut för hand såg vi att män med masterexamen förväntades tjäna 46780 dollar per år, och att kvinnor utan någon examen förväntades tjäna 3574. Vi kan nu jämföra dessa värden med dem vi räknat fram automatiskt. <a href="descriptive_averages_sv.html">Vi räknar ut medelvärdet</a> för vår gissning, för alla kombinationer av de två variablerna, med hjälp av kommandot <code>table</code>.</p>
+<p>The first person is a man with a bachelor's degree. He is expected to earn a bit - we guessed at 38640 dollars per year. But in reality, he earns a whopping 164382 dollars! our guess was way to low. The error term, the difference between our guess and the correct number, is therefore 125742. The real value is 125743 dollar higher than our guess.</p>
+<p>The second person is a man with a high school diploma. We guessed that he would make 22363 dollars per year, but in reality it was 25740. Pretty close - the real value is 3374 higher.</p>
+<p>Person 3 did not have a value on the income variable.</p>
+<p>Person 4 is a woman with a high school diploma. We guessed that she wouldn't make that much - 11714 dollar per year. In reality, she earns even less, 5265 dollar. The error term is therefore -6449. The real value is 6449 dollars lower than our guess.</p>
+<p>Our guesses are therefore wrong most of the time - by a little or a lot. All persons with the same characteristics (on these two independent variables) will get the same guess. If we want to make more advanced guesses we need to bring in more variables in the model.</p>
+<h2 id="Comparison-between-the-values-calculated-by-hand-and-automatically-predicted-values">Comparison between the values calculated by hand and automatically predicted values<a class="anchor-link" href="#Comparison-between-the-values-calculated-by-hand-and-automatically-predicted-values">&#182;</a></h2><p><strong>Regardless of our method for arriving at these values, the result should of course be the same.</strong> We saw that men with a master's degree were expected to earn 46780 dollars per year in our manual calculation, and that a woman without a degree were expected to earn 3574. We can now compare these values with those that we got automatically. We <a href="descriptive_averages_en.html">calculate the average</a> for our guess, for all combinations of the two variables, using the command <code>table</code>.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">table</span> degree sex, contents(mean gissad_inkomst)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">table</span> degree sex, contents(mean guessedincome)
 </pre></div>
 
     </div>
@@ -13432,7 +13433,7 @@ junior college | 30501.82  19852.25
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Män med den högsta utbildningen förväntas alltså tjäna 46779 dollar per år - en dollar mindre än vad vi räknade ut för hand. Anledningen till att det inte blir exakt samma är att vi inte tog med alla decimaler när vi räknade för hand. Kvinnor med den lägsta utbildningsgraden gissar vi tjänar 3575 dollar, en dollar mer än gissningen vi tog fram för hand, återigen på grund av decimalerna.</p>
+<p>Men with the highest level of education are expected to make 46799 dollars per year - a dollar less than what we calculated by hand. The reason it is not exactly the same is that we in our manual calculation did not include all decimals. We guess that women with the lowest level of education will earn 3575 dollars, one dollar more than in our manual calculation, again because of the decimals.</p>
 
 </div>
 </div>
@@ -13440,11 +13441,11 @@ junior college | 30501.82  19852.25
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p>Att predicera värden kan vara intressant för att se på substantiella skillnader utifrån analysen. Det kan till exempel vara mer pedagogiskt att visa hur mycket högutbildade och lågutbildade förväntas skilja sig åt, snarare än att säga "koefficienten för utbildning är 8139". Ibland är det också intressant att jämföra gissningen med verkligheten för att se vilka som så att säga över- respektive underpresterar.</p>
-<p>Ekvationen utökas så mycket som behövs, beroende på hur många variabler man har. I det här exemplet hade vi två variabler, utbildning och kön. Om vi skulle lägga till också ålder skulle ekvationen bara bli lite längre:</p>
-<p>$inkomst_i = \alpha+ \beta_1utbildning_i + \beta_2kon_i +  \beta_3alder_i + \epsilon_i$</p>
-<p>En regressionsanalys går alltså ut på att försöka uppskatta (estimera) vad de bästa värdena på $\alpha$, $\beta_1$, $\beta_2$ och $\beta_3$ är, och det är (bland annat) vad som visas i resultaten när vi kör regressionskommandot.</p>
-<p>Slutligen kan ekvationen också användas för att gissa där vi inte har facit. Till exempel kan man göra en regressionsanalys där man ser hur resultatet i amerikanska presidentval påverkas av ekonomins tillväxt, presidentens opinionsstöd, och så vidare. Då utgår man givetvis ifrån historiska data. Men sedan kan man sätta in nuvarande värden i ekvationen, och få en gissning på hur resultatet kommer bli i nästa val. Man går då tillväga på samma sätt som vi gjort här.</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>Predicted values are often interesting in order to make a more concrete connection between our model and substantial issues. It might, for example, be more pedagogial to showh how highly educated people are expected to differ from people with no school, rather than to say "the coefficient for educatinon is 8139". Sometimes it is also interesting to compare our guess with reality to say which observations that are (so to say) over-performers and under-performers.</p>
+<p>The equation can be expanded as needed, dependning on the number of variables we have. In this example we only had two variables, education and sex. If we for instance would add age the equation would be slightly longer:</p>
+<p>$iincome_i = \alpha+ \beta_1education_i + \beta_2sex_i +  \beta_3age_i + \epsilon_i$</p>
+<p>The aim of a regression analysis is, to summarize, to try to estimate what the best values of $\alpha$, $\beta_1$, $\beta_2$ and $\beta_3$ might be, and this is (among other things) whas is showed in the regression table after a regression analysis.</p>
+<p>Finally, the equation can also be used to make guesses where we don't have the correct answers. For instance, it is easy to make a model that shows how results in presidential elections are affected by economic growth, the popularity of the president, and more. We then of course use historical data when we construct the model. But then we can add current data into the equation, and get an informed guess about what will happen after the next election. The procedure is just the same.</p>
 
 </div>
 </div>
