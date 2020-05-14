@@ -13139,7 +13139,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+    
 <h1 id="Maps-of-the-world-and-regions-with-spmap">Maps of the world and regions with <code>spmap</code><a class="anchor-link" href="#Maps-of-the-world-and-regions-with-spmap">&#182;</a></h1>
+    <br>
+    
+    <!-- Survey link -->
+    <a href="https://forms.gle/Lw254gDmJAXiPtLZ7" target="surveylink">(Did you not find what you were looking for? Tell me here!)</a>
+<!-- Survey link -->
+    
     <p>Maps can be a visually striking and effective way to communicate geographical patterns in data. Stata does not have a ton of support for map-making or GIS operations, but there is a good user-created command that we can use to make nice choropleth maps. These show the values of variables by coloring areas in different colors.</p>
 <p>The command in question is called <code>spmap</code>. We can download and install it by typing <code>ssc install spmap</code>. We only have to do this once.</p>
 <p>However, we also need geographical data. For <code>spmap</code>, this consists of shapefiles that have been transformed into coordinates that Stata can use to plot the maps. We can use the command <code>shp2dta</code> to do this for any shapefile. However, it takes some work to match the units in the shapefiles to the data we might want to plot.</p>
