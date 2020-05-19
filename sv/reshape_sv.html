@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Hur man genomför regressionsanalyser i Stata. Introduktion till OLS, hur man ska tolka resultaten.">
-<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, grafer, regression, regressionsanalys, bivariat regression, OLS, ordinary least squares, line of best fit, regressionslinje">   
+<head><meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Hur man omformar paneldata mellan long och wide, med hjälp av kommandot reshape">
+<meta name="keywords" content="statistik, statistisk analys, Stata, variabler, data, dataset, datamängd, paneldata, reshape, long data, wide data">   
     
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+<title>Omforma paneldataset mellan long och wide med reshape</title>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,21 +15,6 @@
 
   gtag('config', 'UA-132683642-1');
 </script>
-
-    
-    <meta charset="utf-8" />
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-132683642-1');
-</script>    
-    
-<title>Introduktion till regressionsanalys</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13137,333 +13122,109 @@ div#notebook {
     </script>
     <!-- End of mathjax configuration --></head>
 <body>
-                       <!-- SWEDISH MENU -->
+    
+                          <!-- SWEDISH MENU -->
 <div class="headerrow">
 <div class="headercolumnleft">
-    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/regression1_en.html">EN</a>
+    <a class="navlink" href="../index.html">STATISTIKHJÄLPEN | </a> <a class="navlink" href="">SV/</a><a class="navlink" href="../en/reshape_en.html">EN</a>
     <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
     </div>
     </div>  
-
-  <div tabindex="-1" id="notebook" class="border-box-sizing">
-      <div class = "container" id = "notebook-container">          
-
-      
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Introduktion-till-regressionsanalys-i-STATA">Introduktion till regressionsanalys i STATA<a class="anchor-link" href="#Introduktion-till-regressionsanalys-i-STATA">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                         <!-- END OF MENU -->
     
-<p>Regressionsanalys är en av de vanligaste statistiska analyserna, och en av de mest flexibla. Den kan göras med två eller fler variabler, och användas för att undersöka en mängd olika typer av samband, med eller utan kontroll för alternativa förklaringar.</p>
-<p>I princip handlar det dock om att passa in en linje till en mängd punkter. Formeln för "vanlig regressionsanalys" - Ordinary Least Squares (OLS) - gör det på ett väldigt bra sätt.</p>
-<p>I den här guiden ska vi gå igenom den enklaste formen av regressionsanalys, där bara två variabler ingår, och intuitionen bakom analysen. Analysen kan sedan byggas ut på en mängd olika sätt, men det väntar vi med.</p>
-<p>Vi börjar med att öppna en datamängd att analysera. I det här exemplet använder vi oss av en övningsdatamängd som finns förinstallerad i Stata. Den innehåller information om olika bilar - hur mycket bensin de drar, vad det är för modell, vad de väger, osv.</p>
-<p>För att öppna denna träningsdatamängd skriver man i sin do-fil bara:</p>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Omforma-paneldata-mellan-long-och-wide-med-reshape">Omforma paneldata mellan long och wide med <code>reshape</code><a class="anchor-link" href="#Omforma-paneldata-mellan-long-och-wide-med-reshape">&#182;</a></h1><p>Paneldata kan som beskrivits <a href="xtset_sv.html">i ett annat inlägg</a> struktureras på ett långt (long) eller brett (wide) sätt, beroende på syfte. Nedan visas exempel på hur de olika strukturerna ser ut. I bred data är varje variabel med flera gånger, en gång för varje tidsenhet, och en observation per panelenhet (land i det här fallet). I lång data är varje variabel bara med en gång, men varje panelenhet är med många gånger, och så anges tiden i en särskild variabel.</p>
+<p>I den här guiden ska vi gå igenom hur man omformar datan mellan de två strukturerna, med hjälp av kommandot <code>reshape</code>.</p>
+<p><strong>Bred (wide) data:</strong></p>
+<table>
+<thead><tr>
+<th>country</th>
+<th>population2000</th>
+<th>population2001</th>
+<th>population2002</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sweden</td>
+<td>8872284</td>
+<td>8888675</td>
+<td>8911899</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>4491572</td>
+<td>4514907</td>
+<td>4537240</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lång (long) data:</strong></p>
+<table>
+<thead><tr>
+<th>country</th>
+<th>year</th>
+<th>population</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sweden</td>
+<td>2000</td>
+<td>8872284</td>
+</tr>
+<tr>
+<td>Sweden</td>
+<td>2001</td>
+<td>8888675</td>
+</tr>
+<tr>
+<td>Sweden</td>
+<td>2002</td>
+<td>8911899</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2000</td>
+<td>4491572</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2001</td>
+<td>4514907</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2002</td>
+<td>4537240</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">sysuse</span> auto,<span class="k"> clear</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(1978 Automobile Data)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Det finns 12 olika variabler. Vi ska titta på det eventuella sambandet mellan hur många miles bilen kan köra på en gallon bensin och hur mycket bilen väger, i pund (det är amerikanska måttenheter). En rimlig hypotes är att tyngre bilar drar mer bensin, och därför kan köra färre miles per gallon. Vi kallar vikt vår oberoende variabel, och miles per gallon (mpg) den beroende. Vi tror att mpg beror på hur tung bilen är, men inte att bilens vikt avgörs av hur mycket bensin bilen drar.</p>
-<p>Vi kan börja med att visualisera sambandet, att titta på analysenheterna, i en så kallad scatterplot. Det gör vi genom att skriva:</p>
+<h2 id="Omforma-fr&#229;n-l&#229;ng-(long)-till-bred-(wide)">Omforma fr&#229;n l&#229;ng (long) till bred (wide)<a class="anchor-link" href="#Omforma-fr&#229;n-l&#229;ng-(long)-till-bred-(wide)">&#182;</a></h2><p>Vi laddar först in lite data att jobba med: QoG-institutets time-series cross-section dataset. Där har vi data om länder, över tid. För att det ska bli lite mer lättöverskådligt slänger vi också bort de flesta variabler. Vi behåller variablerna "cname", "year", "fh_status" (demokratistatus) och "unna_pop" (befolkningen), samt bara åren 2010 och 2011. Det gör vi med hjälp av kommandot <code>keep</code> och en <a href="ifstatements_sv.html">if-sats.</a></p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter mpg weight)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-(note: file /Users/anderssundell/.stata_kernel_cache/graph3.svg not found)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.0 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="390.80" y="100.86" width="3468.22" height="2388.33" style="fill:#FFFFFF"/>
-	<rect x="393.68" y="103.74" width="3462.46" height="2382.57" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="3859.02" y2="2425.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="1696.29" x2="3859.02" y2="1696.29" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="966.64" x2="3859.02" y2="966.64" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="390.80" y1="237.11" x2="3859.02" y2="237.11" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<circle cx="1660.72" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1660.72" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2093.97" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2093.97" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1361.62" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1361.62" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1990.77" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1990.77" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2846.87" cy="2061.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2846.87" cy="2061.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2424.01" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2424.01" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="938.77" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="938.77" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2021.70" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2021.70" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2640.58" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2640.58" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2145.45" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2145.45" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3104.64" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3104.64" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2661.12" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2661.12" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3063.43" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3063.43" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="815.02" cy="1039.66" r="26.35" style="fill:#1A476F"/>
-	<circle cx="815.02" cy="1039.66" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2444.56" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2444.56" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1918.62" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1918.62" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1959.83" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1959.83" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1475.10" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1475.10" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2176.39" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2176.39" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="825.41" cy="966.77" r="26.35" style="fill:#1A476F"/>
-	<circle cx="825.41" cy="966.77" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2351.74" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2351.74" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2351.74" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2351.74" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2496.16" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2496.16" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="495.37" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="495.37" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1372.02" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1372.02" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3630.70" cy="2280.04" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3630.70" cy="2280.04" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3506.83" cy="2280.04" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3506.83" cy="2280.04" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2588.97" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2588.97" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.75" cy="1550.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.75" cy="1550.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2826.20" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2826.20" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2475.49" cy="2061.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2475.49" cy="2061.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2114.52" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2114.52" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2898.35" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2898.35" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1557.64" cy="1696.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1557.64" cy="1696.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2826.20" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2826.20" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2052.64" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2052.64" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2042.37" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2042.37" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2444.56" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2444.56" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2114.52" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2114.52" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1454.43" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1454.43" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2795.26" cy="1988.11" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2795.26" cy="1988.11" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2001.16" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2001.16" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="495.37" cy="674.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="495.37" cy="674.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="907.83" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="907.83" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1237.87" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1237.87" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2073.31" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2073.31" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2454.95" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2454.95" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2217.72" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2217.72" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1949.56" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1949.56" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1939.29" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1939.29" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2166.12" cy="1769.31" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2166.12" cy="1769.31" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1413.22" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1413.22" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1557.64" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1557.64" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="773.81" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="773.81" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1372.02" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1372.02" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1083.18" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1083.18" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="722.21" cy="601.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="722.21" cy="601.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="990.37" cy="1404.48" r="26.35" style="fill:#1A476F"/>
-	<circle cx="990.37" cy="1404.48" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1475.10" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1475.10" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="835.68" cy="1623.40" r="26.35" style="fill:#1A476F"/>
-	<circle cx="835.68" cy="1623.40" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="949.16" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="949.16" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="454.04" cy="1112.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="454.04" cy="1112.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="681.00" cy="966.77" r="26.35" style="fill:#1A476F"/>
-	<circle cx="681.00" cy="966.77" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2166.12" cy="2134.14" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2166.12" cy="2134.14" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="526.31" cy="1258.58" r="26.35" style="fill:#1A476F"/>
-	<circle cx="526.31" cy="1258.58" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="753.14" cy="601.94" r="26.35" style="fill:#1A476F"/>
-	<circle cx="753.14" cy="601.94" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1124.52" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1124.52" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="907.83" cy="893.75" r="26.35" style="fill:#1A476F"/>
-	<circle cx="907.83" cy="893.75" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1392.56" cy="1842.20" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1392.56" cy="1842.20" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="866.62" cy="1477.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="866.62" cy="1477.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="742.87" cy="164.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="742.87" cy="164.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="629.39" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="629.39" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="691.27" cy="1331.59" r="26.35" style="fill:#1A476F"/>
-	<circle cx="691.27" cy="1331.59" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1908.22" cy="1915.21" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1908.22" cy="1915.21" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="390.80" y1="2489.19" x2="390.80" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="390.80" y1="2425.82" x2="350.83" y2="2425.82" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="2425.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,2425.82)" text-anchor="middle">10</text>
-	<line x1="390.80" y1="1696.29" x2="350.83" y2="1696.29" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="1696.29" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,1696.29)" text-anchor="middle">20</text>
-	<line x1="390.80" y1="966.64" x2="350.83" y2="966.64" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="966.64" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,966.64)" text-anchor="middle">30</text>
-	<line x1="390.80" y1="237.11" x2="350.83" y2="237.11" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="300.72" y="237.11" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 300.72,237.11)" text-anchor="middle">40</text>
-	<text x="190.71" y="1294.96" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 190.71,1294.96)" text-anchor="middle">Mileage (mpg)</text>
-	<line x1="390.80" y1="2489.19" x2="3859.02" y2="2489.19" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="701.66" y1="2489.19" x2="701.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="701.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">2,000</text>
-	<line x1="1732.99" y1="2489.19" x2="1732.99" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="1732.99" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">3,000</text>
-	<line x1="2764.33" y1="2489.19" x2="2764.33" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2764.33" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">4,000</text>
-	<line x1="3795.66" y1="2489.19" x2="3795.66" y2="2529.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2619.14" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">5,000</text>
-	<text x="2124.91" y="2729.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Weight (lbs.)</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Varje prick motsvarar här alltså en bil, som är inplacerad på den vågräta axeln efter hur mycket bilen väger, och på den lodräta axeln efter hur många miles per gallon den orkar. Det finns en viss spridning, men också ett mönster: Prickar längre till höger i grafen är placerade längre ned. De allra tyngsta bilarna orkar inte mer än ungefär 11-12 miles per gallon. Motsatt så ser vi att den bil som kan köra längst på en gallon (och som alltså ligger längst upp i diagrammet) är förhållandevis lätt, kring 2000 pund (lbs).</p>
-<p><strong>Vi kan visualisera det samband vi kan ana</strong> - att tunga bilar kan köra färre miles per gallon - genom att rita ut en linje. Vi låter Stata "passa in" linjen så bra det går. Mer specifikt försöker Stata minimera avståndet i höjdled från linjen till varje punkt. Ännu mer specifikt är det det kvadrerade (squared) avståndet som ska minimeras, därav namnet på formeln: Ordinary Least Squares. <a href="http://setosa.io/ev/ordinary-least-squares-regression/">På den här sidan</a> finns det bra interaktiva visualiseringar av hur det går till.</p>
-<p>För att rita ut linjen lägger vi till ett till lager i vår punktgraf. I det första lagret visas punkterna. I det andra lagret drar vi vår linje, med kommandot lfit. Varje lager får en egen parentes i grafkommandot. Såhär ser det ut:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">twoway</span> (scatter mpg weight) (lfit mpg weight)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_ts_jan18.dta&quot;</span>,<span class="k"> clear</span>
+<span class="k">keep</span> cname year fh_status unna_pop<span class="k"></span>
+<span class="k">keep if</span> year<span class="o">==</span><span class="m">2010</span> | year<span class="o">==</span><span class="m">2011</span>
 </pre></div>
 
     </div>
@@ -13481,222 +13242,10 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-(note: file /Users/anderssundell/.stata_kernel_cache/graph5.svg not found)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
+(Quality of Government Basic dataset 2018 - Time-Series)
 
 
-
-<div class="output_svg output_subarea ">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This is a Stata 15.0 generated SVG file (http://www.stata.com) -->
-
-<svg version="1.1" width="600px" height="436px" viewBox="0 0 3960 2880" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<desc>Stata Graph - Graph</desc>
-	<rect x="0" y="0" width="3960" height="2880" style="fill:#EAF2F3;stroke:none"/>
-	<rect x="0.00" y="0.00" width="3959.88" height="2880.00" style="fill:#EAF2F3"/>
-	<rect x="2.88" y="2.88" width="3954.12" height="2874.24" style="fill:none;stroke:#EAF2F3;stroke-width:5.76"/>
-	<rect x="290.81" y="100.86" width="3568.21" height="2132.77" style="fill:#FFFFFF"/>
-	<rect x="293.69" y="103.74" width="3562.45" height="2127.01" style="fill:none;stroke:#FFFFFF;stroke-width:5.76"/>
-	<line x1="290.81" y1="2170.27" x2="3859.02" y2="2170.27" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="1523.16" x2="3859.02" y2="1523.16" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="876.05" x2="3859.02" y2="876.05" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<line x1="290.81" y1="228.82" x2="3859.02" y2="228.82" style="stroke:#EAF2F3;stroke-width:8.64"/>
-	<circle cx="1596.87" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1596.87" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2042.99" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2042.99" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1288.86" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1288.86" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1936.81" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1936.81" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2818.41" cy="1846.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2818.41" cy="1846.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2382.93" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2382.93" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="853.38" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="853.38" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1968.62" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1968.62" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2605.93" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2605.93" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2096.08" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2096.08" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3083.97" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3083.97" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2627.21" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2627.21" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3041.53" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3041.53" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="725.92" cy="940.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="725.92" cy="940.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2404.22" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2404.22" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1862.44" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1862.44" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1904.88" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1904.88" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1405.68" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1405.68" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2128.01" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2128.01" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="736.44" cy="876.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="736.44" cy="876.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2308.56" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2308.56" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2308.56" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2308.56" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2457.30" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2457.30" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="396.62" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="396.62" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.50" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.50" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3625.75" cy="2040.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3625.75" cy="2040.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="3498.29" cy="2040.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="3498.29" cy="2040.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2552.84" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2552.84" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1225.12" cy="1393.84" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1225.12" cy="1393.84" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2797.12" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2797.12" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2436.02" cy="1846.78" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2436.02" cy="1846.78" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2064.27" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2064.27" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2871.49" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2871.49" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1490.69" cy="1523.29" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1490.69" cy="1523.29" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2797.12" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2797.12" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2000.54" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2000.54" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1989.90" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1989.90" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2404.22" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2404.22" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2064.27" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2064.27" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1384.39" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1384.39" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2765.32" cy="1782.06" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2765.32" cy="1782.06" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1947.45" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1947.45" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="396.62" cy="617.28" r="26.35" style="fill:#1A476F"/>
-	<circle cx="396.62" cy="617.28" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="821.45" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="821.45" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1161.39" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1161.39" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2021.70" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2021.70" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2414.73" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2414.73" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2170.45" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2170.45" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1894.24" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1894.24" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1883.72" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1883.72" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2117.36" cy="1588.01" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2117.36" cy="1588.01" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1341.94" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1341.94" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1490.69" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1490.69" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="683.35" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="683.35" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1299.50" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1299.50" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1002.00" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1002.00" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="630.26" cy="552.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="630.26" cy="552.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="906.47" cy="1264.39" r="26.35" style="fill:#1A476F"/>
-	<circle cx="906.47" cy="1264.39" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1405.68" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1405.68" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="747.08" cy="1458.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="747.08" cy="1458.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="863.90" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="863.90" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="354.05" cy="1005.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="354.05" cy="1005.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="587.81" cy="876.05" r="26.35" style="fill:#1A476F"/>
-	<circle cx="587.81" cy="876.05" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="2117.36" cy="1911.50" r="26.35" style="fill:#1A476F"/>
-	<circle cx="2117.36" cy="1911.50" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="428.42" cy="1134.95" r="26.35" style="fill:#1A476F"/>
-	<circle cx="428.42" cy="1134.95" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="662.06" cy="552.56" r="26.35" style="fill:#1A476F"/>
-	<circle cx="662.06" cy="552.56" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1044.57" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1044.57" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="821.45" cy="811.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="821.45" cy="811.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1320.66" cy="1652.61" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1320.66" cy="1652.61" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="779.01" cy="1329.12" r="26.35" style="fill:#1A476F"/>
-	<circle cx="779.01" cy="1329.12" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="651.54" cy="164.22" r="26.35" style="fill:#1A476F"/>
-	<circle cx="651.54" cy="164.22" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="534.60" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="534.60" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="598.33" cy="1199.67" r="26.35" style="fill:#1A476F"/>
-	<circle cx="598.33" cy="1199.67" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<circle cx="1851.80" cy="1717.33" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1851.80" cy="1717.33" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="354.05" y1="949.56" x2="1989.90" y2="1548.41" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="1989.90" y1="1548.41" x2="3625.75" y2="2147.25" stroke-linecap="round" style="stroke:#90353B;stroke-width:8.64"/>
-	<line x1="290.81" y1="2233.63" x2="290.81" y2="100.86" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="290.81" y1="2170.27" x2="250.84" y2="2170.27" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="2170.27" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,2170.27)" text-anchor="middle">10</text>
-	<line x1="290.81" y1="1523.16" x2="250.84" y2="1523.16" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="1523.16" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,1523.16)" text-anchor="middle">20</text>
-	<line x1="290.81" y1="876.05" x2="250.84" y2="876.05" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="876.05" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,876.05)" text-anchor="middle">30</text>
-	<line x1="290.81" y1="228.82" x2="250.84" y2="228.82" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="200.73" y="228.82" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" transform="rotate(-90 200.73,228.82)" text-anchor="middle">40</text>
-	<line x1="290.81" y1="2233.63" x2="3859.02" y2="2233.63" style="stroke:#000000;stroke-width:5.76"/>
-	<line x1="609.10" y1="2233.63" x2="609.10" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="609.10" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">2,000</text>
-	<line x1="1671.24" y1="2233.63" x2="1671.24" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="1671.24" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">3,000</text>
-	<line x1="2733.51" y1="2233.63" x2="2733.51" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="2733.51" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">4,000</text>
-	<line x1="3795.66" y1="2233.63" x2="3795.66" y2="2273.73" style="stroke:#000000;stroke-width:5.76"/>
-	<text x="3795.66" y="2363.59" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">5,000</text>
-	<text x="2074.92" y="2473.60" style="font-family:'Helvetica';font-size:99.99px;fill:#000000" text-anchor="middle">Weight (lbs.)</text>
-	<rect x="1073.65" y="2558.24" width="2002.65" height="186.37" style="fill:#FFFFFF"/>
-	<rect x="1076.53" y="2561.12" width="1996.89" height="180.61" style="fill:none;stroke:#000000;stroke-width:5.76"/>
-	<circle cx="1138.75" cy="2651.43" r="26.35" style="fill:#1A476F"/>
-	<circle cx="1138.75" cy="2651.43" r="22.03" style="fill:none;stroke:#1A476F;stroke-width:8.64"/>
-	<line x1="2012.79" y1="2651.43" x2="2387.14" y2="2651.43" style="stroke:#90353B;stroke-width:8.64"/>
-	<text x="1220.79" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Mileage (mpg)</text>
-	<text x="2447.16" y="2686.46" style="font-family:'Helvetica';font-size:99.99px;fill:#000000">Fitted values</text>
-</svg>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
+(14,770 observations deleted)
 </pre>
 </div>
 </div>
@@ -13708,20 +13257,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Linjen är nu den bästa möjliga. Om vi skulle vinkla den annorlunda, eller flytta den upp eller ner i diagrammet, skulle det sammanlagda avståndet till punkterna öka. Det här är den så kallade regressionslinjen.</p>
-<p>Eftersom den lutar nedåt åt höger är det ett så kallat negativt samband. Mer av den ena variabeln (vikt) hänger ihop med mindre av den andra (miles per gallon). Mer av miles per gallon hänger också ihop med mindre vikt.</p>
-<p><strong>Regressionsanalys är helt enkelt att sätta siffror på den här linjen.</strong> I en regressionsanalys får vi framförallt ut lutningskoefficienten, dvs hur mycket linjen lutar upp eller ner. Sen får vi också ut något som kallas intercept eller konstant, vilket visar var linjen hamnar på den lodräta axeln när vi är vid 0 på den vågräta axeln. Alternativt uttryckt: Vad genomsnittsvärdet är på den beroende variabeln, när alla de oberoende variablerna är noll.</p>
-<p>För att göra en regressionsanalys på de här två variablerna skriver vi:</p>
+<p>Om vi nu tittar på de första sex raderna i datasetet ser vi att varje land är med två gånger, en gång för 2010 och en gång för 2011. Varje variabel är bara med en gång.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> mpg weight
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
 </pre></div>
 
     </div>
@@ -13739,19 +13285,17 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-      Source |       SS           df       MS      Number of obs   =        74
--------------+----------------------------------   F(1, 72)        =    134.62
-       Model |   1591.9902         1   1591.9902   Prob &gt; F        =    0.0000
-    Residual |  851.469256        72  11.8259619   R-squared       =    0.6515
--------------+----------------------------------   Adj R-squared   =    0.6467
-       Total |  2443.45946        73  33.4720474   Root MSE        =    3.4389
-
-------------------------------------------------------------------------------
-         mpg |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-      weight |  -.0060087   .0005179   -11.60   0.000    -.0070411   -.0049763
-       _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
-------------------------------------------------------------------------------
+     +---------------------------------------------+
+     |       cname   year     fh_status   unna_pop |
+     |---------------------------------------------|
+  1. | Afghanistan   2010      Not Free   27962207 |
+  2. | Afghanistan   2011      Not Free   28809167 |
+  3. |     Albania   2010   Partly Free    2901883 |
+  4. |     Albania   2011   Partly Free    2886010 |
+  5. |     Algeria   2010      Not Free   36036159 |
+     |---------------------------------------------|
+  6. |     Algeria   2011      Not Free   36717132 |
+     +---------------------------------------------+
 </pre>
 </div>
 </div>
@@ -13763,12 +13307,113 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Principen är alltså regressionskommandot "reg", följt av den beroende variabeln "mpg" och sedan en lista på alla de oberoende variablerna (i det här fallet bara "weight").</p>
-<p>Tabellen kan se lite skräckinjagande ut, men det är inte alla siffror som är lika relevanta. Det viktigaste hittar vi i tabellen längst ner, framförallt i raden "weight." <strong>I kolumnen "Coef." ser vi den viktigaste siffran, lutningskoefficienten.</strong> Den visar hur mycket linjen lutar, uttryckt som <em>hur mycket upp eller ner vi hamnar på den beroende variabeln om vi ökar den oberoende variabeln med ett steg</em>.</p>
-<p>I det här fallet är det -.006. Det betyder att en bil som väger ett pund mer i genomsnitt kommer .006 färre miles för varje gallon bensin. Det betyder också att en bil som väger 1000 pund mer kommer 6 miles kortare per gallon. Exakt detta syns i diagrammet med linjen ovan.</p>
-<p>I raden "cons" ser vi vad det så kallade interceptet är. Det är genomsnittsvärdet för den beroende variabeln när alla de oberoende variablerna är noll. Alltså, hur många miles per gallon en bil som väger 0 pund kan köra: 39.44. Så är det naturligtvis inte i verkligheten - inga bilar väger så lite. Men det gör inget. Det är bara det värde vi får ut om vi drar ut den röda linjen i diagrammet en bit åt vänster. Vi behöver inte tolka det på något särskilt sätt.</p>
-<p>Slutligen kan vi också kolla på siffran som står till höger om "R-squared", uppe till höger i outputen. Värdet är här 0.6515. R-square är ett mått som går från 0 till 1 och visar hur bra vår linje passar till punkterna. Ju mer spridda punkterna är kring linjen, desto lägre värde. Ju närmare de är samlade kring linjen, desto högre värde.</p>
-<p>Man kan också tolka värdet som andelen förklarad varians. I det här fallet förklaras 65,15% av variationen i miles per gallon av variabeln vikt. Vikt är alltså en viktig förklaring till varför bilar kommer olika långt på en gallon bensin, även om det också finns annat som påverkar (R-squared är inte 1).</p>
+<h3 id="Reshape-kommandot-fr&#229;n-long-till-wide">Reshape-kommandot fr&#229;n long till wide<a class="anchor-link" href="#Reshape-kommandot-fr&#229;n-long-till-wide">&#182;</a></h3><p>Nu ska vi köra själva reshape-kommandot. Där behöver vi ange några saker.</p>
+<ol>
+<li>Om slutresultatet ska vara long eller wide.</li>
+<li>Vilka variabler det är som ska omformas (fh_status och unna_pop i det här fallet)</li>
+<li>Vilken variabel som anger panelenheten (cname i det här fallet)</li>
+<li>Vilken variabel som anger tidsenheten (year i det här fallet)</li>
+</ol>
+<p>De första två sakerna anges före kommatecknet, och de två andra i options <code>i()</code> (panelenheten) och <code>j()</code> (tidsenheten). Såhär ser det alltså ut:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reshape</span> wide fh_status<span class="o">-</span>unna_pop, i(cname) j(year)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(note: j = 2010 2011)
+
+Data                               long   -&gt;   wide
+-----------------------------------------------------------------------------
+Number of obs.                      422   -&gt;     211
+Number of variables                   4   -&gt;       5
+j variable (2 values)              year   -&gt;   (dropped)
+xij variables:
+                              fh_status   -&gt;   fh_status2010 fh_status2011
+                               unna_pop   -&gt;   unna_pop2010 unna_pop2011
+-----------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Vi får ut en liten statusrapport som visar hur det gick: Antalet observationer har minskat till hälften, vilket är som det ska - förut var ju varje land två observationer, nu är det bara en. Antalet variabler har dock blivit större. Variabeln "year" har försvunnit (den avspeglas nu i de andra variabelnamnen): fh_status har blivit till fh_status2010 och fh_status2011, medan unna_pop har blivit till unna_pop2010 och unna_pop2011. Vi kollar på de första sex raderna och ser att det fungerat.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+     +-----------------------------------------------------------------------+
+     |               cname   fh_sta~2010   unn~2010   fh_sta~2011   unn~2011 |
+     |-----------------------------------------------------------------------|
+  1. |         Afghanistan      Not Free   27962207      Not Free   28809167 |
+  2. |             Albania   Partly Free    2901883   Partly Free    2886010 |
+  3. |             Algeria      Not Free   36036159      Not Free   36717132 |
+  4. |             Andorra          Free      84419          Free      82326 |
+  5. |              Angola      Not Free   21219954      Not Free   21942296 |
+     |-----------------------------------------------------------------------|
+  6. | Antigua and Barbuda          Free      87233          Free      88152 |
+     +-----------------------------------------------------------------------+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Ett-m&#246;jligt-problem:-Dubletter-(values-of-variable-not-unique)">Ett m&#246;jligt problem: Dubletter (values of variable not unique)<a class="anchor-link" href="#Ett-m&#246;jligt-problem:-Dubletter-(values-of-variable-not-unique)">&#182;</a></h3><p>Om det inte fungerar kan ett problem vara att det finns dubletter i panel och tidsvariablerna. Då får man felmeddelandet "values of variable year not unique within cname". Använd kommandot duplicates list för att hitta dessa dubletter: <code>duplicates list cname year</code> och se vad som blivit fel.</p>
 
 </div>
 </div>
@@ -13776,16 +13421,114 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2>
+<h2 id="Omforma-fr&#229;n-bred-(wide)-till-l&#229;ng-(long)">Omforma fr&#229;n bred (wide) till l&#229;ng (long)<a class="anchor-link" href="#Omforma-fr&#229;n-bred-(wide)-till-l&#229;ng-(long)">&#182;</a></h2><p>Nu har vi alltså ett brett dataset. Om man vill omforma ett sådant till ett långt går det också bra att göra med <code>reshape</code>. Kanske är detta något vanligare om man hämtar data från källor som kanske inte är anpassade för statistisk analys.</p>
+<p>För att göra det behöver variabelnamnen se ut på ett speciellt sätt. Alla variabler som visar samma information ska heta samma sak, fast med olika siffror på slutet. De ska alltså heta "unna_pop2010", "unna_pop2011", "unna_pop2012" osv, inte "unna2010pop", "unna2011pop". Siffrorna måste vara på slutet för att Stata ska fatta.</p>
+<h3 id="Reshape-kommandot-fr&#229;n-bred-(wide)-till-l&#229;ng-(long)">Reshape-kommandot fr&#229;n bred (wide) till l&#229;ng (long)<a class="anchor-link" href="#Reshape-kommandot-fr&#229;n-bred-(wide)-till-l&#229;ng-(long)">&#182;</a></h3><p>Kommandot är likt det vi använder när vi ska gå från lång till bred, men inte riktigt. Först skriver vi <code>reshape long</code> för att signalera att det är ett långt dataset vi vill få till. Sedan ska vi skriva själva namnen på de variabler vi vill omforma, men bara grundformen av namnet! Alltså, utan årtalet. Stata letar då efter dessa grundformer i variabellistan. Om man har variabler som heter fh_status2010 och fh_status2011 skriver man alltså bara fh_status.</p>
+<p>Sedan ska vi i option <code>i()</code> ange panelenheten, och i option <code>j()</code> ska vi ange tidsenheten. Men observera att tidsenheten inte har en egen variabel än, vi bestämmer namnet på den här! Vi kallar variabeln som visar året för "year". Såhär blir alltså kommandot:</p>
+
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reshape</span> long fh_status unna_pop, i(cname) j(year)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(note: j = 2010 2011)
+
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      211   -&gt;     422
+Number of variables                   5   -&gt;       4
+j variable (2 values)                     -&gt;   year
+xij variables:
+            fh_status2010 fh_status2011   -&gt;   fh_status
+              unna_pop2010 unna_pop2011   -&gt;   unna_pop
+-----------------------------------------------------------------------------
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Svårare än så är inte regressionsanalys i sin enklaste form. Det handlar om att passa in en linje till ett gäng punkter, och så får vi information om linjen - hur mycket den lutar upp eller ned, vart den börjar, och hur väl den passar till punktsvärmen.</p>
-<p>Rent konkret använder vi den till att undersöka samband mellan olika variabler, och om det evntuella sambandet är starkt eller svagt. I exemplet såg vi att det fanns ett negativt samband: bilar med mycket vikt har lite miles per gallon. Bilar med mycket miles per gallon har lite vikt.</p>
-<p>Sen kan vi använda regressionsanalysen för att kontrollera för andra variabler. Till exempel skulle man kunna tänka sig att vissa bilmärken generellt sett är tyngre, och drar mer bensin. I så fall skulle det kunna hända att det inte är en vikteffekt, utan en märkeseffekt. Vi kan också kolla på signifikansnivåer och konfidensintervall för att se hur generaliserbara resultaten är till en större population. Men det är egna inlägg.</p>
+<p>Här ser vi att antalet observationer har fördubblats, från 211 till 422, eftersom det var två år. Förut låg åren utspridda i kolumner, nu blir de utspridda på längden istället. Variablerna har minskat i antal från 5 till 4, och en ny variabel har skapats: year. Informationen i fh_status2010 och fh_status2011 kallas ryms nu i variabeln fh_status, och unna_pop2010 och unna_pop2011 är nu i variabeln unna_pop. Om vi tittar på de första sex raderna:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+     +---------------------------------------------+
+     |       cname   year     fh_status   unna_pop |
+     |---------------------------------------------|
+  1. | Afghanistan   2010      Not Free   27962207 |
+  2. | Afghanistan   2011      Not Free   28809167 |
+  3. |     Albania   2010   Partly Free    2901883 |
+  4. |     Albania   2011   Partly Free    2886010 |
+  5. |     Algeria   2010      Not Free   36036159 |
+     |---------------------------------------------|
+  6. |     Algeria   2011      Not Free   36717132 |
+     +---------------------------------------------+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Avslutning">Avslutning<a class="anchor-link" href="#Avslutning">&#182;</a></h2><p><code>reshape</code> kan alltså användas för att omvandla data fram och tillbaka mellan långt och brett format.</p>
+<p>När vi går från långt till brett:<br>
+<code>reshape long variabelnamn, i(panelvariabel) j(tidsvariabel)</code></p>
+<p>När vi går från brett till långt:<br>
+<code>reshape wide variabelnamn, i(panelvariabel) j(ny tidsvariabel)</code></p>
+<p>För de flesta analyser är långt format att föredra, eftersom man då kan <a href="xtset_sv.html">ställa in panelstrukturen med <code>xtset</code></a> och lätt göra analyser som drar nytta av tidsformatet.</p>
 
 </div>
 </div>

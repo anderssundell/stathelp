@@ -42,14 +42,8 @@
             <div class="frontpagebox">        <b>Here you can find simple guides to different techniques for statistical analysis with the software Stata.</b> The focus is on running and interpreting the analyses, not the theory and assumptions behind that underpin the analyses. In the guides the code and output from the statistics software is shown, together with explanations in text. All code is supposed to be reproducible, so if you want to you can download the data that is linked in the guides, and follow along in the instructions. The site is run by <a href="https://gu.se/english/about_the_university/staff/?languageId=100001&userId=xsunde" target="outlink">Anders Sundell</a>. <a href="index.html">Swedish version.</a>
 <br>
                 <br>
-<hr>
-                <b>Latest posts:</b><br>
-                                2020-05-09: <a href="en/predictvalues_en.html">Predict values using the regression equation</a>
-                <br>
-                2020-05-05: <a href="en/regoutput_en.html">Interpret output from regression analysis</a>
-                <br>
-                2020-05-01: <a href="en/collapse_en.html">Aggregate datasets with <i>collapse</i></a><br>
-                 2020-04-29: <a href="en/timeseries_en.html">Set data for time series</a>
+
+
             </div>
         </div>
         
@@ -58,8 +52,16 @@
         <script async src="https://cse.google.com/cse.js?cx=015003530259641782996:fncslxyqan0"></script>
 <div class="gcse-search"></div>
                     <hr>
+
+                <b>Latest posts:</b><br>
+                                2020-05-09: <a href="en/predictvalues_en.html">Predict values using the regression equation</a>
+                <br>
+                2020-05-05: <a href="en/regoutput_en.html">Interpret output from regression analysis</a>
+                <br>
+                2020-05-01: <a href="en/collapse_en.html">Aggregate datasets with <i>collapse</i></a><br>
+                 2020-04-29: <a href="en/timeseries_en.html">Set data for time series</a>                    
+                    
 <br>
-                    <b>Help me help you!</b> <a href="https://forms.gle/Lw254gDmJAXiPtLZ7" target="surveylink">Please answer this very short (eight questions) survey. It only takes a minute or two.</a> It would be very helpful, going forward with the site! The survey is of course completely anonymous.
                     
                     </div></div>
       </div>
@@ -116,8 +118,41 @@ Glossary of words that you may encounter when doing statistical analysis or work
   <div class="column">
       <div class="row">
       <div class="menu-overall">
+
+                  <h4>Data management</h4>
+<div class="menu-explainer">
+Different operations required to prepare the data for analysis.<hr>
+<div class = "scircley"></div> <a class="menulink" href="en/intro_en.html">Getting started with Stata</a><br>
+The different parts of the program, setting a project folder, loading data, do-files, etc.<hr> 
+    
+<div class = "scircley"></div> <a class="menulink" href="en/createdata_en.html">Create datasets and import data</a><br>
+Import data or create a dataset from scratch.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="en/recodings_en.html">Recode variables</a><br>
+Change or remove certain values from variables to prepare them for analysis, using the commands "recode", "generate" and "replace".<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="en/ifstatements_en.html">If qualifiers and conditions</a><br>
+Use conditions to run analyses and other commands on selected groups of observations.<hr>    
+    
+<div class = "scircley"></div> <a class="menulink" href="en/merge_en.html">Combining datasets</a><br>
+Add data from other sources with the command "merge".<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="en/logarithm_en.html">Logarithms</a><br>
+Use the logarithmic transformation on variables to account for skewness, for instance arising from exponential growth.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="en/collapse_en.html">Aggregate datasets</a><br>
+Use the command "collapse" to aggregate datasets to show statistics such as means and standard deviations for groups in the data.
+    
+        </div>
+      </div>
+      </div>
+
+      <br>
+    
+  <div class="row">
+    <div class="menu-overall">
       
-      <h4>Regression analysis</h4>
+              <h4>Regression analysis</h4>
 <div class="menu-explainer">
 A common tool for statistical analysis. Used to investigate relationships between two or more variables.<hr>
     
@@ -147,38 +182,9 @@ Create nice tables for presenting regression results with the command esttab.
           </div>    
       </div>
     </div>
-      <br>
-    
-  <div class="row">
-    <div class="menu-overall">
-      
-        <h4>Data management</h4>
-<div class="menu-explainer">
-Different operations required to prepare the data for analysis.<hr>
-<div class = "scircley"></div> <a class="menulink" href="en/intro_en.html">Getting started with Stata</a><br>
-The different parts of the program, setting a project folder, loading data, do-files, etc.<hr> 
-    
-<div class = "scircley"></div> <a class="menulink" href="en/createdata_en.html">Create datasets and import data</a><br>
-Import data or create a dataset from scratch.<hr>    
-    
-<div class = "scircley"></div> <a class="menulink" href="en/recodings_en.html">Recode variables</a><br>
-Change or remove certain values from variables to prepare them for analysis, using the commands "recode", "generate" and "replace".<hr>
-    
-<div class = "scircley"></div> <a class="menulink" href="en/ifstatements_en.html">If qualifiers and conditions</a><br>
-Use conditions to run analyses and other commands on selected groups of observations.<hr>    
-    
-<div class = "scircley"></div> <a class="menulink" href="en/merge_en.html">Combining datasets</a><br>
-Add data from other sources with the command "merge".<hr>
-    
-<div class = "scircley"></div> <a class="menulink" href="en/logarithm_en.html">Logarithms</a><br>
-Use the logarithmic transformation on variables to account for skewness, for instance arising from exponential growth.<hr>
-    
-<div class = "scircley"></div> <a class="menulink" href="en/collapse_en.html">Aggregate datasets</a><br>
-Use the command "collapse" to aggregate datasets to show statistics such as means and standard deviations for groups in the data.
-    
-        </div>
-      </div>
-      </div>
+        
+        
+
       
       <br>
     
@@ -202,7 +208,34 @@ Set time variable, lags, leads, delta variable, plot data over time.
   <div class="row">
       <div class="menu-overall">
       
-      <h4>Graphs</h4>
+                  <h4>Descriptive statistics and simpler analyses</h4>
+<div class="menu-explainer">
+Get an overview of the data before proceeding to more advanced analysis.<hr>
+
+<div class = "scircley"></div> <a class="menulink" href="en/descriptive_summarize_en.html">Simple descriptive statistics</a><br>
+Use the commands codebook, summarize and tab to quickly find out the mean, median, min and max values (among other things) for a variable.<hr>    
+
+<div class = "scircley"></div> <a class="menulink" href="en/descriptive_averages_en.html">Mean values (averages) in different groups</a><br>
+Compare groups in a straightforward way by comparing mean values in different groups, using the commands sum and table.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="en/ttest_en.html">t-test</a><br>
+Test differences between groups for statistical significance.<hr>
+        
+<div class = "scircley"></div> <a class="menulink" href="en/correlation_en.html">Correlation</a><br>
+Simple and very common measure to show the strength and direction of association between two variables.<hr>
+    
+<div class = "scircley"></div> <a class="menulink" href="en/descriptive_crosstab_en.html">Crosstabs</a><br>
+Relationships between two categorical variables shown with percentages.
+        </div>
+      </div>
+      </div>
+          
+
+<br>
+    
+  <div class="row">
+    <div class="menu-overall">
+           <h4>Graphs</h4>
 <div class="menu-explainer">
 Various techniques for visualizing data and relationships.<hr>
 
@@ -226,33 +259,8 @@ Present regression coefficients and confidence intervals graphically, using the 
     
 </div>    
       </div>
-    </div>
-<br>
-    
-  <div class="row">
-    <div class="menu-overall">
-      
-        <h4>Descriptive statistics and simpler analyses</h4>
-<div class="menu-explainer">
-Get an overview of the data before proceeding to more advanced analysis.<hr>
+    </div> 
 
-<div class = "scircley"></div> <a class="menulink" href="en/descriptive_summarize_en.html">Simple descriptive statistics</a><br>
-Use the commands codebook, summarize and tab to quickly find out the mean, median, min and max values (among other things) for a variable.<hr>    
-
-<div class = "scircley"></div> <a class="menulink" href="en/descriptive_averages_en.html">Mean values (averages) in different groups</a><br>
-Compare groups in a straightforward way by comparing mean values in different groups, using the commands sum and table.<hr>
-    
-<div class = "scircley"></div> <a class="menulink" href="en/ttest_en.html">t-test</a><br>
-Test differences between groups for statistical significance.<hr>
-        
-<div class = "scircley"></div> <a class="menulink" href="en/correlation_en.html">Correlation</a><br>
-Simple and very common measure to show the strength and direction of association between two variables.<hr>
-    
-<div class = "scircley"></div> <a class="menulink" href="en/descriptive_crosstab_en.html">Crosstabs</a><br>
-Relationships between two categorical variables shown with percentages.
-        </div>
-      </div>
-      </div>
 </div>
     
     </div>
