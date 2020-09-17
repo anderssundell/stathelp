@@ -1,5 +1,7 @@
+https://www.stathelp.se/
 https://www.stathelp.se/index.html
 https://www.stathelp.se/index_en.html
+https://www.stathelp.se/sv/intro_sv.html
 https://www.stathelp.se/sv/barcharts_sv.html
 https://www.stathelp.se/sv/correlation_sv.html
 https://www.stathelp.se/sv/createdata_sv.html
@@ -29,6 +31,7 @@ https://www.stathelp.se/sv/macros_sv.html
 https://www.stathelp.se/sv/forvalues_sv.html
 https://www.stathelp.se/sv/foreach_sv.html
 https://www.stathelp.se/sv/spmap_sweden_sv.html
+https://www.stathelp.se/sv/spmap_world_sv.html
 https://www.stathelp.se/sv/ttest_sv.html
 https://www.stathelp.se/sv/regression_logistic_sv.html
 https://www.stathelp.se/sv/coefplot_sv.html
@@ -68,3 +71,4 @@ https://www.stathelp.se/en/timeseries_en.html
 https://www.stathelp.se/en/collapse_en.html
 https://www.stathelp.se/en/regoutput_en.html
 https://www.stathelp.se/en/predictvalues_en.html
+https://www.stathelp.se/en/spmap_world_en.html
