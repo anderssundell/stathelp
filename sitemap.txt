@@ -23,7 +23,6 @@ https://www.stathelp.se/sv/regression_interaction_sv.html
 https://www.stathelp.se/sv/regression_interaction2_sv.html
 https://www.stathelp.se/sv/regression_logarithm_sv.html
 https://www.stathelp.se/sv/regression1_sv.html
-https://www.stathelp.se/sv/startmenu_sv.html
 https://www.stathelp.se/sv/merge_sv.html
 https://www.stathelp.se/sv/collapse_sv.html
 https://www.stathelp.se/sv/wordlist_sv.html
@@ -57,7 +56,6 @@ https://www.stathelp.se/en/regression_controls_en.html
 https://www.stathelp.se/en/regression_interaction_en.html
 https://www.stathelp.se/en/regression_logarithm_en.html
 https://www.stathelp.se/en/regression1_en.html
-https://www.stathelp.se/en/startmenu_en.html
 https://www.stathelp.se/en/wordlist_en.html
 https://www.stathelp.se/en/merge_en.html
 https://www.stathelp.se/en/createdata_en.html
