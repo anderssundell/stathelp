@@ -43,6 +43,7 @@ https://www.stathelp.se/sv/regoutput_sv.html
 https://www.stathelp.se/sv/xtset_sv.html
 https://www.stathelp.se/sv/reshape_sv.html
 https://www.stathelp.se/sv/fixedeffects_sv.html
+https://www.stathelp.se/sv/center_sv.html
 https://www.stathelp.se/en/barcharts_en.html
 https://www.stathelp.se/en/correlation_en.html
 https://www.stathelp.se/en/descriptive_crosstab_en.html
