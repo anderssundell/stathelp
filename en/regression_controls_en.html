@@ -13147,12 +13147,12 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
     
-<h2 id="Why-do-we-need-control-variables?">Why do we need control variables?<a class="anchor-link" href="#Why-do-we-need-control-variables?">&#182;</a></h2><p>A major strength of regression analysis is that we can control relationships for alternative explanations. You've probably heard the expression "correlation is not causation." It means that just because we can see that two variables are related, one did not necessarily cause the other.</p>
+<h2 id="Why-do-we-need-control-variables?">Why do we need control variables?<a class="anchor-link" href="#Why-do-we-need-control-variables?">&#182;</a></h2><p>A major strength of <a href="regression1_en.html">regression analysis</a> is that we can control relationships for alternative explanations. You've probably heard the expression "correlation is not causation." It means that just because we can see that two variables are related, one did not necessarily cause the other.</p>
 <p>No statistical method can really <em>prove</em> that causality is present. However, we can make it more or less likely. And at the very least, we can investigate whether a relationship is spurious, that is, caused by other variables.</p>
 <p>To take a simple example. Imagine that we want to investigate the effect of a persons height on running speed. For data we take all the times in the finals of the 100 meters in the Olympics 2016. We will then find that taller persons ran faster, on average. It is actually a quite strong relationship.</p>
 <p>If this was a causal relationship - for instance because you can run faster if you have long legs - we could encourage tall youth to get into track and field.</p>
 <p><strong>But it would be unwise, without taking other relevant variables into account; variables that can affect both height and running speed.</strong> The obvious variable is gender. On average, men are taller than women, and they also have other physiological properties that make them run faster. If we don't account for the runners' gender, we would not pick that up.</p>
-<p><strong>To "control" for the varaible gender in principle means that we compare men with men, and women with women.</strong> What we are looking at is whether tall women run faster than short women, and whether tall men run faster than short men. And if we actually run this analysis (which I have!) we will see that no relationship between height and time remains. The relationship was spurious.</p>
+<p><strong>To "control" for the variable gender in principle means that we compare men with men, and women with women.</strong> What we are looking at is whether tall women run faster than short women, and whether tall men run faster than short men. And if we actually run this analysis (which I have!) we will see that no relationship between height and time remains. The relationship was spurious.</p>
 <p>Had there been a relationship between height and speed even under control for gender, this would still not have implied that the relationship was causal, but it would at least have made it more less unlikely.</p>
 <p><strong>In this guide I will show how to do a regression analysis with control variables in Stata.</strong></p>
 
@@ -13309,7 +13309,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Here we can see a lot of interesting stuff, but the most important is the b-coefficient for the democracy variable, which we find in the column "Coef." It is 0.39, which means that for each step up we take on the democracy variable, life expectancy increases by 0.39 years. The relationship is statistically significant, which we see in the column "P&gt;|t", since the p-value is below 0.050.</p>
 <p>Up to the right, we see that "R-squared = 0.0844". This means that the variables in the model - only democracy in this case - explain 8.4% of the variation in the dependent variable. Not a lot, but something. We have no thresholds by which to judge whether the value is large or small - it completely depends on the context.</p>
-<p>If we want to look at the relationship graphically, we write:</p>
+    <p>If we want to look at the relationship graphically with a <a href="graphs_scatterplot_en.html">scatterplot</a> we write:</p>
 
 </div>
 </div>
@@ -13890,9 +13890,9 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>To prove that a relationship is causal is extremely hard. It is a shame, since proving causality is usually what we need in order to make recommendations, regardless if it is about health care or policy.</p>
-<p>But regression analysis with control variables at the very least help us to avoid the most common pitfalls. In this example, we could see that the relationship between democracy and life expectancy not completely was due to democratic countries being richer, and non-democratic countries poorer. But by doing so, we have accounted for one alternative explanation for the original relationship.</p>
+<p>But regression analysis with control variables at the very least help us to avoid the most common pitfalls. In this example, we could see that the relationship between democracy and life expectancy was not completely due to democratic countries being richer, and non-democratic countries poorer. But by doing so, we have accounted for one alternative explanation for the original relationship.</p>
 <p>It is however important to think through which control variables that should be included. The analysis is not better or more sofisticated just because more control variables are included. We should for example not control for variables that come after the independent variable in the causal chain. That is, if democracy causes something that in turn causes longer life expectancy, we should not control for it. To rule out alternative explanations we should only control for variables that come before both independent and dependent variables.</p>
-<p>It might also be a good idea to run the analyses stepwise, adding one control variable at a time, to see how the main relationship changes. This helps us to get a better sense of what is going on, and to think theoretically about. How we eventually present the results for a wider audience is another question, and we might not then need to show all the steps.</p>
+<p>It might also be a good idea to run the analyses stepwise, adding one control variable at a time, to see how the main relationship changes (<a href="esttab_en.html">see here how to present the results in a nice table</a>) This helps us to get a better sense of what is going on, and to think theoretically about. How we eventually present the results for a wider audience is another question, and we might not then need to show all the steps.</p>
 
 </div>
 </div>
