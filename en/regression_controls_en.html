@@ -40,6 +40,7 @@ html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
+    
 body {
   margin: 0;
 }
@@ -13892,7 +13893,7 @@ div#notebook {
 <p>To prove that a relationship is causal is extremely hard. It is a shame, since proving causality is usually what we need in order to make recommendations, regardless if it is about health care or policy.</p>
 <p>But regression analysis with control variables at the very least help us to avoid the most common pitfalls. In this example, we could see that the relationship between democracy and life expectancy was not completely due to democratic countries being richer, and non-democratic countries poorer. But by doing so, we have accounted for one alternative explanation for the original relationship.</p>
 <p>It is however important to think through which control variables that should be included. The analysis is not better or more sofisticated just because more control variables are included. We should for example not control for variables that come after the independent variable in the causal chain. That is, if democracy causes something that in turn causes longer life expectancy, we should not control for it. To rule out alternative explanations we should only control for variables that come before both independent and dependent variables.</p>
-<p>It might also be a good idea to run the analyses stepwise, adding one control variable at a time, to see how the main relationship changes (<a href="esttab_en.html">see here how to present the results in a nice table</a>) This helps us to get a better sense of what is going on, and to think theoretically about. How we eventually present the results for a wider audience is another question, and we might not then need to show all the steps.</p>
+<p>It might also be a good idea to run the analyses stepwise, adding one control variable at a time, to see how the main relationship changes (see here <a href="esttab_en.html">how to present the results in a nice table</a>, or here <a href="coefplot_en.html"> how to visualize the coefficients</a>). This helps us to get a better sense of what is going on, and to think theoretically about. How we eventually present the results for a wider audience is another question, and we might not then need to show all the steps.</p>
 
 </div>
 </div>
