@@ -76,3 +76,4 @@ https://www.stathelp.se/en/spmap_world_en.html
 https://www.stathelp.se/en/xtset_en.html
 https://www.stathelp.se/en/center_en.html
 https://www.stathelp.se/en/recodeindex_en.html
+https://www.stathelp.se/en/regression_logistic_en.html
