@@ -2,10 +2,10 @@
 <html>
 <head><meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="How to do a regression analysis interaction effects when the variables are continuous">
-<meta name="keywords" content="statistics, stata, statistical analysis, regression, interaction, moderation, interaction effect, continuous, margins, marginsplot, predict values, marginal effects graph">
+        <meta name="description" content="How to transform panel data between long and wide format using the reshape command in Stata.">
+<meta name="keywords" content="statistics, stata, statistical analysis, reshape, transform, panel data, long data, wide data, long, wide">
 
-<title>Regression with interaction effects - continuous variables</title>
+<title>Transform panel data between long and wide with reshape</title>
     
         <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132683642-1"></script>
@@ -16,7 +16,7 @@
 
   gtag('config', 'UA-132683642-1');
 </script>
-
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
@@ -13085,15 +13085,14 @@ div#notebook {
     <!-- End of mathjax configuration --></head>
 <body>
     
-                       <!-- ENGLISH MENU -->
+      <!-- ENGLISH MENU -->
 <div class="headerrow">
 <div class="headercolumnleft">
-    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/regression_interaction2_sv.html">SV/</a><a class="navlink" href="">EN</a>
+    <a class="navlink" href="../index_en.html">STATISTICS HELP | </a> <a class="navlink" href="../sv/reshape_sv.html">SV/</a><a class="navlink" href="">EN</a>
     <div class = "circley"></div> <div class = "circleb"></div> <div class = "circlep"></div>
     </div>
     </div>     
                     <!-- END MENU -->
-    
     
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
@@ -13101,9 +13100,130 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Regression-with-interaction-effects---continuous-variables">Regression with interaction effects - continuous variables<a class="anchor-link" href="#Regression-with-interaction-effects---continuous-variables">&#182;</a></h1><p>In <a href="regression_interaction_en.html">another post</a> we talked about regression analysis with interaction effects. The variables then only had two values. But how do we do when one or both of the variables in the interaction are continuous, with many values? In general we do the same thing, but we have to present and interpret the results in a slightly different way. That is the subject of this post. Anyone that wants to dig deeper can read <a href="https://www.jstor.org/stable/25791835?seq=1#page_scan_tab_contents" target=_blank>this (paywalled) article</a>.</p>
-<p>We will use data from the American <a href="http://gss.norc.org/get-the-data/stata">General Social Survey</a>, a survey with regular citizens, with questions about a lot of subjects. We will use the 2016 version, and ask what is the effect of having kids on income. If you want to follow along, download the data and put it into your project folder. I have put it in a sub-folder called "data", which I also state when loading the file.</p>
-<p>In the code below, we first load the data, and then do a recoding to create a "woman" variable.</p>
+<h1 id="Transform-panel-data-between-long-and-wide-with-reshape">Transform panel data between long and wide with <code>reshape</code><a class="anchor-link" href="#Transform-panel-data-between-long-and-wide-with-reshape">&#182;</a></h1><p>Panel data can, as described in <a href="xtset_en.html">another post</a> be structured in a "long" or "wide" way, depending on the question asked. Below are examples of what the structures look like.</p>
+<ul>
+<li>In wide data each variable is included several times, once for every unit of time, but each panel unit (country in this case) only has one observation.</li>
+<li>In long data each variable is only included once, but each panel unit has many observations. Time is also shown in a special variable.</li>
+</ul>
+<p>In this guide we will cover how to transform the data between the two formats, with the command <code>reshape</code>.</p>
+<p><strong>Wide data:</strong></p>
+<table>
+<thead><tr>
+<th>country</th>
+<th>population2000</th>
+<th>population2001</th>
+<th>population2002</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sweden</td>
+<td>8872284</td>
+<td>8888675</td>
+<td>8911899</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>4491572</td>
+<td>4514907</td>
+<td>4537240</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Long data:</strong></p>
+<table>
+<thead><tr>
+<th>country</th>
+<th>year</th>
+<th>population</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sweden</td>
+<td>2000</td>
+<td>8872284</td>
+</tr>
+<tr>
+<td>Sweden</td>
+<td>2001</td>
+<td>8888675</td>
+</tr>
+<tr>
+<td>Sweden</td>
+<td>2002</td>
+<td>8911899</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2000</td>
+<td>4491572</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2001</td>
+<td>4514907</td>
+</tr>
+<tr>
+<td>Norway</td>
+<td>2002</td>
+<td>4537240</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Reshape-from-long-to-wide">Reshape from long to wide<a class="anchor-link" href="#Reshape-from-long-to-wide">&#182;</a></h2><p>First we load the data to work with: The QoG institute time-series cross-section data. It holds data on the countries of the world, over time. To make it a little bit easier to grasp we will throw away most of the variables. We will only <code>keep</code> the variables "cname", "year", "fh_status" (democracy status) and "unna_pop" (population), and only the years 2010 and 2011. We do this with the command <code>keep</code> and an <a href="ifstatements_en.html">if-statement.</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-stata"><pre><span></span><span class="k">use</span> <span class="s">&quot;https://www.qogdata.pol.gu.se/dataarchive/qog_bas_ts_jan18.dta&quot;</span>,<span class="k"> clear</span>
+<span class="k">keep</span> cname year fh_status unna_pop<span class="k"></span>
+<span class="k">keep if</span> year<span class="o">==</span><span class="m">2010</span> | year<span class="o">==</span><span class="m">2011</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+(Quality of Government Basic dataset 2018 - Time-Series)
+
+
+(14,770 observations deleted)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If we look at the first six rows of the dataset (using <code>list</code>) we can see that each country is included twice, once for 2010 and once for 2011. Each variable is only included once. <strong>The data is in "long" format.</strong></p>
 
 </div>
 </div>
@@ -13113,9 +13233,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">cd</span> <span class="s">&quot;/Users/xsunde/Dropbox/Jupyter/stathelp&quot;</span><span class="k"></span>
-<span class="k">use</span> <span class="s">&quot;data/GSS2016.dta&quot;</span>,<span class="k"> clear</span>
-<span class="k">recode</span> sex (<span class="m">1</span>=<span class="m">0</span>) (<span class="m">2</span>=<span class="m">1</span>),<span class="k"> generate</span>(woman)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
 </pre></div>
 
     </div>
@@ -13133,10 +13251,17 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-/Users/xsunde/Dropbox/Jupyter/stathelp
-
-
-(2867 differences between sex and woman)
+     +---------------------------------------------+
+     |       cname   year     fh_status   unna_pop |
+     |---------------------------------------------|
+  1. | Afghanistan   2010      Not Free   27962207 |
+  2. | Afghanistan   2011      Not Free   28809167 |
+  3. |     Albania   2010   Partly Free    2901883 |
+  4. |     Albania   2011   Partly Free    2886010 |
+  5. |     Algeria   2010      Not Free   36036159 |
+     |---------------------------------------------|
+  6. |     Algeria   2011      Not Free   36717132 |
+     +---------------------------------------------+
 </pre>
 </div>
 </div>
@@ -13148,8 +13273,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Interaction-analysis-with-continuous-variables">Interaction analysis with continuous variables<a class="anchor-link" href="#Interaction-analysis-with-continuous-variables">&#182;</a></h2><p>In the <a href="regression_interaction_en.html">previous post</a> we could see that the effect of having kids on income was different for men and women. But the variable we used for kids was a dummy variable, with the values 0 (no kids) and 1 (one or more kids). Now we will insteade use a continous variable, "childs", that shows how many kids the respondent has. The variable is however cut off at 8 - the value 8 signifies 8 or more kids.</p>
-<p>First we do a normal regression, with income as the dependent variable, and "woman" and "childs" as independents, and also contorlling for age, since it is strongly related to both income and the number of kids.</p>
+<h3 id="The-reshape-command-from-long-to-wide">The <code>reshape</code> command from long to wide<a class="anchor-link" href="#The-reshape-command-from-long-to-wide">&#182;</a></h3><p>Now we shall run the <code>reshape</code> command. We need to specify a few things:</p>
+<ol>
+<li>If the end result should be long or wide</li>
+<li>Which variables to transform (fh_status and unna_pop, in this case)</li>
+<li>Which variable that shows the panel unit (cname, in this case)</li>
+<li>Which variable that shows the time (year, in this case)</li>
+</ol>
+<p>The first two pieces of information are included before the comma sign, and the other two in the options <code>i()</code> (the panel unit) and <code>j()</code> (time). It looks like this:</p>
 
 </div>
 </div>
@@ -13159,7 +13290,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman childs age
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reshape</span> wide fh_status<span class="o">-</span>unna_pop, i(cname) j(year)
 </pre></div>
 
     </div>
@@ -13176,22 +13307,17 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>
-      Source |       SS           df       MS      Number of obs   =     1,627
--------------+----------------------------------   F(3, 1623)      =     24.96
-       Model |  6.1202e+10         3  2.0401e+10   Prob &gt; F        =    0.0000
-    Residual |  1.3264e+12     1,623   817265487   R-squared       =    0.0441
--------------+----------------------------------   Adj R-squared   =    0.0423
-       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28588
+<pre>(note: j = 2010 2011)
 
-------------------------------------------------------------------------------
-    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-       woman |   -9474.27   1418.312    -6.68   0.000    -12256.19   -6692.354
-      childs |  -108.2144   502.1071    -0.22   0.829    -1093.061    876.6319
-         age |   282.4416   52.96583     5.33   0.000      178.553    386.3302
-       _cons |   16147.79   2435.659     6.63   0.000     11370.42    20925.15
-------------------------------------------------------------------------------
+Data                               long   -&gt;   wide
+-----------------------------------------------------------------------------
+Number of obs.                      422   -&gt;     211
+Number of variables                   4   -&gt;       5
+j variable (2 values)              year   -&gt;   (dropped)
+xij variables:
+                              fh_status   -&gt;   fh_status2010 fh_status2011
+                               unna_pop   -&gt;   unna_pop2010 unna_pop2011
+-----------------------------------------------------------------------------
 </pre>
 </div>
 </div>
@@ -13203,8 +13329,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The coefficient for "childs" shows the expected effect of increasing the variable one step, which means having another child. It is weakly negative and insignificant. There is thus no apparent difference between respondents with few and many children. The effect of woman is negative - women earn less than men.</p>
-<h2 id="Difference-in-the-effect-of-having-children-for-women-and-men">Difference in the effect of having children for women and men<a class="anchor-link" href="#Difference-in-the-effect-of-having-children-for-women-and-men">&#182;</a></h2><p>Now we will add the interaction between woman and childs. We can do that directly in the regression command, by connecting the two variables with <code>##</code>. But we must also add <code>c.</code> in front on the childs variable, to show that it is continuous.</p>
+<p>Stata shows us a little status report that shows the result: The number of observations has been cut in half, just as expected. Previously, each country was included twice, now it is only included once. The number of variables has however increase. The variable "year" is gone (it is now reflected in the other variable names): "fh_status" has turned into "fh_status2010" and "fh_status2011", while "unna_pop" has turned into "unna_pop2010" and "unna_pop2011". We can again look at the first six rows to make sure that it worked:</p>
 
 </div>
 </div>
@@ -13214,7 +13339,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman##c<span class="m">.</span>childs age
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
 </pre></div>
 
     </div>
@@ -13232,26 +13357,17 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-      Source |       SS           df       MS      Number of obs   =     1,627
--------------+----------------------------------   F(4, 1622)      =     19.93
-       Model |  6.5005e+10         4  1.6251e+10   Prob &gt; F        =    0.0000
-    Residual |  1.3226e+12     1,622   815424344   R-squared       =    0.0468
--------------+----------------------------------   Adj R-squared   =    0.0445
-       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28556
-
-------------------------------------------------------------------------------
-    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-     1.woman |  -6100.754   2108.763    -2.89   0.004    -10236.94   -1964.569
-      childs |   855.1288   671.1906     1.27   0.203    -461.3629    2171.621
-             |
-       woman#|
-    c.childs |
-          1  |  -2060.054   953.8345    -2.16   0.031    -3930.931   -189.1764
-             |
-         age |   275.4991    53.0037     5.20   0.000     171.5362     379.462
-       _cons |   14916.98   2498.767     5.97   0.000     10015.82    19818.13
-------------------------------------------------------------------------------
+     +-----------------------------------------------------------------------+
+     |               cname   fh_sta~2010   unn~2010   fh_sta~2011   unn~2011 |
+     |-----------------------------------------------------------------------|
+  1. |         Afghanistan      Not Free   27962207      Not Free   28809167 |
+  2. |             Albania   Partly Free    2901883   Partly Free    2886010 |
+  3. |             Algeria      Not Free   36036159      Not Free   36717132 |
+  4. |             Andorra          Free      84419          Free      82326 |
+  5. |              Angola      Not Free   21219954      Not Free   21942296 |
+     |-----------------------------------------------------------------------|
+  6. | Antigua and Barbuda          Free      87233          Free      88152 |
+     +-----------------------------------------------------------------------+
 </pre>
 </div>
 </div>
@@ -13263,17 +13379,19 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>It is now important to remember that we cannot interpret the coefficients in the interaction in the regular way.</strong></p>
-<ul>
-<li>The coefficient for woman (-6100.754) now shows the effect of being a woman for persons with 0 kids.</li>
-<li>The coefficient for childs (855.1288) now shows the effect of having another child for persons that have the value 0 on the variable woman, that is, men.</li>
-<li>The coefficient for woman#c.childs is the interaction term, and shows the difference in effect. That means both the difference in the effect of having a child, for women and men, or how the gender difference changes when you have more kids.</li>
-</ul>
-<p>To calculate the effect of having another child for both values of woman (that is, men and women), we take the main effect of childs (855.1288) and then add the coefficient for the interaction term, times the value of the woman variable: <br>
-For woman = 0 (men): $855.1288 -2060.054*0 = 855.1288$ <br>
-For woman = 1 (women): $855.1288 -2060.054*1 = -1204.9252$ <br></p>
-<p><strong>Men that have another child increase their income by 855.1288, while women decrease their income by 1204.9252. As the interaction term is statistically significant, we know that the difference in effect between the groups is significant.</strong></p>
-<p>However, this does not necessarily mean that the effects of childs is significant for each of the groups. For instance, among women, is the effect of having another child significantly negative? To calculate that we can use the <code>margins</code> command, and then immediately after the <code>marginsplot</code> command to show the coefficients graphically.</p>
+<h3 id="A-possible-problem:-Duplicate-values-(&quot;values-of-variable-not-unique&quot;)">A possible problem: Duplicate values ("values of variable not unique")<a class="anchor-link" href="#A-possible-problem:-Duplicate-values-(&quot;values-of-variable-not-unique&quot;)">&#182;</a></h3><p>If the command doesn't work a problem might be that there are duplicate values in the panel and time variables. We then get the error message "values of variable year not unique within cname". Use the command <code>duplicates list</code> to find these duplicate values: <code>duplicates list cname year</code> and figure out what went wrong.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Reshape-from-wide-to-long">Reshape from wide to long<a class="anchor-link" href="#Reshape-from-wide-to-long">&#182;</a></h2><p>We have now created a "wide" dataset. If we want to turn it back to long format we can do so with <code>reshape</code>. This might actually be the more common case when collecting data from various official sources.</p>
+<p>In order for it to work the variable must be named in a specific way. All variables that show the same information needs to have the same name, but with different numbers at the end. They are supporsed to be named (for instance) "unna_pop2010", "unna_pop2011", "unna_pop2012". They cannot be called "unna2010pop" and "unna2011pop". The numbers have to be at the end.
+Siffrorna måste vara på slutet för att Stata ska fatta.</p>
+<h3 id="The-reshape-command-from-wide-to-long">The reshape command from wide to long<a class="anchor-link" href="#The-reshape-command-from-wide-to-long">&#182;</a></h3><p>The command is very similar to what we did previously, but not entirely. First we write <code>reshape long</code> to indicate that we want to create a long dataset. Then we write the name of the variables we want to reshape, but only the "stem" - not the time. Stata will then look for this variable name "stems" in the variable list. If we have variables that are called fh_status2010 and fh_status2011 we only write "fh_status".</p>
+<p>In the option <code>i()</code> we state the name of the panel unit variable, and in option <code>j()</code> we name the time variable. But this time, there is no existing time variable! We set the name of it in this command. We will call the vairable that shows the year for "year". The full command is thus:</p>
 
 </div>
 </div>
@@ -13283,8 +13401,7 @@ For woman = 1 (women): $855.1288 -2060.054*1 = -1204.9252$ <br></p>
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(childs) at(woman=(<span class="m">0</span> <span class="m">1</span>))
-marginsplot, yline(<span class="m">0</span>)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">reshape</span> long fh_status unna_pop, i(cname) j(year)
 </pre></div>
 
     </div>
@@ -13301,104 +13418,17 @@ marginsplot, yline(<span class="m">0</span>)
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>
+<pre>(note: j = 2010 2011)
 
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : childs
-
-1._at        : woman           =           0
-
-2._at        : woman           =           1
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-childs       |
-         _at |
-          1  |   855.1288   671.1906     1.27   0.203    -461.3629    2171.621
-          2  |  -1204.925   713.7205    -1.69   0.092    -2604.836    194.9863
-------------------------------------------------------------------------------
-
-
-  Variables that uniquely identify margins: woman
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;3859.02&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2019.54&quot; x2=&quot;3859.02&quot; y2=&quot;2019.54&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1613.26&quot; x2=&quot;3859.02&quot; y2=&quot;1613.26&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1206.97&quot; x2=&quot;3859.02&quot; y2=&quot;1206.97&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;800.69&quot; x2=&quot;3859.02&quot; y2=&quot;800.69&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;394.40&quot; x2=&quot;3859.02&quot; y2=&quot;394.40&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1206.97&quot; x2=&quot;3859.02&quot; y2=&quot;1206.97&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1394.46&quot; x2=&quot;454.16&quot; y2=&quot;324.73&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;324.73&quot; x2=&quot;476.19&quot; y2=&quot;324.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1394.46&quot; x2=&quot;476.19&quot; y2=&quot;1394.46&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2265.31&quot; x2=&quot;3795.66&quot; y2=&quot;1127.77&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1127.77&quot; x2=&quot;3817.69&quot; y2=&quot;1127.77&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2265.31&quot; x2=&quot;3817.69&quot; y2=&quot;2265.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 859.59 L3795.66 1696.67&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;859.59&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;859.59&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1696.67&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1696.67&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;350.83&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2425.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2425.82)&quot; text-anchor=&quot;middle&quot;&gt;-3000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2019.54&quot; x2=&quot;350.83&quot; y2=&quot;2019.54&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2019.54&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2019.54)&quot; text-anchor=&quot;middle&quot;&gt;-2000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1613.26&quot; x2=&quot;350.83&quot; y2=&quot;1613.26&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1613.26&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1613.26)&quot; text-anchor=&quot;middle&quot;&gt;-1000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1206.97&quot; x2=&quot;350.83&quot; y2=&quot;1206.97&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1206.97&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1206.97)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;800.69&quot; x2=&quot;350.83&quot; y2=&quot;800.69&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;800.69&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,800.69)&quot; text-anchor=&quot;middle&quot;&gt;1000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;394.40&quot; x2=&quot;350.83&quot; y2=&quot;394.40&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;394.40&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,394.40)&quot; text-anchor=&quot;middle&quot;&gt;2000&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;RECODE of sex (respondents sex)&lt;/text&gt;
-	&lt;text x=&quot;1980.00&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of childs with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      211   -&gt;     422
+Number of variables                   5   -&gt;       4
+j variable (2 values)                     -&gt;   year
+xij variables:
+            fh_status2010 fh_status2011   -&gt;   fh_status
+              unna_pop2010 unna_pop2011   -&gt;   unna_pop
+-----------------------------------------------------------------------------
 </pre>
 </div>
 </div>
@@ -13410,21 +13440,7 @@ childs       |
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We now get graphically what we calculated manually: The effect of "childs" is positive for people with a 0 on the variable woman (the men) and it is negative for the women. But the effects in themselves are not significantly different from zero. That means that we can be pretty sure that the effect of having more children is different for women than for men, but we can at the same time not be sure that either of the two effects is different from zero! This might be a little bit difficult to grasp.</p>
-<p>But what we need to keep in mind is that "not significantly different from zero" not means that it definitely is zero. It is just more than five percent chance that it is zero. But if we look at the graph we can see that the confidence intervals only overlap slightly. In order for the two effects to be the same, the effect for men must be in the lowest part of the interval, at the same time as the effect of women is in the highest part of the interval. THe chance of both those happening at the same time is less than five percent. A bit tricky, but it actually makes sense.</p>
-<h2 id="Difference-in-the-effect-of-woman-for-people-with-different-number-of-kids">Difference in the effect of woman for people with different number of kids<a class="anchor-link" href="#Difference-in-the-effect-of-woman-for-people-with-different-number-of-kids">&#182;</a></h2><p>Now we will calculate what the difference between men and women is, over different values of the variable childs. We do so by taking the main effect of "woman" (-6100.754), and then add the interaction term (-2060.054) times different values of children.</p>
-<p>0 kids: -6100.754 -2060.054 <em> 0 = -6100.754 <br>
-1 kids: -6100.754 -2060.054 </em> 1 = -8160.808 <br>
-2 kids: -6100.754 -2060.054 <em> 2 = -10220.862 <br>
-3 kids: -6100.754 -2060.054 </em> 3 = -12280.916 <br>
-4 kids: -6100.754 -2060.054 <em> 4 = -14340.97 <br>
-5 kids: -6100.754 -2060.054 </em> 5 = -16401.024 <br>
-6 kids: -6100.754 -2060.054 <em> 6 = -18461.078 <br>
-7 kids: -6100.754 -2060.054 </em> 7 = -20521.132 <br>
-8 kids: -6100.754 -2060.054 * 8 = -22581.186 <br></p>
-<p>We thus get nine coefificents, each 2060.054 smaller than the previous. The difference between men and women grow larger for each additional kid there is. Women with 8 kids on average earn 22581.186 less than men with 8 kids!</p>
-<p>We can't have 3.5 kids, but we can use the same method for interactions with variables that have decimal values.</p>
-<p>Now we will calculate the same coefficients with the margins command, because we then also get the significance values and confidence intervals:</p>
+<p>The number of observations doubles, from 211 to 422, because there were two years. Previously, the years were spread out over columns - now they are spread out over more observations instead. There are now only four variables, down from five, and Stata has also created a new variable: "year". The information in "fh_status2010" and "fh_status2011" are now contained in the variable "fh_status", and the information in the variables "unna_pop2010" and "unna_pop2011" are now in the variable "unna_pop". Let's look at the first six rows:</p>
 
 </div>
 </div>
@@ -13434,8 +13450,7 @@ childs       |
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(woman) at(childs=(<span class="m">0</span><span class="o">/</span><span class="m">8</span>))
-marginsplot, yline(<span class="m">0</span>)
+<div class=" highlight hl-stata"><pre><span></span><span class="k">list in</span> <span class="m">1</span><span class="o">/</span><span class="m">6</span>
 </pre></div>
 
     </div>
@@ -13453,173 +13468,17 @@ marginsplot, yline(<span class="m">0</span>)
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : 1.woman
-
-1._at        : childs          =           0
-
-2._at        : childs          =           1
-
-3._at        : childs          =           2
-
-4._at        : childs          =           3
-
-5._at        : childs          =           4
-
-6._at        : childs          =           5
-
-7._at        : childs          =           6
-
-8._at        : childs          =           7
-
-9._at        : childs          =           8
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-0.woman      |  (base outcome)
--------------+----------------------------------------------------------------
-1.woman      |
-         _at |
-          1  |  -6100.754   2108.763    -2.89   0.004    -10236.94   -1964.569
-          2  |  -8160.807   1541.729    -5.29   0.000     -11184.8   -5136.819
-          3  |  -10220.86   1458.278    -7.01   0.000    -13081.17   -7360.555
-          4  |  -12280.91   1922.452    -6.39   0.000    -16051.67   -8510.164
-          5  |  -14340.97   2661.704    -5.39   0.000    -19561.71   -9120.228
-          6  |  -16401.02   3506.154    -4.68   0.000    -23278.09   -9523.954
-          7  |  -18461.08   4395.585    -4.20   0.000     -27082.7   -9839.454
-          8  |  -20521.13    5307.43    -3.87   0.000    -30931.27   -10110.99
-          9  |  -22581.18   6231.859    -3.62   0.000    -34804.52   -10357.84
-------------------------------------------------------------------------------
-Note: dy/dx for factor levels is the discrete change from the base level.
-
-
-  Variables that uniquely identify margins: childs
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;3859.02&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1900.61&quot; x2=&quot;3859.02&quot; y2=&quot;1900.61&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1375.28&quot; x2=&quot;3859.02&quot; y2=&quot;1375.28&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;849.94&quot; x2=&quot;3859.02&quot; y2=&quot;849.94&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;862.44&quot; x2=&quot;454.16&quot; y2=&quot;427.94&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;427.94&quot; x2=&quot;476.19&quot; y2=&quot;427.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;862.44&quot; x2=&quot;476.19&quot; y2=&quot;862.44&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;871.82&quot; y1=&quot;912.19&quot; x2=&quot;871.82&quot; y2=&quot;594.51&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;594.51&quot; x2=&quot;893.85&quot; y2=&quot;594.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;912.19&quot; x2=&quot;893.85&quot; y2=&quot;912.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;1011.81&quot; x2=&quot;1289.47&quot; y2=&quot;711.34&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;711.34&quot; x2=&quot;1311.50&quot; y2=&quot;711.34&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;1011.81&quot; x2=&quot;1311.50&quot; y2=&quot;1011.81&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1707.26&quot; y1=&quot;1167.87&quot; x2=&quot;1707.26&quot; y2=&quot;771.73&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;771.73&quot; x2=&quot;1729.28&quot; y2=&quot;771.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;1167.87&quot; x2=&quot;1729.28&quot; y2=&quot;1167.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;1352.26&quot; x2=&quot;2124.91&quot; y2=&quot;803.78&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;803.78&quot; x2=&quot;2146.94&quot; y2=&quot;803.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1352.26&quot; x2=&quot;2146.94&quot; y2=&quot;1352.26&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2542.57&quot; y1=&quot;1547.42&quot; x2=&quot;2542.57&quot; y2=&quot;824.94&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;824.94&quot; x2=&quot;2564.59&quot; y2=&quot;824.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;1547.42&quot; x2=&quot;2564.59&quot; y2=&quot;1547.42&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;1747.28&quot; x2=&quot;2960.35&quot; y2=&quot;841.53&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;841.53&quot; x2=&quot;2982.38&quot; y2=&quot;841.53&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1747.28&quot; x2=&quot;2982.38&quot; y2=&quot;1747.28&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3378.00&quot; y1=&quot;1949.49&quot; x2=&quot;3378.00&quot; y2=&quot;855.88&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;855.88&quot; x2=&quot;3400.03&quot; y2=&quot;855.88&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;1949.49&quot; x2=&quot;3400.03&quot; y2=&quot;1949.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2152.95&quot; x2=&quot;3795.66&quot; y2=&quot;868.75&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;868.75&quot; x2=&quot;3817.69&quot; y2=&quot;868.75&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2152.95&quot; x2=&quot;3817.69&quot; y2=&quot;2152.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 645.25 L871.82 753.41 L1289.47 861.70 L1707.13 969.86 L2124.91 1078.14 L2542.57 1186.30 L2960.22 1294.47 L3378.00 1402.75 L3795.66 1510.91&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;645.25&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;645.25&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;753.41&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;753.41&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;861.70&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;861.70&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;969.86&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;969.86&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1078.14&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1078.14&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;1186.30&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;1186.30&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1294.47&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1294.47&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;1402.75&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;1402.75&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1510.91&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1510.91&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;350.83&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2425.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2425.82)&quot; text-anchor=&quot;middle&quot;&gt;-40000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1900.61&quot; x2=&quot;350.83&quot; y2=&quot;1900.61&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1900.61&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1900.61)&quot; text-anchor=&quot;middle&quot;&gt;-30000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1375.28&quot; x2=&quot;350.83&quot; y2=&quot;1375.28&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;-20000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;849.94&quot; x2=&quot;350.83&quot; y2=&quot;849.94&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;849.94&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,849.94)&quot; text-anchor=&quot;middle&quot;&gt;-10000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;871.82&quot; y1=&quot;2489.19&quot; x2=&quot;871.82&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;871.82&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;2489.19&quot; x2=&quot;1289.47&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1289.47&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;2&lt;/text&gt;
-	&lt;line x1=&quot;1707.26&quot; y1=&quot;2489.19&quot; x2=&quot;1707.26&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1707.26&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;3&lt;/text&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;2489.19&quot; x2=&quot;2124.91&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;4&lt;/text&gt;
-	&lt;line x1=&quot;2542.57&quot; y1=&quot;2489.19&quot; x2=&quot;2542.57&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2542.57&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;2489.19&quot; x2=&quot;2960.35&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2960.35&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;6&lt;/text&gt;
-	&lt;line x1=&quot;3378.00&quot; y1=&quot;2489.19&quot; x2=&quot;3378.00&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3378.00&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;7&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;eight or more&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;number of children&lt;/text&gt;
-	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of 1.woman with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
+     +---------------------------------------------+
+     |       cname   year     fh_status   unna_pop |
+     |---------------------------------------------|
+  1. | Afghanistan   2010      Not Free   27962207 |
+  2. | Afghanistan   2011      Not Free   28809167 |
+  3. |     Albania   2010   Partly Free    2901883 |
+  4. |     Albania   2011   Partly Free    2886010 |
+  5. |     Algeria   2010      Not Free   36036159 |
+     |---------------------------------------------|
+  6. |     Algeria   2011      Not Free   36717132 |
+     +---------------------------------------------+
 </pre>
 </div>
 </div>
@@ -13631,1022 +13490,16 @@ Note: dy/dx for factor levels is the discrete change from the base level.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The nine points with confidence intervals thus shows the nine coefficients we just calculated. We can see that the coefficient for woman - that is, the difference between women and men - grows more and more negative as the number of kids increases. All confidence intervals are also different frmo zero, which means that the gender difference always is statistically significant.</p>
-<p>The fact that confidence intervals are wider in some places than others have to do with the distribution of values on the childs variable. The regression line is drawn through the center of gravity for the observations, and therefore varies more towards the ends of the data. The intervals are generally smallest where there are the most observations - between 1 and 3 kids. The average of the childs variable in the data is 1.8 kids.</p>
-<h2 id="Predict-values">Predict values<a class="anchor-link" href="#Predict-values">&#182;</a></h2><p>Finally we predict values of the income variable, using the margins command. The easiest way to do so is to show the expected income for women and men at different numbers of kids. But keep in mind that the order of the variables in the at option matters. The variable that is entered first will be on the x axis, and the second will govern the colors. The table is also large, since we now have 18 (9 * 2) coefficients. This table is not generally reported, only the graph.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins, at(childs=(<span class="m">0</span><span class="o">/</span><span class="m">8</span>) woman=(<span class="m">0</span> <span class="m">1</span>))
-marginsplot
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-Predictive margins                              Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-
-1._at        : woman           =           0
-               childs          =           0
-
-2._at        : woman           =           0
-               childs          =           1
-
-3._at        : woman           =           0
-               childs          =           2
-
-4._at        : woman           =           0
-               childs          =           3
-
-5._at        : woman           =           0
-               childs          =           4
-
-6._at        : woman           =           0
-               childs          =           5
-
-7._at        : woman           =           0
-               childs          =           6
-
-8._at        : woman           =           0
-               childs          =           7
-
-9._at        : woman           =           0
-               childs          =           8
-
-10._at       : woman           =           1
-               childs          =           0
-
-11._at       : woman           =           1
-               childs          =           1
-
-12._at       : woman           =           1
-               childs          =           2
-
-13._at       : woman           =           1
-               childs          =           3
-
-14._at       : woman           =           1
-               childs          =           4
-
-15._at       : woman           =           1
-               childs          =           5
-
-16._at       : woman           =           1
-               childs          =           6
-
-17._at       : woman           =           1
-               childs          =           7
-
-18._at       : woman           =           1
-               childs          =           8
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |   27141.21   1476.111    18.39   0.000     24245.93     30036.5
-          2  |   27996.34   1089.904    25.69   0.000     25858.57    30134.11
-          3  |   28851.47   1047.794    27.54   0.000      26796.3    30906.64
-          4  |    29706.6   1381.611    21.50   0.000     26996.67    32416.53
-          5  |   30561.73   1902.845    16.06   0.000     26829.44    34294.02
-          6  |   31416.86   2496.754    12.58   0.000     26519.65    36314.06
-          7  |   32271.99   3122.136    10.34   0.000     26148.14    38395.83
-          8  |   33127.11   3763.334     8.80   0.000     25745.61    40508.62
-          9  |   33982.24    4413.46     7.70   0.000     25325.56    42638.93
-         10  |   21040.46   1549.293    13.58   0.000     18001.63    24079.29
-         11  |   19835.53   1099.371    18.04   0.000      17679.2    21991.87
-         12  |   18630.61   1017.701    18.31   0.000     16634.46    20626.76
-         13  |   17425.68   1371.717    12.70   0.000     14735.16    20116.21
-         14  |   16220.76   1935.535     8.38   0.000     12424.35    20017.17
-         15  |   15015.83   2574.835     5.83   0.000     9965.481    20066.19
-         16  |   13810.91   3245.312     4.26   0.000     7445.464    20176.35
-         17  |   12605.98   3931.046     3.21   0.001     4895.522    20316.45
-         18  |   11401.06   4625.255     2.46   0.014     2328.956    20473.16
-------------------------------------------------------------------------------
-
-
-  Variables that uniquely identify margins: childs woman
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;1972.27&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;1966.51&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2170.27&quot; x2=&quot;3859.02&quot; y2=&quot;2170.27&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1737.50&quot; x2=&quot;3859.02&quot; y2=&quot;1737.50&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1304.61&quot; x2=&quot;3859.02&quot; y2=&quot;1304.61&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;871.85&quot; x2=&quot;3859.02&quot; y2=&quot;871.85&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;438.95&quot; x2=&quot;3859.02&quot; y2=&quot;438.95&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1120.84&quot; x2=&quot;454.16&quot; y2=&quot;870.24&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;870.24&quot; x2=&quot;476.19&quot; y2=&quot;870.24&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1120.84&quot; x2=&quot;476.19&quot; y2=&quot;1120.84&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;871.82&quot; y1=&quot;1051.04&quot; x2=&quot;871.82&quot; y2=&quot;866.03&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;866.03&quot; x2=&quot;893.85&quot; y2=&quot;866.03&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;1051.04&quot; x2=&quot;893.85&quot; y2=&quot;1051.04&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;1010.45&quot; x2=&quot;1289.47&quot; y2=&quot;832.49&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;832.49&quot; x2=&quot;1311.50&quot; y2=&quot;832.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;1010.45&quot; x2=&quot;1311.50&quot; y2=&quot;1010.45&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1707.26&quot; y1=&quot;1001.79&quot; x2=&quot;1707.26&quot; y2=&quot;767.15&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;767.15&quot; x2=&quot;1729.28&quot; y2=&quot;767.15&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;1001.79&quot; x2=&quot;1729.28&quot; y2=&quot;1001.79&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;1008.97&quot; x2=&quot;2124.91&quot; y2=&quot;685.97&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;685.97&quot; x2=&quot;2146.94&quot; y2=&quot;685.97&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1008.97&quot; x2=&quot;2146.94&quot; y2=&quot;1008.97&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2542.57&quot; y1=&quot;1022.45&quot; x2=&quot;2542.57&quot; y2=&quot;598.47&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;598.47&quot; x2=&quot;2564.59&quot; y2=&quot;598.47&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;1022.45&quot; x2=&quot;2564.59&quot; y2=&quot;1022.45&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;1038.54&quot; x2=&quot;2960.35&quot; y2=&quot;508.38&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;508.38&quot; x2=&quot;2982.38&quot; y2=&quot;508.38&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1038.54&quot; x2=&quot;2982.38&quot; y2=&quot;1038.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3378.00&quot; y1=&quot;1055.99&quot; x2=&quot;3378.00&quot; y2=&quot;416.93&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;416.93&quot; x2=&quot;3400.03&quot; y2=&quot;416.93&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;1055.99&quot; x2=&quot;3400.03&quot; y2=&quot;1055.99&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;1074.06&quot; x2=&quot;3795.66&quot; y2=&quot;324.73&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;324.73&quot; x2=&quot;3817.69&quot; y2=&quot;324.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1074.06&quot; x2=&quot;3817.69&quot; y2=&quot;1074.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1391.12&quot; x2=&quot;454.16&quot; y2=&quot;1128.02&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1128.02&quot; x2=&quot;476.19&quot; y2=&quot;1128.02&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1391.12&quot; x2=&quot;476.19&quot; y2=&quot;1391.12&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;871.82&quot; y1=&quot;1405.10&quot; x2=&quot;871.82&quot; y2=&quot;1218.48&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;1218.48&quot; x2=&quot;893.85&quot; y2=&quot;1218.48&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;849.79&quot; y1=&quot;1405.10&quot; x2=&quot;893.85&quot; y2=&quot;1405.10&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;1450.27&quot; x2=&quot;1289.47&quot; y2=&quot;1277.51&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;1277.51&quot; x2=&quot;1311.50&quot; y2=&quot;1277.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;1450.27&quot; x2=&quot;1311.50&quot; y2=&quot;1450.27&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1707.26&quot; y1=&quot;1532.57&quot; x2=&quot;1707.26&quot; y2=&quot;1299.66&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;1299.66&quot; x2=&quot;1729.28&quot; y2=&quot;1299.66&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1685.23&quot; y1=&quot;1532.57&quot; x2=&quot;1729.28&quot; y2=&quot;1532.57&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;1632.56&quot; x2=&quot;2124.91&quot; y2=&quot;1303.87&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1303.87&quot; x2=&quot;2146.94&quot; y2=&quot;1303.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1632.56&quot; x2=&quot;2146.94&quot; y2=&quot;1632.56&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2542.57&quot; y1=&quot;1738.99&quot; x2=&quot;2542.57&quot; y2=&quot;1301.77&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;1301.77&quot; x2=&quot;2564.59&quot; y2=&quot;1301.77&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2520.54&quot; y1=&quot;1738.99&quot; x2=&quot;2564.59&quot; y2=&quot;1738.99&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;1848.02&quot; x2=&quot;2960.35&quot; y2=&quot;1297.06&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1297.06&quot; x2=&quot;2982.38&quot; y2=&quot;1297.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1848.02&quot; x2=&quot;2982.38&quot; y2=&quot;1848.02&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3378.00&quot; y1=&quot;1958.40&quot; x2=&quot;3378.00&quot; y2=&quot;1291.00&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;1291.00&quot; x2=&quot;3400.03&quot; y2=&quot;1291.00&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3355.98&quot; y1=&quot;1958.40&quot; x2=&quot;3400.03&quot; y2=&quot;1958.40&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2069.54&quot; x2=&quot;3795.66&quot; y2=&quot;1284.19&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1284.19&quot; x2=&quot;3817.69&quot; y2=&quot;1284.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2069.54&quot; x2=&quot;3817.69&quot; y2=&quot;2069.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 995.60 L871.82 958.60 L1289.47 921.60 L1707.13 884.59 L2124.91 847.59 L2542.57 810.46 L2960.22 773.46 L3378.00 736.46 L3795.66 699.46&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;995.60&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;995.60&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;958.60&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;958.60&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;921.60&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;921.60&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;884.59&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;884.59&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;847.59&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;847.59&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;810.46&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;810.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;773.46&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;773.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;736.46&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;736.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;699.46&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;699.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 1259.69 L871.82 1311.79 L1289.47 1364.02 L1707.13 1416.12 L2124.91 1468.34 L2542.57 1520.44 L2960.22 1572.54 L3378.00 1624.76 L3795.66 1676.86&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1259.69&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1259.69&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;1311.79&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;871.82&quot; cy=&quot;1311.79&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;1364.02&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;1364.02&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;1416.12&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;1707.13&quot; cy=&quot;1416.12&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1468.34&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1468.34&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;1520.44&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2542.57&quot; cy=&quot;1520.44&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1572.54&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1572.54&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;1624.76&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;3378.00&quot; cy=&quot;1624.76&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1676.86&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1676.86&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2233.63&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2170.27&quot; x2=&quot;350.83&quot; y2=&quot;2170.27&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2170.27&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2170.27)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1737.50&quot; x2=&quot;350.83&quot; y2=&quot;1737.50&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1737.50&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1737.50)&quot; text-anchor=&quot;middle&quot;&gt;10000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1304.61&quot; x2=&quot;350.83&quot; y2=&quot;1304.61&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1304.61&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1304.61)&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;871.85&quot; x2=&quot;350.83&quot; y2=&quot;871.85&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;871.85&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,871.85)&quot; text-anchor=&quot;middle&quot;&gt;30000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;438.95&quot; x2=&quot;350.83&quot; y2=&quot;438.95&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;438.95&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,438.95)&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1247.56&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1247.56)&quot; text-anchor=&quot;middle&quot;&gt;Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2233.63&quot; x2=&quot;3859.02&quot; y2=&quot;2233.63&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2233.63&quot; x2=&quot;454.16&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;871.82&quot; y1=&quot;2233.63&quot; x2=&quot;871.82&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;871.82&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;2233.63&quot; x2=&quot;1289.47&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1289.47&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;2&lt;/text&gt;
-	&lt;line x1=&quot;1707.26&quot; y1=&quot;2233.63&quot; x2=&quot;1707.26&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1707.26&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;3&lt;/text&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;2233.63&quot; x2=&quot;2124.91&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;4&lt;/text&gt;
-	&lt;line x1=&quot;2542.57&quot; y1=&quot;2233.63&quot; x2=&quot;2542.57&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2542.57&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;2233.63&quot; x2=&quot;2960.35&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2960.35&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;6&lt;/text&gt;
-	&lt;line x1=&quot;3378.00&quot; y1=&quot;2233.63&quot; x2=&quot;3378.00&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3378.00&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;7&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2233.63&quot; x2=&quot;3795.66&quot; y2=&quot;2273.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2363.59&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;eight or more&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2473.60&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;number of children&lt;/text&gt;
-	&lt;rect x=&quot;1134.29&quot; y=&quot;2558.24&quot; width=&quot;1981.36&quot; height=&quot;186.37&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;1137.17&quot; y=&quot;2561.12&quot; width=&quot;1975.60&quot; height=&quot;180.61&quot; style=&quot;fill:none;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;1177.48&quot; y1=&quot;2651.43&quot; x2=&quot;1551.83&quot; y2=&quot;2651.43&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1364.71&quot; cy=&quot;2651.43&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1364.71&quot; cy=&quot;2651.43&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2194.95&quot; y1=&quot;2651.43&quot; x2=&quot;2569.30&quot; y2=&quot;2651.43&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2651.43&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2651.43&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;text x=&quot;1611.84&quot; y=&quot;2686.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;woman=0&lt;/text&gt;
-	&lt;text x=&quot;2629.32&quot; y=&quot;2686.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;woman=1&lt;/text&gt;
-	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Predictive Margins with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Interaction-with-two-continuous-variables">Interaction with two continuous variables<a class="anchor-link" href="#Interaction-with-two-continuous-variables">&#182;</a></h2><p>Now it is time to take things a step further. What if we have two continuous variables in the interaction? We basically do the same thing, but just have to interpret and present a little bit differently.</p>
-<p>Now let's say that we want to look at the relationship between income, age and having another child. It is a bit strange, since the number of kids you have is tightly connecteed with age, but let us still try, for the sake of the exapmle. We then run a regression where we interact the number of kids with age (and write <code>c.</code> in front of both variables, since they are both continuous).</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span><span class="k">reg</span> realrinc woman c<span class="m">.</span>childs##c<span class="m">.</span>age
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-      Source |       SS           df       MS      Number of obs   =     1,627
--------------+----------------------------------   F(4, 1622)      =     23.32
-       Model |  7.5451e+10         4  1.8863e+10   Prob &gt; F        =    0.0000
-    Residual |  1.3122e+12     1,622   808984506   R-squared       =    0.0544
--------------+----------------------------------   Adj R-squared   =    0.0520
-       Total |  1.3876e+12     1,626   853396969   Root MSE        =     28443
-
-------------------------------------------------------------------------------
-    realrinc |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-       woman |  -10027.18   1417.245    -7.08   0.000       -12807   -7247.353
-      childs |   6347.314   1617.275     3.92   0.000     3175.145    9519.482
-         age |   474.4715   69.78933     6.80   0.000     337.5848    611.3583
-             |
-    c.childs#|
-       c.age |  -138.2845   32.94967    -4.20   0.000    -202.9129   -73.65609
-             |
-       _cons |    8337.64   3055.404     2.73   0.006     2344.686    14330.59
-------------------------------------------------------------------------------
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>There is a significant interaction effect (-138.2845). Since the term is negative, the interpretation is that the effect of having more kids becomes more negative the older you are. Conversely, the effect of age is more negative the more kids you have.</p>
-<p>To for instance calculate the effect of having another another child at different ages we do the following:
-20 years old: 6347.314 - 138.2845 <em> 20 = 3581.624 <br>
-30 years old: 6347.314 - 138.2845 </em> 30 = 2198.779 <br>
-40 years old: 6347.314 - 138.2845 <em> 40 = 815.934 <br>
-50 years old: 6347.314 - 138.2845 </em> 50 = -566.9108 <br>
-60 years old: 6347.314 - 138.2845 * 60 = -1949.756 <br></p>
-<p>We can as usual illustrate it with <code>margins</code> and <code>marginsplot</code>:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(childs) at(age=(<span class="m">20</span>(<span class="m">10</span>)<span class="m">60</span>))
-marginsplot, yline(<span class="m">0</span>)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : childs
-
-1._at        : age             =          20
-
-2._at        : age             =          30
-
-3._at        : age             =          40
-
-4._at        : age             =          50
-
-5._at        : age             =          60
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-childs       |
-         _at |
-          1  |   3581.624   1011.207     3.54   0.000     1598.214    5565.033
-          2  |   2198.779   742.7817     2.96   0.003     741.8664    3655.691
-          3  |   815.9341   545.9354     1.49   0.135    -254.8787    1886.747
-          4  |  -566.9108   511.3732    -1.11   0.268    -1569.932    436.1107
-          5  |  -1949.756   664.9028    -2.93   0.003    -3253.914   -645.5969
-------------------------------------------------------------------------------
-
-
-  Variables that uniquely identify margins: age
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;3859.02&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2005.68&quot; x2=&quot;3859.02&quot; y2=&quot;2005.68&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1585.41&quot; x2=&quot;3859.02&quot; y2=&quot;1585.41&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1165.14&quot; x2=&quot;3859.02&quot; y2=&quot;1165.14&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;745.00&quot; x2=&quot;3859.02&quot; y2=&quot;745.00&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1585.41&quot; x2=&quot;3859.02&quot; y2=&quot;1585.41&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1249.54&quot; x2=&quot;454.16&quot; y2=&quot;416.06&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;416.06&quot; x2=&quot;476.19&quot; y2=&quot;416.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1249.54&quot; x2=&quot;476.19&quot; y2=&quot;1249.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;1429.48&quot; x2=&quot;1289.47&quot; y2=&quot;817.27&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;817.27&quot; x2=&quot;1311.50&quot; y2=&quot;817.27&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;1429.48&quot; x2=&quot;1311.50&quot; y2=&quot;1429.48&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;1639.00&quot; x2=&quot;2124.91&quot; y2=&quot;1189.03&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1189.03&quot; x2=&quot;2146.94&quot; y2=&quot;1189.03&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1639.00&quot; x2=&quot;2146.94&quot; y2=&quot;1639.00&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;1915.21&quot; x2=&quot;2960.35&quot; y2=&quot;1493.71&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1493.71&quot; x2=&quot;2982.38&quot; y2=&quot;1493.71&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1915.21&quot; x2=&quot;2982.38&quot; y2=&quot;1915.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2269.03&quot; x2=&quot;3795.66&quot; y2=&quot;1721.05&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1721.05&quot; x2=&quot;3817.69&quot; y2=&quot;1721.05&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2269.03&quot; x2=&quot;3817.69&quot; y2=&quot;2269.03&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 832.86 L1289.47 1123.44 L2124.91 1414.01 L2960.22 1704.59 L3795.66 1995.16&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;832.86&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;832.86&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;1123.44&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;1123.44&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1414.01&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1414.01&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1704.59&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1704.59&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1995.16&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1995.16&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2425.82&quot; x2=&quot;350.83&quot; y2=&quot;2425.82&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2425.82&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2425.82)&quot; text-anchor=&quot;middle&quot;&gt;-4000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2005.68&quot; x2=&quot;350.83&quot; y2=&quot;2005.68&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2005.68&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2005.68)&quot; text-anchor=&quot;middle&quot;&gt;-2000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1585.41&quot; x2=&quot;350.83&quot; y2=&quot;1585.41&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1585.41&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1585.41)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1165.14&quot; x2=&quot;350.83&quot; y2=&quot;1165.14&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1165.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1165.14)&quot; text-anchor=&quot;middle&quot;&gt;2000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;745.00&quot; x2=&quot;350.83&quot; y2=&quot;745.00&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;745.00&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,745.00)&quot; text-anchor=&quot;middle&quot;&gt;4000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;6000&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;2489.19&quot; x2=&quot;1289.47&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1289.47&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;2489.19&quot; x2=&quot;2124.91&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;2489.19&quot; x2=&quot;2960.35&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2960.35&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;age of respondent&lt;/text&gt;
-	&lt;text x=&quot;1980.00&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of childs with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We can see in the graph that the effect of having kids is positive for people that are 20, 30 and 40, and negative for people that are 50 or 60.</p>
-<p><strong>And to get the effect of getting one year older at different number of kids we do the following:</strong></p>
-<p>0 kids: 474.4715 - 138.2845 <em> 0 = 474.4715 <br>
-2 kids: 474.4715 - 138.2845 </em> 2 = 197.9026 <br>
-4 kids: 474.4715 - 138.2845 <em> 4 = -78.6664 <br>
-6 kids: 474.4715 - 138.2845 </em> 6 = -355.2354 <br>
-8 kids: 474.4715 - 138.2845 * 8 = 631.8044 <br></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins,<span class="k"> dydx</span>(age) at(childs=(<span class="m">0</span>(<span class="m">2</span>)<span class="m">8</span>))
-marginsplot, yline(<span class="m">0</span>)
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-Average marginal effects                        Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-dy/dx w.r.t. : age
-
-1._at        : childs          =           0
-
-2._at        : childs          =           2
-
-3._at        : childs          =           4
-
-4._at        : childs          =           6
-
-5._at        : childs          =           8
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-age          |
-         _at |
-          1  |   474.4715   69.78933     6.80   0.000     337.5848    611.3583
-          2  |   197.9026   56.41555     3.51   0.000     87.24755    308.5576
-          3  |  -78.66641   100.8976    -0.78   0.436    -276.5697    119.2369
-          4  |  -355.2354    160.821    -2.21   0.027    -670.6741   -39.79669
-          5  |  -631.8044   224.1247    -2.82   0.005    -1071.409   -192.1999
-------------------------------------------------------------------------------
-
-
-  Variables that uniquely identify margins: childs
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;2227.82&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;2222.06&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2336.72&quot; x2=&quot;3859.02&quot; y2=&quot;2336.72&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1712.38&quot; x2=&quot;3859.02&quot; y2=&quot;1712.38&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1088.04&quot; x2=&quot;3859.02&quot; y2=&quot;1088.04&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;463.71&quot; x2=&quot;3859.02&quot; y2=&quot;463.71&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1088.04&quot; x2=&quot;3859.02&quot; y2=&quot;1088.04&quot; style=&quot;stroke:#C10534;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;666.54&quot; x2=&quot;454.16&quot; y2=&quot;324.73&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;324.73&quot; x2=&quot;476.19&quot; y2=&quot;324.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;666.54&quot; x2=&quot;476.19&quot; y2=&quot;666.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;979.14&quot; x2=&quot;1289.47&quot; y2=&quot;702.80&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;702.80&quot; x2=&quot;1311.50&quot; y2=&quot;702.80&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1267.45&quot; y1=&quot;979.14&quot; x2=&quot;1311.50&quot; y2=&quot;979.14&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;1433.44&quot; x2=&quot;2124.91&quot; y2=&quot;939.17&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;939.17&quot; x2=&quot;2146.94&quot; y2=&quot;939.17&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2102.88&quot; y1=&quot;1433.44&quot; x2=&quot;2146.94&quot; y2=&quot;1433.44&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;1925.49&quot; x2=&quot;2960.35&quot; y2=&quot;1137.79&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1137.79&quot; x2=&quot;2982.38&quot; y2=&quot;1137.79&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2938.32&quot; y1=&quot;1925.49&quot; x2=&quot;2982.38&quot; y2=&quot;1925.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2425.82&quot; x2=&quot;3795.66&quot; y2=&quot;1328.00&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1328.00&quot; x2=&quot;3817.69&quot; y2=&quot;1328.00&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2425.82&quot; x2=&quot;3817.69&quot; y2=&quot;2425.82&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 495.76 L1289.47 841.03 L2124.91 1186.30 L2960.22 1531.70 L3795.66 1876.97&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;495.76&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;495.76&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;841.03&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1289.47&quot; cy=&quot;841.03&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1186.30&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2124.91&quot; cy=&quot;1186.30&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1531.70&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2960.22&quot; cy=&quot;1531.70&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1876.97&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1876.97&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2336.72&quot; x2=&quot;350.83&quot; y2=&quot;2336.72&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;2336.72&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2336.72)&quot; text-anchor=&quot;middle&quot;&gt;-1000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1712.38&quot; x2=&quot;350.83&quot; y2=&quot;1712.38&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1712.38&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1712.38)&quot; text-anchor=&quot;middle&quot;&gt;-500&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1088.04&quot; x2=&quot;350.83&quot; y2=&quot;1088.04&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1088.04&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1088.04)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;463.71&quot; x2=&quot;350.83&quot; y2=&quot;463.71&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;463.71&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,463.71)&quot; text-anchor=&quot;middle&quot;&gt;500&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1375.28&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1375.28)&quot; text-anchor=&quot;middle&quot;&gt;Effects on Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2489.19&quot; x2=&quot;454.16&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
-	&lt;line x1=&quot;1289.47&quot; y1=&quot;2489.19&quot; x2=&quot;1289.47&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1289.47&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;2&lt;/text&gt;
-	&lt;line x1=&quot;2124.91&quot; y1=&quot;2489.19&quot; x2=&quot;2124.91&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;4&lt;/text&gt;
-	&lt;line x1=&quot;2960.35&quot; y1=&quot;2489.19&quot; x2=&quot;2960.35&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2960.35&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;6&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;eight or more&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;number of children&lt;/text&gt;
-	&lt;text x=&quot;1980.00&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Average Marginal Effects of age with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The effect of age is positive for people with 0 or 2 kids, but negative for people with 4, 6 or 8 kids.</p>
-<p>So far we have looked at the effects, but it gets more tricky if we want to show predicted values. Let's say that we want to have age on the x axis. THen we will have to have one line for each number of kids. But in order not to make the graph to overloaded we will just display a few vales, for instance 0, 3 and 6 kids. The other lines would be drawn in between anyway.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-stata"><pre><span></span>margins, at(age=(<span class="m">20</span>(<span class="m">10</span>)<span class="m">70</span>) childs=(<span class="m">0</span> <span class="m">3</span> <span class="m">6</span>))
-marginsplot
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-Predictive margins                              Number of obs     =      1,627
-Model VCE    : OLS
-
-Expression   : Linear prediction, predict()
-
-1._at        : childs          =           0
-               age             =          20
-
-2._at        : childs          =           0
-               age             =          30
-
-3._at        : childs          =           0
-               age             =          40
-
-4._at        : childs          =           0
-               age             =          50
-
-5._at        : childs          =           0
-               age             =          60
-
-6._at        : childs          =           0
-               age             =          70
-
-7._at        : childs          =           3
-               age             =          20
-
-8._at        : childs          =           3
-               age             =          30
-
-9._at        : childs          =           3
-               age             =          40
-
-10._at       : childs          =           3
-               age             =          50
-
-11._at       : childs          =           3
-               age             =          60
-
-12._at       : childs          =           3
-               age             =          70
-
-13._at       : childs          =           6
-               age             =          20
-
-14._at       : childs          =           6
-               age             =          30
-
-15._at       : childs          =           6
-               age             =          40
-
-16._at       : childs          =           6
-               age             =          50
-
-17._at       : childs          =           6
-               age             =          60
-
-18._at       : childs          =           6
-               age             =          70
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |   12699.47   1777.144     7.15   0.000     9213.729    16185.21
-          2  |   17444.18   1282.334    13.60   0.000     14928.98    19959.39
-          3  |    22188.9   1051.014    21.11   0.000     20127.41    24250.39
-          4  |   26933.61    1240.56    21.71   0.000     24500.34    29366.88
-          5  |   31678.33   1716.817    18.45   0.000     28310.92    35045.74
-          6  |   36423.04   2308.688    15.78   0.000     31894.72    40951.37
-          7  |   23444.34   2412.406     9.72   0.000     18712.58     28176.1
-          8  |   24040.52   1751.345    13.73   0.000     20605.38    27475.66
-          9  |    24636.7   1197.448    20.57   0.000     22287.99    26985.41
-         10  |   25232.88   959.0215    26.31   0.000     23351.83    27113.93
-         11  |   25829.06     1234.8    20.92   0.000     23407.09    28251.03
-         12  |   26425.24   1802.472    14.66   0.000     22889.82    29960.66
-         13  |   34189.21   5185.257     6.59   0.000      24018.7    44359.72
-         14  |   30636.86    3797.51     8.07   0.000     23188.32     38085.4
-         15  |    27084.5   2669.823    10.14   0.000     21847.84    32321.17
-         16  |   23532.15   2237.744    10.52   0.000     19142.98    27921.32
-         17  |    19979.8   2838.965     7.04   0.000     14411.37    25548.22
-         18  |   16427.44   4035.421     4.07   0.000     8512.254    24342.63
-------------------------------------------------------------------------------
-
-
-  Variables that uniquely identify margins: age childs
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
-&lt;!-- This is a Stata 16.0 generated SVG file (http://www.stata.com) --&gt;
-
-&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
-	&lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
-	&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
-	&lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
-	&lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
-	&lt;rect x=&quot;390.80&quot; y=&quot;261.37&quot; width=&quot;3468.22&quot; height=&quot;1832.30&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;393.68&quot; y=&quot;264.25&quot; width=&quot;3462.46&quot; height=&quot;1826.54&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1969.17&quot; x2=&quot;3859.02&quot; y2=&quot;1969.17&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1558.06&quot; x2=&quot;3859.02&quot; y2=&quot;1558.06&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1146.95&quot; x2=&quot;3859.02&quot; y2=&quot;1146.95&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;735.84&quot; x2=&quot;3859.02&quot; y2=&quot;735.84&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;3859.02&quot; y2=&quot;324.73&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2001.47&quot; x2=&quot;454.16&quot; y2=&quot;1714.86&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1714.86&quot; x2=&quot;476.19&quot; y2=&quot;1714.86&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;2001.47&quot; x2=&quot;476.19&quot; y2=&quot;2001.47&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1122.41&quot; y1=&quot;1766.59&quot; x2=&quot;1122.41&quot; y2=&quot;1559.67&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;1559.67&quot; x2=&quot;1144.44&quot; y2=&quot;1559.67&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;1766.59&quot; x2=&quot;1144.44&quot; y2=&quot;1766.59&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1790.79&quot; y1=&quot;1552.86&quot; x2=&quot;1790.79&quot; y2=&quot;1383.32&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1383.32&quot; x2=&quot;1812.81&quot; y2=&quot;1383.32&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1552.86&quot; x2=&quot;1812.81&quot; y2=&quot;1552.86&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2459.04&quot; y1=&quot;1373.05&quot; x2=&quot;2459.04&quot; y2=&quot;1172.94&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1172.94&quot; x2=&quot;2481.06&quot; y2=&quot;1172.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1373.05&quot; x2=&quot;2481.06&quot; y2=&quot;1373.05&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3127.41&quot; y1=&quot;1216.38&quot; x2=&quot;3127.41&quot; y2=&quot;939.54&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;939.54&quot; x2=&quot;3149.44&quot; y2=&quot;939.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;1216.38&quot; x2=&quot;3149.44&quot; y2=&quot;1216.38&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;1069.11&quot; x2=&quot;3795.66&quot; y2=&quot;696.73&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;696.73&quot; x2=&quot;3817.69&quot; y2=&quot;696.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1069.11&quot; x2=&quot;3817.69&quot; y2=&quot;1069.11&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1611.03&quot; x2=&quot;454.16&quot; y2=&quot;1221.95&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1221.95&quot; x2=&quot;476.19&quot; y2=&quot;1221.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1611.03&quot; x2=&quot;476.19&quot; y2=&quot;1611.03&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1122.41&quot; y1=&quot;1533.19&quot; x2=&quot;1122.41&quot; y2=&quot;1250.78&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;1250.78&quot; x2=&quot;1144.44&quot; y2=&quot;1250.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;1533.19&quot; x2=&quot;1144.44&quot; y2=&quot;1533.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1790.79&quot; y1=&quot;1464.01&quot; x2=&quot;1790.79&quot; y2=&quot;1270.83&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1270.83&quot; x2=&quot;1812.81&quot; y2=&quot;1270.83&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1464.01&quot; x2=&quot;1812.81&quot; y2=&quot;1464.01&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2459.04&quot; y1=&quot;1420.20&quot; x2=&quot;2459.04&quot; y2=&quot;1265.63&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1265.63&quot; x2=&quot;2481.06&quot; y2=&quot;1265.63&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1420.20&quot; x2=&quot;2481.06&quot; y2=&quot;1420.20&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3127.41&quot; y1=&quot;1417.97&quot; x2=&quot;3127.41&quot; y2=&quot;1218.85&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;1218.85&quot; x2=&quot;3149.44&quot; y2=&quot;1218.85&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;1417.97&quot; x2=&quot;3149.44&quot; y2=&quot;1417.97&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;1439.26&quot; x2=&quot;3795.66&quot; y2=&quot;1148.56&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1148.56&quot; x2=&quot;3817.69&quot; y2=&quot;1148.56&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1439.26&quot; x2=&quot;3817.69&quot; y2=&quot;1439.26&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;1392.85&quot; x2=&quot;454.16&quot; y2=&quot;556.64&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;556.64&quot; x2=&quot;476.19&quot; y2=&quot;556.64&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;432.13&quot; y1=&quot;1392.85&quot; x2=&quot;476.19&quot; y2=&quot;1392.85&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1122.41&quot; y1=&quot;1427.01&quot; x2=&quot;1122.41&quot; y2=&quot;814.55&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;814.55&quot; x2=&quot;1144.44&quot; y2=&quot;814.55&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1100.38&quot; y1=&quot;1427.01&quot; x2=&quot;1144.44&quot; y2=&quot;1427.01&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1790.79&quot; y1=&quot;1482.08&quot; x2=&quot;1790.79&quot; y2=&quot;1051.54&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1051.54&quot; x2=&quot;1812.81&quot; y2=&quot;1051.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1768.76&quot; y1=&quot;1482.08&quot; x2=&quot;1812.81&quot; y2=&quot;1482.08&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2459.04&quot; y1=&quot;1593.33&quot; x2=&quot;2459.04&quot; y2=&quot;1232.34&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1232.34&quot; x2=&quot;2481.06&quot; y2=&quot;1232.34&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2437.01&quot; y1=&quot;1593.33&quot; x2=&quot;2481.06&quot; y2=&quot;1593.33&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3127.41&quot; y1=&quot;1787.87&quot; x2=&quot;3127.41&quot; y2=&quot;1329.98&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;1329.98&quot; x2=&quot;3149.44&quot; y2=&quot;1329.98&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3105.38&quot; y1=&quot;1787.87&quot; x2=&quot;3149.44&quot; y2=&quot;1787.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2030.31&quot; x2=&quot;3795.66&quot; y2=&quot;1379.48&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;1379.48&quot; x2=&quot;3817.69&quot; y2=&quot;1379.48&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;3773.63&quot; y1=&quot;2030.31&quot; x2=&quot;3817.69&quot; y2=&quot;2030.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 1858.29 L1122.41 1663.25 L1790.66 1468.09 L2459.04 1273.06 L3127.29 1078.02 L3795.66 882.98&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1858.29&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1858.29&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1663.25&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1663.25&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1468.09&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1468.09&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1273.06&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1273.06&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1078.02&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1078.02&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;882.98&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;882.98&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 1416.49 L1122.41 1391.98 L1790.66 1367.48 L2459.04 1342.98 L3127.29 1318.47 L3795.66 1293.97&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1416.49&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;1416.49&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1391.98&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1391.98&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1367.48&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1367.48&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1342.98&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1342.98&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1318.47&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1318.47&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1293.97&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1293.97&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;path d=&quot; M454.04 974.81 L1122.41 1120.84 L1790.66 1266.87 L2459.04 1412.90 L3127.29 1558.93 L3795.66 1704.96&quot; stroke-linejoin=&quot;round&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;974.81&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;454.04&quot; cy=&quot;974.81&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1120.84&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;1122.41&quot; cy=&quot;1120.84&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1266.87&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;1790.66&quot; cy=&quot;1266.87&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1412.90&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;2459.04&quot; cy=&quot;1412.90&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1558.93&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;3127.29&quot; cy=&quot;1558.93&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1704.96&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;3795.66&quot; cy=&quot;1704.96&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2093.67&quot; x2=&quot;390.80&quot; y2=&quot;261.37&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1969.17&quot; x2=&quot;350.83&quot; y2=&quot;1969.17&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1969.17&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1969.17)&quot; text-anchor=&quot;middle&quot;&gt;10000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1558.06&quot; x2=&quot;350.83&quot; y2=&quot;1558.06&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1558.06&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1558.06)&quot; text-anchor=&quot;middle&quot;&gt;20000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;1146.95&quot; x2=&quot;350.83&quot; y2=&quot;1146.95&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;1146.95&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1146.95)&quot; text-anchor=&quot;middle&quot;&gt;30000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;735.84&quot; x2=&quot;350.83&quot; y2=&quot;735.84&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;735.84&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,735.84)&quot; text-anchor=&quot;middle&quot;&gt;40000&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;324.73&quot; x2=&quot;350.83&quot; y2=&quot;324.73&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;300.72&quot; y=&quot;324.73&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,324.73)&quot; text-anchor=&quot;middle&quot;&gt;50000&lt;/text&gt;
-	&lt;text x=&quot;190.71&quot; y=&quot;1177.52&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1177.52)&quot; text-anchor=&quot;middle&quot;&gt;Linear Prediction&lt;/text&gt;
-	&lt;line x1=&quot;390.80&quot; y1=&quot;2093.67&quot; x2=&quot;3859.02&quot; y2=&quot;2093.67&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;454.16&quot; y1=&quot;2093.67&quot; x2=&quot;454.16&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;454.16&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
-	&lt;line x1=&quot;1122.41&quot; y1=&quot;2093.67&quot; x2=&quot;1122.41&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1122.41&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;
-	&lt;line x1=&quot;1790.79&quot; y1=&quot;2093.67&quot; x2=&quot;1790.79&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;1790.79&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;
-	&lt;line x1=&quot;2459.04&quot; y1=&quot;2093.67&quot; x2=&quot;2459.04&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;2459.04&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;
-	&lt;line x1=&quot;3127.41&quot; y1=&quot;2093.67&quot; x2=&quot;3127.41&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3127.41&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
-	&lt;line x1=&quot;3795.66&quot; y1=&quot;2093.67&quot; x2=&quot;3795.66&quot; y2=&quot;2133.64&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;text x=&quot;3795.66&quot; y=&quot;2223.62&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;70&lt;/text&gt;
-	&lt;text x=&quot;2124.91&quot; y=&quot;2333.64&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;age of respondent&lt;/text&gt;
-	&lt;rect x=&quot;1520.64&quot; y=&quot;2418.27&quot; width=&quot;1208.54&quot; height=&quot;326.34&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
-	&lt;rect x=&quot;1523.52&quot; y=&quot;2421.15&quot; width=&quot;1202.78&quot; height=&quot;320.58&quot; style=&quot;fill:none;stroke:#000000;stroke-width:5.76&quot;/&gt;
-	&lt;line x1=&quot;1563.83&quot; y1=&quot;2511.46&quot; x2=&quot;1938.30&quot; y2=&quot;2511.46&quot; style=&quot;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1751.06&quot; cy=&quot;2511.46&quot; r=&quot;26.35&quot; style=&quot;fill:#1A476F&quot;/&gt;
-	&lt;circle cx=&quot;1751.06&quot; cy=&quot;2511.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#1A476F;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;2194.95&quot; y1=&quot;2511.46&quot; x2=&quot;2569.30&quot; y2=&quot;2511.46&quot; style=&quot;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2511.46&quot; r=&quot;26.35&quot; style=&quot;fill:#90353B&quot;/&gt;
-	&lt;circle cx=&quot;2382.06&quot; cy=&quot;2511.46&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#90353B;stroke-width:8.64&quot;/&gt;
-	&lt;line x1=&quot;1563.83&quot; y1=&quot;2651.43&quot; x2=&quot;1938.30&quot; y2=&quot;2651.43&quot; style=&quot;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;circle cx=&quot;1751.06&quot; cy=&quot;2651.43&quot; r=&quot;26.35&quot; style=&quot;fill:#55752F&quot;/&gt;
-	&lt;circle cx=&quot;1751.06&quot; cy=&quot;2651.43&quot; r=&quot;22.03&quot; style=&quot;fill:none;stroke:#55752F;stroke-width:8.64&quot;/&gt;
-	&lt;text x=&quot;1998.19&quot; y=&quot;2546.49&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;0&lt;/text&gt;
-	&lt;text x=&quot;2629.32&quot; y=&quot;2546.49&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;3&lt;/text&gt;
-	&lt;text x=&quot;1998.19&quot; y=&quot;2686.46&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot;&gt;6&lt;/text&gt;
-	&lt;text x=&quot;1979.88&quot; y=&quot;206.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:125.98px;fill:#1E2D53&quot; text-anchor=&quot;middle&quot;&gt;Predictive Margins with 95% CIs&lt;/text&gt;
-&lt;/svg&gt;
-</body></html>"></iframe>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Here we can see in a different way that the effect of getting older is positive for people with 0 kids, close to zero for people with 3 kids, and negative for people with 6 kids.</p>
-<p>But we also have to remember that we now have divided the data into a lot of different subgroups, and we only had about 1600 observations to work with from the beginning. The more interactions we do, the more sensitive is the data to outliers. If there for instance is a person that is very old or have a lot of kids, that person will have a great deal of leverage. It is therefore often better to combine values, so that we for instance compare people with and without kids, or people above or below 40, for instance.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>Interaction analyses are often theoretically interesting, and can show important differences in the data. But remember that the goal seldom is to make a map with the scale 1:1 of reality. Instead, we want to sift through large amounts of data to get to the big patterns. The fact that it is possible to find a significant interaction does not imply that it is interesting. There is always a risk of overfitting, that is, building a model that fits our sample perfectly, but not the wider population.</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p><code>reshape</code> can be used to transform data to and from long and wide format.</p>
+<ul>
+<li><p>Going from long to wide:<br>
+<code>reshape long variabelnamn, i(panelvariabel) j(tidsvariabel)</code></p>
+</li>
+<li><p>Going from wide to long:<br>
+<code>reshape wide variabelnamn, i(panelvariabel) j(ny tidsvariabel)</code></p>
+</li>
+</ul>
+<p>For most (but not all) statistical analysis long format is better, since we then can <a href="xtset_sv.html">set the panel structure with <code>xtset</code></a> and do analyses that take time into account.</p>
 
 </div>
 </div>
