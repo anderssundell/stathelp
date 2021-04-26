@@ -57,6 +57,7 @@ https://www.stathelp.se/en/logarithm_en.html
 https://www.stathelp.se/en/recodings_en.html
 https://www.stathelp.se/en/regression_controls_en.html
 https://www.stathelp.se/en/regression_interaction_en.html
+https://www.stathelp.se/en/regression_interaction2_en.html
 https://www.stathelp.se/en/regression_logarithm_en.html
 https://www.stathelp.se/en/regression1_en.html
 https://www.stathelp.se/en/wordlist_en.html
